@@ -129,14 +129,37 @@ a:hover{text-decoration-color:currentColor}
 .card:focus-within{border-color:var(--c)}
 .badge{width:36px;height:36px;border-radius:999px;background:var(--c);color:#fff;display:grid;place-items:center;font:700 15px/1 var(--font);flex:none}
 .card .txt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.card select{
-  appearance:none;-webkit-appearance:none;border:0;background:transparent;width:100%;min-width:0;padding:0;margin:0;
+.pick-btn{
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;width:100%;min-width:0;padding:0;margin:0;text-align:left;
   font:500 22px/1.25 var(--font);letter-spacing:-.01em;color:var(--ink);cursor:pointer;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;
 }
-.card select:focus-visible{outline:none}
-.card select option{color:#1d1d1b;background:#f4f3ef;font-size:15px}
+.pick-btn:focus-visible{outline:none}
+.card:has(.pick-btn:focus-visible){box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent)}
 .card .meta{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card::after{content:"";position:absolute;right:22px;top:50%;width:7px;height:7px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.card::after{content:"";position:absolute;right:22px;top:50%;width:7px;height:7px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none;transition:transform .15s}
+.card.open{border-color:var(--c)}
+.card.open::after{transform:translateY(-25%) rotate(-135deg)}
+/* bag list (custom dropdown) */
+.pick{position:relative;z-index:20}
+.bag-list{
+  position:absolute;left:-1px;right:-1px;top:calc(100% + 8px);z-index:30;margin:0;padding:6px;list-style:none;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--bar-shadow),0 18px 40px -18px rgba(40,38,30,.35);
+  max-height:min(440px,62vh);overflow:auto;overscroll-behavior:contain;cursor:default;outline:none
+}
+.bag-list .grp{font-size:12px;color:var(--muted);padding:10px 12px 4px;letter-spacing:.02em}
+.bag-list .grp:first-child{padding-top:6px}
+.bag-opt{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;min-width:0}
+.bag-opt .t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.bag-opt .nm{font-size:15px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bag-opt .sub{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.bag-opt .slot{width:22px;height:22px;border-radius:999px;display:grid;place-items:center;font:700 11px/1 var(--font);color:#fff;flex:none}
+.bag-opt .slot.a{background:var(--sig-a)} .bag-opt .slot.b{background:var(--sig-b)}
+.bag-opt .chk{width:16px;height:16px;flex:none;color:var(--accent);visibility:hidden}
+.bag-opt[aria-selected="true"] .chk{visibility:visible}
+.bag-opt[aria-selected="true"] .nm{color:var(--ink)}
+.bag-opt:hover,.bag-opt.active{background:var(--well)}
+.bag-opt .swapnote{font-size:12px;color:var(--muted);white-space:nowrap}
+@media (prefers-reduced-motion: reduce){.card::after{transition:none}}
 .swap{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:border-color .15s}
 .swap:hover{border-color:var(--line-strong)}
 .swap svg{width:18px;height:18px}
@@ -304,7 +327,7 @@ details.all[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   .pick .swap{position:absolute;right:52px;top:50%;transform:translateY(-50%) rotate(90deg);z-index:1}
   .card::after{right:13px;width:6px;height:6px}
   .badge{width:28px;height:28px;font-size:13px}
-  .card select{font-size:16px}
+  .pick-btn{font-size:18px}
   .card .meta{font-size:12px}
   .swap{width:36px;height:36px}
   .viewer{height:min(62svh,520px);min-height:340px;border-radius:12px}
@@ -353,17 +376,19 @@ details.all[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   </header>
 
   <div class="pick">
-    <label class="card" id="selAWrap">
+    <div class="card" id="selAWrap">
       <span class="badge" aria-hidden="true">A</span>
-      <span class="txt"><select id="selA" aria-label="Bag A"></select><span class="meta" id="metaA"></span></span>
-    </label>
+      <span class="txt"><button type="button" class="pick-btn" id="selA" aria-haspopup="listbox" aria-expanded="false" aria-controls="listA"></button><span class="meta" id="metaA"></span></span>
+      <ul class="bag-list" id="listA" role="listbox" tabindex="-1" aria-label="Choose bag A" hidden></ul>
+    </div>
     <button class="swap" id="swapBtn" type="button" aria-label="Swap bag A and bag B" title="Swap A and B">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h13M16 5l3 3-3 3M18 16H5M8 13l-3 3 3 3"/></svg>
     </button>
-    <label class="card" id="selBWrap">
+    <div class="card" id="selBWrap">
       <span class="badge" aria-hidden="true">B</span>
-      <span class="txt"><select id="selB" aria-label="Bag B"></select><span class="meta" id="metaB"></span></span>
-    </label>
+      <span class="txt"><button type="button" class="pick-btn" id="selB" aria-haspopup="listbox" aria-expanded="false" aria-controls="listB"></button><span class="meta" id="metaB"></span></span>
+      <ul class="bag-list" id="listB" role="listbox" tabindex="-1" aria-label="Choose bag B" hidden></ul>
+    </div>
   </div>
 
   <div class="viewer" id="viewer">
@@ -1586,13 +1611,95 @@ function onThemeChange() {
   if (slots.a.bag && slots.b.bag) { renderChrome(); renderReadout(); renderSpecs(); renderFit(); }
 }
 
+/* ---------- bag pickers: card button + styled list ---------- */
+const pickers = {
+  a: { wrap: $('#selAWrap'), btn: $('#selA'), list: $('#listA'), active: -1 },
+  b: { wrap: $('#selBWrap'), btn: $('#selB'), list: $('#listB'), active: -1 },
+};
+const CHECK_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>';
+function bagSub(b) {
+  const s = b.specs || {}, parts = [b.brand];
+  if (s.volume_internal_l) parts.push(`${s.volume_internal_l} L`);
+  if (s.weight_kg) parts.push(`${s.weight_kg.toFixed(2)} kg`);
+  return parts.filter(Boolean).join(' · ');
+}
 function fillSelects() {
-  for (const [id, slotKey] of [['#selA', 'a'], ['#selB', 'b']]) {
-    const sel = $(id); sel.replaceChildren();
-    for (const b of state.bags) { const o = el('option', null, b.short || b.name); o.value = b.id; sel.appendChild(o); }
-    sel.value = slots[slotKey].bag.id;
+  for (const k of ['a', 'b']) {
+    const p = pickers[k], other = k === 'a' ? 'b' : 'a';
+    const cur = slots[k].bag;
+    p.btn.textContent = cur.short || cur.name;
+    p.btn.setAttribute('aria-label', `Bag ${k.toUpperCase()}: ${cur.name}. Change bag`);
+    p.list.replaceChildren();
+    let lastBrand = null;
+    state.bags.forEach((b) => {
+      if (b.brand !== lastBrand) { lastBrand = b.brand; const g = el('li', 'grp', b.brand); g.setAttribute('role', 'presentation'); p.list.appendChild(g); }
+      const li = el('li', 'bag-opt');
+      li.id = `opt-${k}-${b.id}`; li.dataset.id = b.id;
+      li.setAttribute('role', 'option');
+      li.setAttribute('aria-selected', String(b === cur));
+      const chk = el('span', 'chk'); chk.innerHTML = CHECK_SVG; chk.setAttribute('aria-hidden', 'true');
+      const t = el('span', 't');
+      t.append(el('span', 'nm', b.short || b.name), el('span', 'sub', bagSub(b)));
+      li.append(chk, t);
+      if (slots[other].bag === b) {
+        li.append(el('span', 'swapnote', 'swaps'));
+        const tag = el('span', `slot ${other}`, other.toUpperCase()); tag.title = `Currently bag ${other.toUpperCase()}`;
+        li.append(tag);
+      }
+      li.addEventListener('click', (e) => { e.stopPropagation(); pickAndClose(k, b.id); });
+      li.addEventListener('pointermove', () => setActive(k, optionsOf(k).indexOf(li)));
+      p.list.appendChild(li);
+    });
   }
 }
+const optionsOf = (k) => [...pickers[k].list.querySelectorAll('.bag-opt')];
+function setActive(k, i) {
+  const opts = optionsOf(k), p = pickers[k];
+  if (!opts.length) return;
+  i = Math.max(0, Math.min(opts.length - 1, i));
+  opts.forEach((o, j) => o.classList.toggle('active', j === i));
+  p.active = i;
+  p.list.setAttribute('aria-activedescendant', opts[i].id);
+  opts[i].scrollIntoView({ block: 'nearest' });
+}
+function openPicker(k) {
+  closePicker(k === 'a' ? 'b' : 'a');
+  const p = pickers[k];
+  p.list.hidden = false; p.wrap.classList.add('open'); p.btn.setAttribute('aria-expanded', 'true');
+  setActive(k, optionsOf(k).findIndex((o) => o.getAttribute('aria-selected') === 'true'));
+  p.list.focus({ preventScroll: true });
+}
+function closePicker(k, refocus) {
+  const p = pickers[k];
+  if (p.list.hidden) return;
+  p.list.hidden = true; p.wrap.classList.remove('open'); p.btn.setAttribute('aria-expanded', 'false');
+  if (refocus) p.btn.focus({ preventScroll: true });
+}
+function pickAndClose(k, id) { closePicker(k, true); choose(k, id); }
+for (const k of ['a', 'b']) {
+  const p = pickers[k];
+  p.wrap.addEventListener('click', (e) => {
+    if (p.list.contains(e.target)) return;
+    p.list.hidden ? openPicker(k) : closePicker(k, true);
+  });
+  p.btn.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); openPicker(k); }
+  });
+  p.list.addEventListener('keydown', (e) => {
+    const n = optionsOf(k).length;
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(k, p.active + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(k, p.active - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); setActive(k, 0); }
+    else if (e.key === 'End') { e.preventDefault(); setActive(k, n - 1); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const o = optionsOf(k)[p.active]; if (o) pickAndClose(k, o.dataset.id); }
+    else if (e.key === 'Escape') { e.preventDefault(); closePicker(k, true); }
+    else if (e.key === 'Tab') { closePicker(k); }
+    e.stopPropagation(); // keep the 1–6 camera shortcuts out of the list
+  });
+}
+document.addEventListener('pointerdown', (e) => {
+  for (const k of ['a', 'b']) if (!pickers[k].wrap.contains(e.target)) closePicker(k);
+});
 function choose(slotKey, id) {
   const other = slotKey === 'a' ? 'b' : 'a';
   const bag = state.byId[id];
@@ -1607,8 +1714,6 @@ function swapBags() {
   fillSelects();
 }
 
-$('#selA').addEventListener('change', (e) => choose('a', e.target.value));
-$('#selB').addEventListener('change', (e) => choose('b', e.target.value));
 $('#swapBtn').addEventListener('click', swapBags);
 document.querySelectorAll('[data-mode]').forEach((b) => b.addEventListener('click', () => {
   if (state.mode === b.dataset.mode) return;
