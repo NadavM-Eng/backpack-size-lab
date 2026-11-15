@@ -1,0 +1,1702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Compare backpacks in 3D at real scale: overlay or side by side, measuring boxes, a person model with height and weight sliders, and full specs.">
+<style>
+/* base reset (the Claude artifact host adds this automatically; needed when served standalone) */
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Backpack Size Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&display=swap">
+<style>
+:root{
+  --page:#e8e6e1;
+  --surface:#f4f3ef;
+  --well:#dedcd6;
+  --line:#d3d1ca;
+  --line-strong:#bebcb4;
+  --ink:#1d1d1b;
+  --ink-2:#3d3c38;
+  --muted:#66655f;
+  --viewer:#f4f3ef;
+  --grid:#e0ded7;
+  --grid-major:#c9c7bf;
+  --measure:#1d1d1b;
+  --on-ink:#f4f3ef;
+  --accent:#3f8f4f;
+  --accent-fill:#367d45;
+  --on-accent:#ffffff;
+  --sig-a:#d4542b;
+  --sig-b:#2f6f9f;
+  --mannequin:#cdc8be;
+  --bar-shadow:0 1px 2px rgba(40,38,30,.05),0 6px 18px rgba(40,38,30,.05);
+  --font:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --gutter-l:max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --page:#1b1b1a;
+    --surface:#262624;
+    --well:#1f1f1e;
+    --line:#3a3936;
+    --line-strong:#4a4945;
+    --ink:#ecebe6;
+    --ink-2:#cfcdc6;
+    --muted:#a6a49c;
+    --viewer:#2c2c2a;
+    --grid:#363633;
+    --grid-major:#4b4a46;
+    --measure:#ecebe6;
+    --on-ink:#1b1b1a;
+    --accent:#5fae6e;
+    --accent-fill:#5fae6e;
+    --on-accent:#1b1b1a;
+    --sig-a:#e8714a;
+    --sig-b:#5b9bd0;
+    --mannequin:#7a7872;
+    --bar-shadow:0 1px 2px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#1b1b1a;
+  --surface:#262624;
+  --well:#1f1f1e;
+  --line:#3a3936;
+  --line-strong:#4a4945;
+  --ink:#ecebe6;
+  --ink-2:#cfcdc6;
+  --muted:#a6a49c;
+  --viewer:#2c2c2a;
+  --grid:#363633;
+  --grid-major:#4b4a46;
+  --measure:#ecebe6;
+  --on-ink:#1b1b1a;
+  --accent:#5fae6e;
+  --accent-fill:#5fae6e;
+  --on-accent:#1b1b1a;
+  --sig-a:#e8714a;
+  --sig-b:#5b9bd0;
+  --mannequin:#7a7872;
+  --bar-shadow:0 1px 2px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--page);color:var(--ink);
+  font:400 15px/1.5 var(--font);font-variant-numeric:tabular-nums;
+  -webkit-text-size-adjust:100%;overflow-x:hidden;
+}
+.num{font-variant-numeric:tabular-nums}
+button,select{font:inherit;color:inherit}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:var(--line-strong)}
+a:hover{text-decoration-color:currentColor}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.muted{color:var(--muted)}
+
+.app{max-width:1232px;margin:0 auto;padding:0 var(--gutter-r) 64px var(--gutter-l)}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:32px 0 0}
+.top h1{margin:0;font:500 22px/1.2 var(--font);letter-spacing:-.01em;white-space:nowrap}
+.top .right{display:flex;align-items:center;gap:16px}
+.units{font-size:13px;color:var(--muted);white-space:nowrap}
+.icon-btn{
+  width:40px;height:40px;flex:none;border:1px solid var(--line);border-radius:999px;background:var(--surface);
+  display:grid;place-items:center;cursor:pointer;transition:border-color .15s
+}
+.icon-btn:hover{border-color:var(--line-strong)}
+.icon-btn svg{width:18px;height:18px}
+
+/* bag pickers */
+.pick{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;margin-top:40px}
+.card{
+  position:relative;display:flex;align-items:center;gap:16px;min-width:0;
+  padding:18px 52px 18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:14px;cursor:pointer;
+  transition:border-color .15s
+}
+.card:hover{border-color:var(--line-strong)}
+.card:focus-within{border-color:var(--c)}
+.badge{width:36px;height:36px;border-radius:999px;background:var(--c);color:#fff;display:grid;place-items:center;font:700 15px/1 var(--font);flex:none}
+.card .txt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.card select{
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;width:100%;min-width:0;padding:0;margin:0;
+  font:500 22px/1.25 var(--font);letter-spacing:-.01em;color:var(--ink);cursor:pointer;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;
+}
+.card select:focus-visible{outline:none}
+.card select option{color:#1d1d1b;background:#f4f3ef;font-size:15px}
+.card .meta{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card::after{content:"";position:absolute;right:22px;top:50%;width:7px;height:7px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.swap{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:border-color .15s}
+.swap:hover{border-color:var(--line-strong)}
+.swap svg{width:18px;height:18px}
+
+/* viewer */
+.viewer{
+  position:relative;margin-top:16px;height:min(72vh,760px);min-height:360px;overflow:hidden;
+  background:var(--viewer);border-radius:14px;box-shadow:inset 0 0 0 1px var(--line);touch-action:none;
+}
+.viewer canvas{display:block;width:100%;height:100%;outline:none;border-radius:14px}
+.labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.dim{
+  position:absolute;left:0;top:0;white-space:nowrap;
+  font:500 12.5px/1 var(--font);font-variant-numeric:tabular-nums;
+  padding:5px 9px;border-radius:999px;background:var(--viewer);color:var(--ink);border:1.5px solid var(--c);
+  will-change:transform;
+}
+.dim b{font-weight:500;color:var(--muted);margin-right:5px}
+.dim.delta{border-color:var(--measure);background:var(--measure);color:var(--viewer)}
+.dim.back{border-color:var(--accent);color:var(--ink)}
+.dim.back b:empty,.dim.mark b:empty{display:none}
+.dim.mark{border-color:var(--muted);color:var(--ink-2)}
+.dim.delta b{color:inherit;opacity:.75}
+.legend{position:absolute;left:16px;top:16px;display:flex;flex-wrap:wrap;gap:8px;pointer-events:none;max-width:calc(100% - 140px)}
+.chip{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 12px 6px 10px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.chip i{width:10px;height:10px;border-radius:999px;background:var(--c);flex:none}
+.chip.ghost i{background:transparent;box-shadow:inset 0 0 0 1.5px var(--c)}
+.chip small{color:var(--muted);font-size:12px}
+.viewname{position:absolute;right:16px;top:16px;pointer-events:none;font-size:13px;color:var(--muted)}
+.hint{position:absolute;right:16px;bottom:14px;pointer-events:none;font-size:12.5px;color:var(--muted)}
+.status{position:absolute;left:16px;bottom:16px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;pointer-events:none;max-width:calc(100% - 32px)}
+.msg{font-size:13px;padding:7px 12px;background:var(--surface);border-radius:10px;box-shadow:inset 0 0 0 1px var(--line);max-width:100%}
+.msg.warn{box-shadow:inset 0 0 0 1.5px var(--sig-a)}
+.msg.warn::before{content:"!";display:inline-grid;place-items:center;width:16px;height:16px;border-radius:999px;background:var(--sig-a);color:#fff;margin-right:8px;font-size:11px;font-weight:700;vertical-align:-2px}
+.msg .bar{display:block;height:3px;margin-top:6px;border-radius:999px;background:var(--well);overflow:hidden}
+.msg .bar span{display:block;height:100%;width:var(--p,0%);background:var(--c,var(--ink));border-radius:999px}
+
+/* control bar */
+.controls{
+  display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin-top:16px;padding:10px;
+  background:var(--surface);border:1px solid var(--line);border-radius:999px;box-shadow:var(--bar-shadow)
+}
+.group{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.seg{display:flex;padding:3px;border-radius:999px;background:var(--well)}
+.seg button{border:0;background:transparent;border-radius:999px;height:34px;padding:0 16px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line),0 1px 2px rgba(0,0,0,.06)}
+.pill{
+  border:1px solid var(--line);background:transparent;border-radius:999px;height:40px;padding:0 16px;cursor:pointer;
+  font-size:14px;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transition:border-color .15s,background .15s
+}
+.pill:hover:not(:disabled){border-color:var(--line-strong)}
+.pill:disabled{cursor:default;color:var(--muted);opacity:.55}
+.ghost-btn i{width:10px;height:10px;border-radius:999px;box-shadow:inset 0 0 0 1.5px var(--c)}
+.led{width:8px;height:8px;border-radius:999px;background:var(--line-strong)}
+#boxBtn[aria-pressed="true"] .led,#personBtn[aria-pressed="true"] .led{background:var(--accent)}
+.views{margin-left:auto}
+.views .pill{padding:0 14px;min-width:58px;justify-content:center}
+.views .pill[aria-pressed="true"]{background:var(--accent-fill);border-color:var(--accent-fill);color:var(--on-accent)}
+
+/* person panel */
+.person{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:20px 40px;margin-top:12px;padding:20px 24px;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px
+}
+.person[hidden]{display:none}
+.sliders{display:flex;flex-direction:column;gap:14px;min-width:0}
+.sl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sl-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-size:14px}
+.sl-top span{color:var(--muted);font-weight:500}
+.sl-top output{font-weight:500;color:var(--ink)}
+.sl-top output small{font-size:13px;font-weight:400;color:var(--muted);margin-left:8px}
+.sl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:24px;margin:0;background:transparent;cursor:pointer;--p:50%}
+.sl input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:999px;background:linear-gradient(to right,var(--accent-fill) var(--p),var(--line-strong) var(--p))}
+.sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-8px;border-radius:999px;background:var(--surface);border:1.5px solid var(--ink-2);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.sl input[type=range]::-moz-range-track{height:4px;border-radius:999px;background:var(--line-strong)}
+.sl input[type=range]::-moz-range-progress{height:4px;border-radius:999px;background:var(--accent-fill)}
+.sl input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:999px;background:var(--surface);border:1.5px solid var(--ink-2)}
+.sl input[type=range]:focus-visible{outline:none}
+.sl input[type=range]:focus-visible::-webkit-slider-thumb{outline:2px solid var(--accent);outline-offset:2px}
+.sl-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+.link{border:0;background:none;padding:0;cursor:pointer;font-size:13px;color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+.link:hover{text-decoration-color:currentColor}
+.fit{display:flex;flex-direction:column;gap:12px;min-width:0}
+.fit-head{font-size:14px;font-weight:500;color:var(--muted)}
+.fit-row{display:grid;grid-template-columns:10px minmax(0,1fr) auto;align-items:center;gap:6px 12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.fit-row > i{width:10px;height:10px;border-radius:999px;background:var(--c);align-self:start;margin-top:6px}
+.fit-name{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fit-txt{font-size:13px;color:var(--ink-2)}
+.tag{font-size:12.5px;font-weight:500;padding:4px 10px;border-radius:999px;white-space:nowrap;border:1.5px solid var(--accent);color:var(--ink)}
+.tag.warn{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.fit-note{margin:0;font-size:13px;color:var(--muted)}
+
+/* sections */
+.section{margin-top:56px}
+.section h2{margin:0 0 20px;font:500 20px/1.2 var(--font);letter-spacing:-.01em}
+
+/* comparison tiles */
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px 24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.tile.wide{grid-column:span 2}
+.tile .lab{font-size:14px;font-weight:500;color:var(--muted)}
+.vals{display:flex;flex-direction:column;gap:14px}
+.tile.wide .vals{flex-direction:row;gap:32px}
+.tile.wide .val{flex:1}
+.val{display:flex;flex-direction:column;gap:8px;min-width:0}
+.val .row1{display:flex;align-items:baseline;gap:10px;min-width:0}
+.val .dot{width:10px;height:10px;border-radius:999px;background:var(--c);flex:none;align-self:center}
+.val .big{font:500 30px/1.1 var(--font);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.val .big.txt{font-size:22px;letter-spacing:-.01em}
+.val .big small{font-size:15px;font-weight:400;color:var(--muted);margin-left:4px;letter-spacing:0}
+.val .big.na{color:var(--muted);font-size:18px;font-weight:400}
+.val .who{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:20px}
+.val .sub{font-size:13px;color:var(--muted);padding-left:20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{height:6px;border-radius:999px;background:var(--well);margin-left:20px;overflow:hidden}
+.track span{display:block;height:100%;width:var(--w,0%);background:var(--c);border-radius:999px;transition:width .4s ease}
+.line{margin:0;font-size:15px;color:var(--ink);padding-top:14px;border-top:1px solid var(--line);margin-top:auto}
+.line strong{font-weight:700}
+.line.same{color:var(--muted)}
+.outer{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px;font-size:14px;color:var(--ink-2)}
+.outer .o{display:inline-flex;align-items:center;gap:8px}
+.outer .o i{width:8px;height:8px;border-radius:999px;background:var(--c)}
+.outer .note{flex-basis:100%;font-size:13px;color:var(--muted)}
+
+/* all specs */
+details.all{margin-top:32px}
+details.all > summary{
+  list-style:none;display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 20px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:15px;font-weight:500;user-select:none
+}
+details.all > summary::-webkit-details-marker{display:none}
+details.all > summary:hover{border-color:var(--line-strong)}
+details.all > summary::after{content:"";width:7px;height:7px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-2px) rotate(45deg);transition:transform .2s}
+details.all[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
+.spec{margin-top:20px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 24px 16px}
+.spec-head,.srow{display:grid;grid-template-columns:200px minmax(0,1fr) minmax(0,1fr);gap:24px}
+.spec-head{padding:16px 0 14px;border-bottom:1px solid var(--line)}
+.spec-head div{display:flex;gap:10px;align-items:flex-start;font-weight:500;min-width:0;line-height:1.35}
+.spec-head i{width:10px;height:10px;border-radius:999px;background:var(--c);flex:none;margin-top:5px}
+.srow{padding:14px 0;border-bottom:1px solid var(--line);row-gap:6px}
+.srow:last-child{border-bottom:0}
+.srow .lab{font-size:14px;color:var(--muted)}
+.srow .v{min-width:0;overflow-wrap:anywhere}
+.srow .v.na{color:var(--muted)}
+.srow .d{grid-column:2/-1;font-size:13px;color:var(--muted);display:flex;align-items:center;flex-wrap:wrap;white-space:pre-wrap}
+.srow .d i{width:8px;height:8px;border-radius:999px;background:var(--c);flex:none;margin-right:8px}
+.srow .d .num{color:var(--ink-2);font-weight:500}
+.srow.computed .lab::after{content:" · from 3D model";color:var(--muted)}
+.src{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.src a{font-size:14px;overflow-wrap:anywhere}
+.foot{margin:16px 0 0;font-size:13px;color:var(--muted)}
+
+.fatal{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;font-size:15px;color:var(--ink-2);background:var(--viewer);border-radius:14px}
+
+@media (max-width:900px){
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .controls{border-radius:20px}
+  .views{margin-left:0}
+}
+@media (max-width:640px){
+  .top{padding-top:20px}
+  .top h1{font-size:19px}
+  .units{display:none}
+  .pick{margin-top:24px;gap:10px;grid-template-columns:minmax(0,1fr);position:relative}
+  .card{padding:14px 40px 14px 14px;gap:12px;border-radius:12px}
+  .pick .swap{position:absolute;right:52px;top:50%;transform:translateY(-50%) rotate(90deg);z-index:1}
+  .card::after{right:13px;width:6px;height:6px}
+  .badge{width:28px;height:28px;font-size:13px}
+  .card select{font-size:16px}
+  .card .meta{font-size:12px}
+  .swap{width:36px;height:36px}
+  .viewer{height:min(62svh,520px);min-height:340px;border-radius:12px}
+  .legend{left:10px;top:10px;gap:6px;max-width:calc(100% - 20px)}
+  .viewname{display:none}
+  .hint{display:none}
+  .status{left:10px;bottom:10px}
+  .controls{padding:10px;gap:10px;border-radius:16px}
+  .group{width:100%}
+  .seg{flex:1}
+  .seg button{flex:1;padding:0 10px}
+  .toggles .pill{flex:1;justify-content:center}
+  .views{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+  .views .pill{min-width:0;padding:0 4px;font-size:13px;height:38px}
+  .person{grid-template-columns:minmax(0,1fr);padding:16px;gap:18px;border-radius:12px}
+  .fit-row{grid-template-columns:10px minmax(0,1fr)}
+  .fit-row .tag{grid-column:2;justify-self:start}
+  .section{margin-top:40px}
+  .tiles{grid-template-columns:minmax(0,1fr);gap:12px}
+  .tile{padding:18px 18px 20px}
+  .tile.wide{grid-column:auto}
+  .tile.wide .vals{flex-direction:column;gap:14px}
+  .val .big{font-size:28px}
+  .spec{padding:4px 16px 12px}
+  .spec-head,.srow{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 16px}
+  .srow .lab{grid-column:1/-1}
+  .spec-head > :first-child{display:none}
+  .srow .d{grid-column:1/-1;margin-top:0}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top">
+    <h1>Backpack Size Lab</h1>
+    <div class="right">
+      <span class="units">cm · litres</span>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch colour theme" title="Light / dark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="pick">
+    <label class="card" id="selAWrap">
+      <span class="badge" aria-hidden="true">A</span>
+      <span class="txt"><select id="selA" aria-label="Bag A"></select><span class="meta" id="metaA"></span></span>
+    </label>
+    <button class="swap" id="swapBtn" type="button" aria-label="Swap bag A and bag B" title="Swap A and B">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h13M16 5l3 3-3 3M18 16H5M8 13l-3 3 3 3"/></svg>
+    </button>
+    <label class="card" id="selBWrap">
+      <span class="badge" aria-hidden="true">B</span>
+      <span class="txt"><select id="selB" aria-label="Bag B"></select><span class="meta" id="metaB"></span></span>
+    </label>
+  </div>
+
+  <div class="viewer" id="viewer">
+    <div class="labels" id="labels"></div>
+    <div class="legend" id="legend"></div>
+    <div class="viewname" id="viewName"></div>
+    <div class="hint">Drag to orbit · scroll to zoom</div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="controls" role="toolbar" aria-label="Viewer controls">
+    <div class="group">
+      <div class="seg" role="group" aria-label="Layout">
+        <button type="button" data-mode="overlay" aria-pressed="true">Overlay</button>
+        <button type="button" data-mode="side" aria-pressed="false">Side by side</button>
+      </div>
+    </div>
+    <div class="group toggles" role="group" aria-label="Display">
+      <button type="button" id="ghostBtn" class="pill ghost-btn" title="Choose which bag is see-through"><i></i><span>Ghost B</span></button>
+      <button type="button" id="boxBtn" class="pill" aria-pressed="true" title="Show measuring boxes"><span class="led"></span>Boxes</button>
+      <button type="button" id="personBtn" class="pill" aria-pressed="false" aria-controls="personPanel" title="Show the bags worn on a person"><span class="led"></span>Person</button>
+    </div>
+    <div class="group views" role="group" aria-label="Camera presets">
+      <button type="button" class="pill" data-view="front" title="Front (key 1)" aria-keyshortcuts="1">Front</button>
+      <button type="button" class="pill" data-view="back" title="Back (key 2)" aria-keyshortcuts="2">Back</button>
+      <button type="button" class="pill" data-view="left" title="Left (key 3)" aria-keyshortcuts="3">Left</button>
+      <button type="button" class="pill" data-view="right" title="Right (key 4)" aria-keyshortcuts="4">Right</button>
+      <button type="button" class="pill" data-view="top" title="Top (key 5)" aria-keyshortcuts="5">Top</button>
+      <button type="button" class="pill" data-view="iso" title="3/4 view (key 6)" aria-keyshortcuts="6">3/4</button>
+    </div>
+  </div>
+
+  <div class="person" id="personPanel" hidden role="group" aria-label="Person">
+    <div class="sliders">
+      <label class="sl"><span class="sl-top"><span>Height</span><output id="hOut" for="hIn">175 cm</output></span>
+        <input type="range" id="hIn" min="150" max="200" step="1" value="175" aria-label="Height in centimetres"></label>
+      <label class="sl"><span class="sl-top"><span>Weight</span><output id="wOut" for="wIn">75 kg</output></span>
+        <input type="range" id="wIn" min="45" max="130" step="1" value="75" aria-label="Weight in kilograms"></label>
+      <div class="sl-foot"><span id="bmiOut"></span><button type="button" class="link" id="personReset">Reset</button></div>
+    </div>
+    <div class="fit">
+      <div class="fit-head">On this body</div>
+      <div id="fitList"></div>
+      <p class="fit-note">Each bag hangs with its top 4 cm below the base of the neck. Hips = top of the buttocks; a pack that ends well below it bumps as you walk.</p>
+    </div>
+  </div>
+
+  <section class="section" aria-labelledby="diffTitle">
+    <h2 id="diffTitle">What's different</h2>
+    <div class="tiles" id="tiles"></div>
+
+    <details class="all" id="allSpecs">
+      <summary>All specs</summary>
+      <div class="spec">
+        <div class="spec-head" id="specHead"></div>
+        <div id="specRows"></div>
+      </div>
+      <p class="foot">Listed specs come from the linked retailer pages. Outer sizes are measured from the 3D models on this page.</p>
+    </details>
+  </section>
+</div>
+
+<script>
+  // Shown if the ES module (three.js from CDN) never starts.
+  setTimeout(function(){
+    if(!window.__labStarted){
+      var v=document.getElementById('viewer');
+      if(v && !v.querySelector('.fatal')){
+        var d=document.createElement('div');d.className='fatal';
+        d.textContent='The 3D engine could not load. Check your connection and reload the page.';
+        v.appendChild(d);
+      }
+    }
+  },10000);
+</script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+
+window.__labStarted = true;
+
+const $ = (s) => document.querySelector(s);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const fmt = (n, d = 1) => (Math.round(n * 10 ** d) / 10 ** d).toFixed(d);
+const cm = (m) => fmt(m * 100, 1);
+// Comparison chrome uses a fixed pair: A = signal orange, B = blue (theme tokens).
+const slotColor = (k) => css(k === 'a' ? '--sig-a' : '--sig-b') || (k === 'a' ? '#d4542b' : '#2f6f9f');
+
+/* ---------- theme toggle (per-viewer convenience) ---------- */
+const THEME_KEY = 'bsl-theme';
+function applyTheme(t) {
+  if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  else document.documentElement.removeAttribute('data-theme');
+}
+try { applyTheme(localStorage.getItem(THEME_KEY)); } catch (e) {}
+$('#themeBtn').addEventListener('click', () => {
+  const dark = css('color-scheme') === 'dark';
+  const next = dark ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+  onThemeChange();
+});
+reduceMotion.addEventListener?.('change', () => {});
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => onThemeChange());
+
+/* ---------- renderer / scene ---------- */
+const viewer = $('#viewer');
+const labelsLayer = $('#labels');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setClearColor(0x000000, 0);
+viewer.prepend(renderer.domElement);
+renderer.domElement.setAttribute('aria-label', '3D view of the two backpacks');
+renderer.domElement.setAttribute('role', 'img');
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.75;
+
+const camera = new THREE.PerspectiveCamera(32, 1, 0.01, 50);
+camera.position.set(1.2, 0.9, 1.6);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minPolarAngle = 0;
+controls.maxPolarAngle = Math.PI;
+controls.enablePan = false;
+controls.minDistance = 0.3;
+controls.maxDistance = 5;
+controls.rotateSpeed = 0.9;
+controls.target.set(0, 0.23, 0);
+
+const key = new THREE.DirectionalLight(0xffffff, 2.2);
+key.position.set(1.4, 2.6, 1.8);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.left = -0.9; key.shadow.camera.right = 0.9;
+key.shadow.camera.top = 0.9; key.shadow.camera.bottom = -0.9;
+key.shadow.camera.near = 0.5; key.shadow.camera.far = 6;
+key.shadow.bias = -0.0004; key.shadow.normalBias = 0.01;
+key.shadow.radius = 4;
+scene.add(key);
+const rim = new THREE.DirectionalLight(0xffffff, 0.7);
+rim.position.set(-1.6, 1.4, -1.8);
+scene.add(rim);
+
+/* ground disc with a 10 cm grid */
+const GROUND_R = 1.1;
+const gridCanvas = document.createElement('canvas');
+gridCanvas.width = gridCanvas.height = 2048;
+const gridTex = new THREE.CanvasTexture(gridCanvas);
+gridTex.colorSpace = THREE.SRGBColorSpace;
+gridTex.anisotropy = 8;
+function drawGrid() {
+  const g = gridCanvas.getContext('2d');
+  const N = gridCanvas.width, ppm = N / (GROUND_R * 2);
+  g.clearRect(0, 0, N, N);
+  const c = N / 2;
+  for (let i = -11; i <= 11; i++) {
+    const p = c + i * 0.1 * ppm;
+    const major = i % 5 === 0;
+    g.strokeStyle = major ? css('--grid-major') : css('--grid');
+    g.lineWidth = major ? 2.4 : 1.4;
+    g.beginPath(); g.moveTo(p, 0); g.lineTo(p, N); g.stroke();
+    g.beginPath(); g.moveTo(0, p); g.lineTo(N, p); g.stroke();
+  }
+  gridTex.needsUpdate = true;
+}
+const fadeCanvas = document.createElement('canvas');
+fadeCanvas.width = fadeCanvas.height = 256;
+{
+  const g = fadeCanvas.getContext('2d');
+  const grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  grd.addColorStop(0, '#fff'); grd.addColorStop(0.7, '#fff'); grd.addColorStop(1, '#000');
+  g.fillStyle = grd; g.fillRect(0, 0, 256, 256);
+}
+// grid: unlit thin lines on a transparent disc, so the viewer background stays flat
+const groundMat = new THREE.MeshBasicMaterial({
+  map: gridTex, alphaMap: new THREE.CanvasTexture(fadeCanvas), transparent: true,
+  depthWrite: false, toneMapped: false, side: THREE.FrontSide,
+});
+const ground = new THREE.Mesh(new THREE.CircleGeometry(GROUND_R, 96), groundMat);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -0.0005;
+ground.renderOrder = -2;
+scene.add(ground);
+// shadow catcher: only the contact shadow is drawn
+const shadowMat = new THREE.ShadowMaterial({ opacity: 0.14, depthWrite: false });
+const shadowCatcher = new THREE.Mesh(new THREE.CircleGeometry(GROUND_R, 64), shadowMat);
+shadowCatcher.rotation.x = -Math.PI / 2;
+shadowCatcher.position.y = -0.0003;
+shadowCatcher.receiveShadow = true;
+shadowCatcher.renderOrder = -1;
+scene.add(shadowCatcher);
+
+/* ---------- state ---------- */
+const state = { bags: [], byId: {}, mode: 'overlay', ghost: 'b', boxes: true, view: 'iso' };
+const slots = {
+  a: { key: 'a', group: new THREE.Group(), bag: null, model: null, box: null, seq: 0, status: null, fallback: false },
+  b: { key: 'b', group: new THREE.Group(), bag: null, model: null, box: null, seq: 0, status: null, fallback: false },
+};
+scene.add(slots.a.group, slots.b.group);
+
+const lineMats = new Set();
+function makeLineMat(color, dashed = true) {
+  const m = new LineMaterial({ color, linewidth: 1, dashed, dashSize: 0.006, gapSize: 0.005, transparent: true, opacity: 1, depthTest: false, toneMapped: false });
+  lineMats.add(m);
+  sizeLineMat(m);
+  return m;
+}
+function sizeLineMat(m) { m.resolution.set(viewer.clientWidth || 1, viewer.clientHeight || 1); }
+
+/* ---------- labels (DOM, projected each frame) ---------- */
+const labels = [];
+function addLabel(cls, accent, axis) {
+  const e = el('div', 'dim' + (cls ? ' ' + cls : ''));
+  if (accent) e.style.setProperty('--c', accent);
+  labelsLayer.appendChild(e);
+  const l = { el: e, pos: new THREE.Vector3(), show: false, axis };
+  labels.push(l);
+  return l;
+}
+function setLabel(l, tag, text) {
+  l.el.replaceChildren(el('b', null, tag), document.createTextNode(text));
+}
+const tmpV = new THREE.Vector3();
+const viewDir = new THREE.Vector3();
+const AXES = { x: new THREE.Vector3(1, 0, 0), y: new THREE.Vector3(0, 1, 0), z: new THREE.Vector3(0, 0, 1) };
+function updateLabels() {
+  const w = viewer.clientWidth, h = viewer.clientHeight;
+  viewDir.copy(camera.position).sub(controls.target).normalize();
+  for (const l of labels) {
+    // a dimension seen end-on has no length on screen: hide its label
+    const endOn = l.axis && Math.abs(viewDir.dot(AXES[l.axis])) > 0.92;
+    if (!l.show || endOn) { l.el.style.display = 'none'; continue; }
+    tmpV.copy(l.pos).project(camera);
+    if (tmpV.z > 1 || tmpV.z < -1) { l.el.style.display = 'none'; continue; }
+    l.el.style.display = '';
+    // keep callouts inside the viewer
+    const hw = l.el.offsetWidth / 2 + 3, hh = l.el.offsetHeight / 2 + 3;
+    const x = THREE.MathUtils.clamp((tmpV.x * 0.5 + 0.5) * w, hw, w - hw);
+    const y = THREE.MathUtils.clamp((-tmpV.y * 0.5 + 0.5) * h, hh, h - hh);
+    l.el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) translate(-50%,-50%)`;
+  }
+}
+
+/* ---------- models ---------- */
+const loader = new GLTFLoader();
+const cache = new Map(); // id -> Promise<THREE.Object3D>
+const progressListeners = new Map();
+
+function loadGLB(id) {
+  if (!cache.has(id)) {
+    // Models ship as models/<id>.glb.txt (base64 of the GLB), because the artifact host
+    // only serves standard web types; a plain models/<id>.glb is used where it exists (e.g. Vercel).
+    const base = `models/${encodeURIComponent(id)}`;
+    const report = (p) => { const f = progressListeners.get(id); if (f) f(p); };
+    const readWithProgress = async (res) => {
+      const total = +res.headers.get('content-length') || 0;
+      if (!res.body || !total) return new Uint8Array(await res.arrayBuffer());
+      const reader = res.body.getReader(); const parts = []; let got = 0;
+      for (;;) { const { done, value } = await reader.read(); if (done) break; parts.push(value); got += value.length; report(Math.min(1, got / total)); }
+      const out = new Uint8Array(got); let o = 0; for (const p of parts) { out.set(p, o); o += p.length; } return out;
+    };
+    cache.set(id, (async () => {
+      let buf;
+      let res = await fetch(`${base}.glb`);
+      if (res.ok) {
+        buf = await readWithProgress(res);
+      } else {
+        // fallback: base64 copy (used where the host can't serve .glb, e.g. Claude artifacts)
+        res = await fetch(`${base}.glb.txt`);
+        if (!res.ok) throw new Error(`model ${id}: HTTP ${res.status}`);
+        const txt = new TextDecoder().decode(await readWithProgress(res)).trim();
+        const bin = atob(txt); buf = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+      }
+      const gltf = await loader.parseAsync(buf.buffer, '');
+      return gltf.scene;
+    })());
+    cache.get(id).catch(() => cache.delete(id));
+  }
+  return cache.get(id);
+}
+
+function specDims(bag) {
+  const s = bag.shape || {};
+  let h = s.height, w = s.width, d = s.depth_external;
+  if (!(h && w && d) && bag.specs && bag.specs.dimensions_cm) {
+    const n = String(bag.specs.dimensions_cm).match(/[\d.]+/g);
+    if (n && n.length >= 3) [h, w, d] = n.map(Number);
+  }
+  return { h: (h || 45) / 100, w: (w || 30) / 100, d: (d || 18) / 100 };
+}
+
+function fallbackModel(bag) {
+  const { h, w, d } = specDims(bag);
+  const r = Math.min(0.04, Math.min(w, d) * 0.2);
+  const geo = new RoundedBoxGeometry(w, h, d, 4, r);
+  const col = (bag.shape && bag.shape.fabric && bag.shape.fabric.color) || '#2b2f34';
+  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: col, roughness: 0.8 }));
+  mesh.position.y = h / 2;
+  const g = new THREE.Group(); g.add(mesh);
+  return g;
+}
+
+// Put every bag's back panel (the padding that touches the wearer) on the plane z = 0,
+// so bags line up where they meet your back; the bag extends forward (+z), straps sit behind (-z).
+// Back panel = the body shell plus back padding parts; straps, webbing and buckles are ignored.
+const BACK_PARTS = /^(body|band|back_pad|back_mesh|pads|mesh|spine)$/;
+function alignBack(model, bag) {
+  model.updateMatrixWorld(true);
+  const box = new THREE.Box3(), tmp = new THREE.Box3();
+  const prefix = bag.id + '_';
+  model.traverse((o) => {
+    if (!o.isMesh) return;
+    const raw = (o.name.startsWith(prefix) ? o.name : (o.parent && o.parent.name) || '').replace(/[^\w-]/g, '_');
+    const part = raw.startsWith(prefix) ? raw.slice(prefix.length) : raw;
+    if (BACK_PARTS.test(part)) box.union(tmp.setFromObject(o, true));
+  });
+  // fallback models (or unnamed parts): use the whole model's back face
+  if (box.isEmpty()) box.setFromObject(model, true);
+  model.position.z -= box.min.z;
+  model.userData.backZ = 0;
+  model.updateMatrixWorld(true);
+}
+
+function prepModel(obj) {
+  obj.traverse((o) => {
+    if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; o.userData.origMat = o.material; }
+  });
+  obj.updateMatrixWorld(true);
+  return obj;
+}
+
+async function setSlotBag(slot, bag) {
+  const seq = ++slot.seq;
+  slot.bag = bag;
+  clearSlot(slot);
+  slot.status = { kind: 'loading', p: 0 };
+  slot.ghostMat = new THREE.MeshStandardMaterial({
+    color: slotColor(slot.key), transparent: true, opacity: 0.16, roughness: 0.9, metalness: 0,
+    depthWrite: false, depthTest: false,
+  });
+  renderStatus(); renderChrome();
+  progressListeners.set(bag.id, (p) => { if (slot.seq === seq && slot.status && slot.status.kind === 'loading') { slot.status.p = p; renderStatus(); } });
+  let model, failed = false;
+  try {
+    const src = await loadGLB(bag.id);
+    model = src.clone(true);
+  } catch (e) {
+    console.warn(`Model for ${bag.id} failed to load`, e);
+    model = fallbackModel(bag);
+    failed = true;
+  }
+  if (slot.seq !== seq) return;
+  prepModel(model);
+  alignBack(model, bag);
+  slot.model = model;
+  slot.fallback = failed;
+  slot.box = new THREE.Box3().setFromObject(model, true);
+  slot.group.add(model);
+  slot.status = failed ? { kind: 'failed' } : null;
+  buildBox(slot);
+  renderStatus();
+  relayout(true);
+}
+
+function clearSlot(slot) {
+  if (slot.model) slot.group.remove(slot.model);
+  const objs = [slot.lines, ...Object.values(slot.dims || {})].filter(Boolean);
+  for (const l of objs) { slot.group.remove(l); l.geometry.dispose(); lineMats.delete(l.material); l.material.dispose(); }
+  slot.lines = null; slot.dims = null;
+  slot.model = null; slot.box = null;
+  if (slot.labels) for (const l of Object.values(slot.labels)) l.show = false;
+}
+
+const EDGE_IDX = [[0,1],[1,3],[3,2],[2,0],[4,5],[5,7],[7,6],[6,4],[0,4],[1,5],[2,6],[3,7]];
+function boxSegments(box, pad = 0.002) {
+  const mn = box.min.clone().subScalar(pad), mx = box.max.clone().addScalar(pad);
+  mn.y = Math.max(mn.y, 0.0015);
+  const c = [];
+  for (let i = 0; i < 8; i++) c.push([(i & 1) ? mx.x : mn.x, (i & 2) ? mx.y : mn.y, (i & 4) ? mx.z : mn.z]);
+  const pos = [];
+  for (const [a, b] of EDGE_IDX) pos.push(...c[a], ...c[b]);
+  return pos;
+}
+function buildBox(slot) {
+  const geo = new LineSegmentsGeometry().setPositions(boxSegments(slot.box));
+  const col = slotColor(slot.key);
+  const line = new LineSegments2(geo, makeLineMat(col, true));
+  line.computeLineDistances();
+  line.renderOrder = 3;
+  slot.lines = line;
+  slot.group.add(line);
+  // one solid dimension object per axis, so a dimension seen end-on can be hidden
+  const dimMat = makeLineMat(col, false);
+  slot.dims = {};
+  for (const ax of ['h', 'w', 'd']) {
+    const d = new LineSegments2(new LineSegmentsGeometry(), dimMat);
+    d.renderOrder = 3; d.userData.axis = { h: 'y', w: 'x', d: 'z' }[ax];
+    slot.dims[ax] = d; slot.group.add(d);
+  }
+  if (!slot.labels) slot.labels = { h: addLabel('', col, 'y'), w: addLabel('', col, 'x'), d: addLabel('', col, 'z') };
+  for (const l of Object.values(slot.labels)) l.el.style.setProperty('--c', col);
+  const s = slot.box.getSize(new THREE.Vector3());
+  setLabel(slot.labels.h, 'H', `${cm(s.y)} cm`);
+  setLabel(slot.labels.w, 'W', `${cm(s.x)} cm`);
+  setLabel(slot.labels.d, 'D', `${cm(s.z)} cm`);
+}
+
+/* height difference connector (side by side) */
+const diffMat = makeLineMat(0x000000, false);
+
+/* technical-drawing dimension: extension lines from the two measured points,
+   a dimension line offset by `off`, and 45° slash ticks at both ends */
+const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+function dimension(out, p0, p1, off, gap = 0.006, over = 0.01, tick = 0.009) {
+  const u = off.clone().normalize();
+  const a = p0.clone().add(off), b = p1.clone().add(off);
+  const push = (q, r) => out.push(q.x, q.y, q.z, r.x, r.y, r.z);
+  push(p0.clone().addScaledVector(u, gap), a.clone().addScaledVector(u, over));
+  push(p1.clone().addScaledVector(u, gap), b.clone().addScaledVector(u, over));
+  push(a, b);
+  const ld = b.clone().sub(a).normalize();
+  const sl = u.clone().add(ld).normalize().multiplyScalar(tick / 2);
+  push(a.clone().sub(sl), a.clone().add(sl));
+  push(b.clone().sub(sl), b.clone().add(sl));
+  return a.clone().add(b).multiplyScalar(0.5);
+}
+const diffLine = new LineSegments2(new LineSegmentsGeometry(), diffMat);
+diffLine.visible = false; diffLine.renderOrder = 4;
+scene.add(diffLine);
+const diffLabel = addLabel('delta');
+
+// Shared back-panel line on the floor: every bag's back padding starts here.
+const backMat = makeLineMat(0x000000, true);
+const backLine = new LineSegments2(new LineSegmentsGeometry(), backMat);
+backLine.renderOrder = 4; backLine.visible = false;
+scene.add(backLine);
+const backLabel = addLabel('back');
+setLabel(backLabel, '', 'Back panel');
+
+/* ---------- person: a procedural mannequin to wear the bags ---------- */
+// Landmark heights as fractions of stature H (ANSUR II / Drillis & Contini, rounded).
+// The person faces -z with the most posterior point of the upper back (shoulder blades) on z = 0,
+// so the bag's back panel rests on it and the bag's front (+z) faces away from the wearer.
+const LM = { c7: 0.85, shoulder: 0.818, chest: 0.72, elbow: 0.63, waist: 0.62, crest: 0.60, hips: 0.57, trochanter: 0.53, crotch: 0.47, wrist: 0.485, knee: 0.285, ankle: 0.039 };
+const BAG_TOP_GAP = 0.04;   // bag top sits this far below C7 (where the straps meet the shoulders)
+const TOO_LONG = 0.03;      // flag when the bag ends this far below the hips line
+const PERSON_KEY = 'bsl-person';
+const PERSON_DEF = { on: false, h: 175, w: 75 };
+const clamp = THREE.MathUtils.clamp;
+state.person = { ...PERSON_DEF };
+try {
+  const p = JSON.parse(localStorage.getItem(PERSON_KEY) || 'null');
+  if (p && typeof p === 'object') {
+    state.person.on = p.on === true;
+    if (Number.isFinite(p.h)) state.person.h = clamp(Math.round(p.h), 150, 200);
+    if (Number.isFinite(p.w)) state.person.w = clamp(Math.round(p.w), 45, 130);
+  }
+} catch (e) {}
+function savePerson() { try { localStorage.setItem(PERSON_KEY, JSON.stringify(state.person)); } catch (e) {} }
+
+function personDims() {
+  const H = state.person.h / 100, kg = state.person.w;
+  const bmi = kg / (H * H);
+  const g = clamp(Math.sqrt(bmi / 22), 0.8, 1.45); // girth factor; 1 at BMI 22
+  return { H, kg, bmi, g, c7: LM.c7 * H, hips: LM.hips * H, shoulder: LM.shoulder * H };
+}
+
+// Smooth loft through horizontal superellipse rings: keys = [y, cx, cz, rx, rz, p], top to bottom.
+const crom = (p0, p1, p2, p3, t) => 0.5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
+function loft(keys, seg = 48, steps = 6) {
+  const rings = [], n = keys.length;
+  for (let i = 0; i < n - 1; i++) {
+    const k0 = keys[Math.max(0, i - 1)], k1 = keys[i], k2 = keys[i + 1], k3 = keys[Math.min(n - 1, i + 2)];
+    for (let s = 0; s < steps; s++) rings.push(k1.map((_, j) => crom(k0[j], k1[j], k2[j], k3[j], s / steps)));
+  }
+  rings.push(keys[n - 1].slice());
+  const pos = [], idx = [];
+  for (const [y, cx, cz, rx, rz, p] of rings) {
+    const e = 2 / (p || 2);
+    for (let j = 0; j < seg; j++) {
+      const a = (j / seg) * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
+      pos.push(cx + Math.max(rx, 1e-4) * Math.sign(c) * Math.abs(c) ** e, y, cz + Math.max(rz, 1e-4) * Math.sign(s) * Math.abs(s) ** e);
+    }
+  }
+  const R = rings.length;
+  for (let i = 0; i < R - 1; i++) for (let j = 0; j < seg; j++) {
+    const a = i * seg + j, b = i * seg + (j + 1) % seg, c = a + seg, d = b + seg;
+    idx.push(a, b, c, b, d, c);
+  }
+  const t0 = rings[0], t1 = rings[R - 1];
+  const top = pos.length / 3; pos.push(t0[1], t0[0], t0[2]);
+  const bot = top + 1; pos.push(t1[1], t1[0], t1[2]);
+  for (let j = 0; j < seg; j++) {
+    idx.push(top, (j + 1) % seg, j);
+    idx.push(bot, (R - 1) * seg + j, (R - 1) * seg + (j + 1) % seg);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+  return geo;
+}
+function ellipsoid(rx, ry, rz, x, y, z) {
+  return new THREE.SphereGeometry(1, 32, 20).scale(rx, ry, rz).translate(x, y, z);
+}
+
+// Torso rings: [y/H, half-width/H, half-depth/H, back z/H, superellipse p, width exp, depth exp]
+// (exp = how strongly weight widens that ring: girth ** exp; the belly grows forward)
+const TORSO = [
+  [0.851, 0.034, 0.030, -0.030, 2.0, 0.6, 0.6],
+  [0.843, 0.070, 0.044, -0.021, 2.2, 0.5, 0.6],
+  [0.829, 0.100, 0.056, -0.012, 2.5, 0.4, 0.7],
+  [0.810, 0.112, 0.064, -0.005, 2.7, 0.4, 0.8],
+  [0.785, 0.110, 0.071, -0.001, 2.5, 0.6, 0.9],
+  [0.750, 0.105, 0.075, 0.000, 2.3, 0.7, 1.0],
+  [0.715, 0.099, 0.075, -0.002, 2.2, 0.8, 1.1],
+  [0.675, 0.091, 0.069, -0.008, 2.1, 1.0, 1.3],
+  [0.635, 0.087, 0.063, -0.016, 2.0, 1.1, 1.5],
+  [0.605, 0.088, 0.063, -0.019, 2.0, 1.1, 1.5],
+  [0.575, 0.092, 0.066, -0.014, 2.0, 1.0, 1.25],
+  [0.545, 0.097, 0.071, -0.006, 2.1, 0.9, 1.05],
+  [0.515, 0.099, 0.073, -0.002, 2.1, 0.9, 1.0],
+  [0.490, 0.095, 0.068, -0.008, 2.0, 0.9, 1.0],
+  [0.468, 0.078, 0.050, -0.022, 2.0, 0.9, 1.0],
+  [0.456, 0.030, 0.020, -0.045, 2.0, 0.9, 1.0],
+];
+function torsoRing(yf, g) {
+  // linear lookup of the torso's half-width, half-depth and centre z at y/H = yf (in units of H)
+  let i = 0; while (i < TORSO.length - 2 && TORSO[i + 1][0] > yf) i++;
+  const a = TORSO[i], b = TORSO[i + 1];
+  const t = clamp((a[0] - yf) / (a[0] - b[0]), 0, 1);
+  const L = (k) => a[k] + (b[k] - a[k]) * t;
+  const hw = L(1) * g ** L(5), hd = L(2) * g ** L(6);
+  return { hw, hd, cz: L(3) - hd };
+}
+
+function buildMannequin(d) {
+  const { H, g } = d;
+  const geos = [];
+  // torso
+  geos.push(loft(TORSO.map(([y, hw, hd, b, p, we, de]) => {
+    const rz = hd * g ** de; return [y * H, 0, (b - rz) * H, hw * g ** we * H, rz * H, p];
+  }), 56, 6));
+  // neck + head (the head's back sits a little forward of the shoulder blades)
+  const gn = g ** 0.8;
+  const neckCz = -0.035 - 0.033 * gn;
+  geos.push(loft([
+    [0.900, 0, neckCz, 0.028 * gn, 0.030 * gn, 2], [0.880, 0, neckCz, 0.030 * gn, 0.032 * gn, 2],
+    [0.860, 0, neckCz, 0.032 * gn, 0.034 * gn, 2], [0.840, 0, neckCz - 0.002, 0.038 * gn, 0.040 * gn, 2],
+    [0.826, 0, neckCz - 0.004, 0.030 * gn, 0.032 * gn, 2],
+  ].map((k) => [k[0] * H, 0, k[2] * H, k[3] * H, k[4] * H, 2]), 40, 5));
+  const hc = -0.018 - 0.053; // head centre z / H
+  geos.push(loft([
+    [1.000, 0.000, 0.004, 0.004], [0.993, 0.000, 0.024, 0.030], [0.980, 0.000, 0.034, 0.044],
+    [0.962, -0.002, 0.041, 0.053], [0.940, -0.003, 0.044, 0.056], [0.918, -0.004, 0.043, 0.055],
+    [0.898, -0.008, 0.039, 0.050], [0.882, -0.014, 0.031, 0.042], [0.872, -0.020, 0.020, 0.030],
+    [0.866, -0.024, 0.006, 0.012],
+  ].map(([y, dz, rx, rz]) => [y * H, 0, (hc + dz) * H, rx * H, rz * H, 2]), 40, 5));
+  // arms: relaxed, hanging slightly away from the torso so they clear the straps and hips
+  const ga = g ** 1.0;
+  const sh = torsoRing(0.81, g);
+  const jointX = sh.hw - 0.004;
+  const zArm = torsoRing(0.785, g).cz;
+  let wristX = 0.099 * g ** 0.9 + 0.032;
+  const elbowNeed = torsoRing(0.635, g).hw + 0.022 * ga + 0.012;
+  const kE = (0.805 - 0.635) / (0.805 - LM.wrist);
+  wristX = Math.max(wristX, jointX + (elbowNeed - jointX) / kE);
+  const ARM = [[0.838, 0.010], [0.828, 0.024], [0.808, 0.034], [0.782, 0.032], [0.742, 0.028], [0.692, 0.025],
+    [0.648, 0.022], [0.622, 0.023], [0.588, 0.024], [0.545, 0.020], [0.505, 0.016], [0.486, 0.015], [0.474, 0.011]];
+  const armX = (yf) => yf >= 0.805 ? jointX - (yf - 0.805) * 0.35 : jointX + (wristX - jointX) * (0.805 - yf) / (0.805 - LM.wrist);
+  for (const side of [-1, 1]) {
+    geos.push(loft(ARM.map(([yf, r]) => [yf * H, side * armX(yf) * H, zArm * H, r * ga * 0.94 * H, r * ga * H, 2]), 32, 5));
+    const hx = armX(0.44) + 0.002;
+    geos.push(ellipsoid(0.015 * g ** 0.6 * H, 0.047 * H, 0.024 * g ** 0.4 * H, side * hx * H, 0.44 * H, (zArm - 0.004) * H)
+    );
+  }
+  // legs
+  const hip = torsoRing(0.515, g);
+  const legZ = -0.002 - 0.073 * g ** 0.7 - 0.004;
+  const LEG = [[0.548, 0.030, 0], [0.528, 0.052, 0], [0.497, 0.057, 0], [0.440, 0.051, 0], [0.372, 0.044, 0],
+    [0.307, 0.035, 0], [0.276, 0.034, 0.002], [0.226, 0.036, 0.006], [0.170, 0.033, 0.004], [0.110, 0.024, 0.001],
+    [0.062, 0.019, 0], [0.042, 0.017, 0], [0.030, 0.014, 0]];
+  const legX = (yf) => { const t = clamp((0.53 - yf) / 0.49, 0, 1); return 0.052 * g ** 0.7 * (1 - t) + 0.046 * g ** 0.3 * t; };
+  for (const side of [-1, 1]) {
+    geos.push(loft(LEG.map(([yf, r, dz]) => {
+      const gl = yf > 0.3 ? g ** 1.1 : g ** 0.8;
+      return [yf * H, side * legX(yf) * H, (legZ + dz) * H, r * gl * H, r * gl * 1.02 * H, 2];
+    }), 36, 5));
+    // foot, pointing forward (-z)
+    geos.push(ellipsoid(0.021 * g ** 0.3 * H, 0.021 * H, 0.070 * H, side * legX(0.03) * H, 0.021 * H, (legZ - 0.032) * H));
+  }
+  const box = new THREE.Box3();
+  for (const geo of geos) { geo.computeBoundingBox(); box.union(geo.boundingBox); }
+  return { geos, box, hipHalfW: hip.hw * H };
+}
+
+const personMat = new THREE.MeshStandardMaterial({ color: '#cdc8be', roughness: 0.78, metalness: 0, envMapIntensity: 0.9 });
+const people = { a: new THREE.Group(), b: new THREE.Group() };
+for (const m of Object.values(people)) { m.visible = false; scene.add(m); }
+let personBuild = null;
+function rebuildPerson() {
+  if (personBuild) for (const g of personBuild.geos) g.dispose();
+  personBuild = buildMannequin(personDims());
+  for (const grp of Object.values(people)) {
+    grp.clear();
+    for (const geo of personBuild.geos) {
+      const m = new THREE.Mesh(geo, personMat);
+      m.castShadow = true; m.receiveShadow = true;
+      grp.add(m);
+    }
+  }
+}
+// "Hips" line across each wearer's back, so you can read where each bag ends
+const hipMat = makeLineMat(0x000000, true);
+const hipLine = new LineSegments2(new LineSegmentsGeometry(), hipMat);
+hipLine.renderOrder = 4; hipLine.visible = false;
+scene.add(hipLine);
+const hipLabel = addLabel('mark');
+setLabel(hipLabel, '', 'Hips');
+
+function slotCx(s) { return s.box ? s.group.position.x + (s.box.min.x + s.box.max.x) / 2 : 0; }
+let shadowR = 0.9;
+function layoutPeople() {
+  const P = state.person.on;
+  const side = state.mode === 'side' && slots.a.box && slots.b.box;
+  people.a.visible = P;
+  people.b.visible = P && !!side;
+  people.a.position.x = side ? slotCx(slots.a) : 0;
+  people.b.position.x = side ? slotCx(slots.b) : 0;
+  // shadows must cover a standing person
+  const r = P ? 1.6 : 0.9;
+  if (r !== shadowR) {
+    shadowR = r;
+    const c = key.shadow.camera;
+    c.left = -r; c.right = r; c.top = r; c.bottom = -r; c.far = P ? 9 : 6;
+    c.updateProjectionMatrix();
+  }
+  controls.maxDistance = P ? 9 : 5;
+  hipLine.visible = false; hipLabel.show = false;
+  if (P && personBuild) {
+    const y = personDims().hips, w = personBuild.hipHalfW + 0.05, seg = [];
+    const zf = Math.max(0.1, ...[slots.a, slots.b].filter((s) => s.box).map((s) => s.box.max.z)) + 0.03;
+    const shown = [people.a, people.b].filter((m) => m.visible);
+    for (const m of shown) {
+      const x0 = m.position.x - w, x1 = m.position.x + w;
+      seg.push(x0, y, 0.002, x1, y, 0.002, x0, y, -0.03, x0, y, zf, x1, y, -0.03, x1, y, zf);
+    }
+    hipLine.geometry.dispose();
+    hipLine.geometry = new LineSegmentsGeometry().setPositions(seg);
+    hipLine.computeLineDistances();
+    hipLine.visible = state.boxes;
+    // label at the outer-left end, behind the bag, clear of the bags' own dimension labels
+    hipLabel.pos.set(shown[0].position.x - w - 0.02, y, -0.03);
+    hipLabel.show = state.boxes;
+  }
+}
+function personBoxes() {
+  const out = [];
+  if (!state.person.on || !personBuild) return out;
+  for (const m of [people.a, people.b]) if (m.visible) out.push(personBuild.box.clone().translate(m.position));
+  return out;
+}
+function bagLift(s) { return s.box ? personDims().c7 - BAG_TOP_GAP - s.box.max.y : 0; }
+
+function renderFit() {
+  const list = $('#fitList');
+  if (!list) return;
+  const d = personDims();
+  $('#bmiOut').textContent = `BMI ${fmt(d.bmi, 1)}`;
+  list.replaceChildren();
+  for (const s of [slots.a, slots.b]) {
+    if (!s.bag) continue;
+    const row = el('div', 'fit-row'); row.style.setProperty('--c', slotColor(s.key));
+    const body = el('div');
+    body.appendChild(el('div', 'fit-name', s.bag.short));
+    if (!s.box) { body.appendChild(el('div', 'fit-txt', 'Measuring…')); row.append(el('i'), body); list.appendChild(row); continue; }
+    const top = d.c7 - BAG_TOP_GAP, bottom = top - (s.box.max.y - s.box.min.y);
+    const dh = bottom - d.hips;
+    const n = Math.round(Math.abs(dh) * 100);
+    const end = n === 0 ? 'ends at the hips' : `ends ${n} cm ${dh > 0 ? 'above' : 'below'} the hips`;
+    body.appendChild(el('div', 'fit-txt', `Top ${Math.round(BAG_TOP_GAP * 100)} cm below the base of the neck · ${end}`));
+    const long = dh < -TOO_LONG;
+    const tag = el('span', 'tag' + (long ? ' warn' : ''), long ? 'Too long for this torso' : 'Fits this torso');
+    row.append(el('i'), body, tag);
+    list.appendChild(row);
+  }
+}
+function syncPersonUI() {
+  const P = state.person;
+  $('#personBtn').setAttribute('aria-pressed', String(P.on));
+  $('#personPanel').hidden = !P.on;
+  const hIn = $('#hIn'), wIn = $('#wIn');
+  hIn.value = P.h; wIn.value = P.w;
+  for (const i of [hIn, wIn]) i.style.setProperty('--p', `${((i.value - i.min) / (i.max - i.min)) * 100}%`);
+  $('#hOut').textContent = `${P.h} cm`;
+  $('#wOut').textContent = `${P.w} kg`;
+  renderFit();
+}
+
+function applyMaterials() {
+  for (const s of Object.values(slots)) {
+    if (!s.model) continue;
+    const ghost = state.mode === 'overlay' && state.ghost === s.key;
+    s.model.traverse((o) => {
+      if (!o.isMesh) return;
+      o.material = ghost ? s.ghostMat : o.userData.origMat;
+      o.castShadow = !ghost;
+      o.renderOrder = ghost ? 2 : 0;
+    });
+  }
+}
+
+function relayout(refit) {
+  const A = slots.a, B = slots.b;
+  A.group.position.set(0, 0, 0); B.group.position.set(0, 0, 0);
+  const P = state.person.on;
+  if (P && !personBuild) rebuildPerson();
+  if (state.mode === 'side' && A.box && B.box && P) {
+    // one wearer per bag: space the bags so the two people stand clear of each other
+    const pw = personBuild.box.max.x - personBuild.box.min.x;
+    const bw = (A.box.max.x - A.box.min.x + B.box.max.x - B.box.min.x) / 2;
+    const sep = Math.max(pw + 0.14, bw + 0.12);
+    A.group.position.x = -sep / 2 - (A.box.min.x + A.box.max.x) / 2;
+    B.group.position.x = sep / 2 - (B.box.min.x + B.box.max.x) / 2;
+  } else if (state.mode === 'side' && A.box && B.box) {
+    const gap = 0.12;
+    let ax = -gap / 2 - A.box.max.x, bx = gap / 2 - B.box.min.x;
+    const off = -((ax + A.box.min.x) + (bx + B.box.max.x)) / 2;
+    A.group.position.x = ax + off; B.group.position.x = bx + off;
+  }
+  // worn: the bag's top hangs BAG_TOP_GAP below C7, its back panel on the wearer's shoulder blades
+  if (P) for (const s of [A, B]) s.group.position.y = bagLift(s);
+  layoutPeople();
+  applyMaterials();
+  // boxes + labels
+  for (const s of [A, B]) {
+    if (!s.box || !s.labels) continue;
+    s.lines.visible = state.boxes;
+    const p = s.group.position, b = s.box;
+    // A's labels sit on its outer/bottom edges, B's on the opposite/top edges so they don't collide.
+    const isA = s.key === 'a';
+    const side = state.mode === 'side' ? (isA ? -1 : 1) : (isA ? 1 : -1);
+    const sx = side > 0 ? b.max.x : b.min.x;
+    const yEdge = (isA || state.mode === 'side') ? 0 : b.max.y;
+    const OFF = 0.035, low = isA || state.mode === 'side';
+    const sh = [], sw = [], sd = [];
+    const mh = dimension(sh, V3(sx, b.min.y, b.max.z), V3(sx, b.max.y, b.max.z), V3(side * OFF, 0, 0));
+    const mw = low
+      ? dimension(sw, V3(b.min.x, b.min.y, b.max.z), V3(b.max.x, b.min.y, b.max.z), V3(0, 0, OFF))
+      : dimension(sw, V3(b.min.x, b.max.y, b.min.z), V3(b.max.x, b.max.y, b.min.z), V3(0, 0, -OFF));
+    const md = dimension(sd, V3(sx, yEdge, b.min.z), V3(sx, yEdge, b.max.z), V3(side * OFF, 0, 0));
+    for (const [ax, segs] of [['h', sh], ['w', sw], ['d', sd]]) {
+      const o = s.dims[ax];
+      o.geometry.dispose();
+      o.geometry = new LineSegmentsGeometry().setPositions(segs);
+    }
+    // A's H label sits mid-height, B's a little higher so overlaid labels don't collide
+    if (!isA) mh.y = b.min.y + (b.max.y - b.min.y) * 0.62;
+    s.labels.h.pos.copy(mh).add(p);
+    s.labels.w.pos.copy(mw).add(p);
+    s.labels.d.pos.copy(md).add(p);
+    for (const l of Object.values(s.labels)) l.show = state.boxes;
+  }
+  // height difference
+  diffLine.visible = false; diffLabel.show = false;
+  if (state.mode === 'side' && A.box && B.box) {
+    // compare tops normally; on a person the tops line up, so compare where the bags end
+    const hgt = (s) => s.box.max.y - s.box.min.y;
+    const tall = hgt(A) >= hgt(B) ? A : B, short = tall === A ? B : A;
+    const ref = (s) => s.group.position.y + (P ? s.box.min.y : s.box.max.y);
+    const refY = ref(tall), otherY = ref(short);
+    const sg = Math.sign(otherY - refY) || (P ? 1 : -1);
+    const tallInner = tall === A ? A.group.position.x + A.box.max.x : B.group.position.x + B.box.min.x;
+    const shortInner = short === A ? A.group.position.x + A.box.max.x : B.group.position.x + B.box.min.x;
+    const shortCx = (tallInner + shortInner) / 2; // dimension sits in the gap between the bags
+    const z = Math.max(A.box.max.z, B.box.max.z);
+    const dh = hgt(tall) - hgt(short);
+    if (dh > 0.002) {
+      diffLine.geometry.dispose();
+      const seg = [];
+      const dirS = Math.sign(shortInner - tallInner) || 1;
+      seg.push(tallInner, refY, z, shortInner + dirS * 0.01, refY, z);
+      const sl = 0.0045;
+      seg.push(shortCx - sl, refY - sl, z, shortCx + sl, refY + sl, z, shortCx - sl, otherY - sl, z, shortCx + sl, otherY + sl, z);
+      seg.push(shortCx, refY - sg * 0.008, z, shortCx, otherY, z);
+      diffLine.geometry = new LineSegmentsGeometry().setPositions(seg);
+      diffLine.computeLineDistances();
+      diffLine.visible = state.boxes;
+      diffLabel.pos.set(shortCx, (refY + otherY) / 2, z);
+      setLabel(diffLabel, 'ΔH', `+${cm(dh)} cm`);
+      diffLabel.el.title = P ? `${tall.bag.short} hangs ${cm(dh)} cm lower` : `${tall.bag.short} is ${cm(dh)} cm taller`;
+    } else {
+      diffLabel.pos.set(shortCx, otherY + (P ? -0.03 : 0.03), z);
+      setLabel(diffLabel, 'ΔH', 'same height');
+    }
+    diffLabel.show = state.boxes;
+  }
+  // back-panel reference line across both bags at z = 0
+  backLine.visible = false; backLabel.show = false;
+  const boxesNow = [A, B].filter((s) => s.box);
+  if (boxesNow.length) {
+    let x0 = Infinity, x1 = -Infinity;
+    for (const s of boxesNow) { x0 = Math.min(x0, s.group.position.x + s.box.min.x); x1 = Math.max(x1, s.group.position.x + s.box.max.x); }
+    x0 -= 0.05; x1 += 0.05;
+    backLine.geometry.dispose();
+    backLine.geometry = new LineSegmentsGeometry().setPositions([x0, 0.001, 0, x1, 0.001, 0]);
+    backLine.computeLineDistances();
+    backLine.visible = state.boxes;
+    backLabel.pos.set(x1 + 0.01, 0.001, 0);
+    backLabel.show = state.boxes;
+  }
+  // ground covers both
+  renderReadout();
+  renderSpecs();
+  renderFit();
+  if (refit) goTo(currentDir(), false, true);
+}
+
+/* ---------- camera presets ---------- */
+const VIEWS = {
+  front: { phi: Math.PI / 2, theta: 0, name: 'Front', pname: 'Front of the bag · wearer seen from behind' },
+  back: { phi: Math.PI / 2, theta: Math.PI, name: 'Back', pname: 'Back of the bag · wearer seen from the front' },
+  left: { phi: Math.PI / 2, theta: -Math.PI / 2, name: 'Left side' },
+  right: { phi: Math.PI / 2, theta: Math.PI / 2, name: 'Right side' },
+  top: { phi: 0.0005, theta: 0, name: 'Top' },
+  iso: { phi: 1.08, theta: 0.68, name: '3/4' },
+};
+function combinedBox() {
+  const box = new THREE.Box3();
+  for (const s of Object.values(slots)) {
+    if (s.box) box.union(s.box.clone().translate(s.group.position));
+  }
+  for (const b of personBoxes()) box.union(b);
+  if (box.isEmpty()) box.set(new THREE.Vector3(-0.17, 0, -0.15), new THREE.Vector3(0.17, 0.48, 0.15));
+  if (state.boxes) box.expandByVector(new THREE.Vector3(0.05, 0, 0.05)); // room for dimension lines
+  return box;
+}
+const tmpCam = new THREE.PerspectiveCamera();
+function fitDistance(phi, theta, box, center) {
+  const dir = new THREE.Vector3().setFromSphericalCoords(1, phi, theta);
+  tmpCam.position.copy(center).add(dir);
+  tmpCam.up.set(0, 1, 0);
+  tmpCam.lookAt(center);
+  tmpCam.updateMatrixWorld(true);
+  const inv = tmpCam.matrixWorldInverse;
+  const aspect = camera.aspect;
+  const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2), tanH = tanV * aspect;
+  const narrow = viewer.clientWidth < 560;
+  const padX = narrow ? 1.24 : 1.2, padY = narrow ? 1.18 : 1.16;
+  let D = 0;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < 8; i++) {
+    v.set((i & 1) ? box.max.x : box.min.x, (i & 2) ? box.max.y : box.min.y, (i & 4) ? box.max.z : box.min.z).applyMatrix4(inv);
+    D = Math.max(D, (Math.abs(v.x) * padX) / tanH + v.z + 1, (Math.abs(v.y) * padY) / tanV + v.z + 1);
+  }
+  return THREE.MathUtils.clamp(D, controls.minDistance, controls.maxDistance);
+}
+function currentDir() {
+  const sph = new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
+  return { phi: sph.phi, theta: sph.theta };
+}
+let tween = null;
+function goTo(view, animate = true, keepName = false) {
+  const box = combinedBox();
+  const center = box.getCenter(new THREE.Vector3());
+  const { phi, theta } = view;
+  const radius = fitDistance(phi, theta, box, center);
+  const from = new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
+  let dTheta = theta - from.theta;
+  dTheta = Math.atan2(Math.sin(dTheta), Math.cos(dTheta));
+  const to = { phi, theta: from.theta + dTheta, radius, target: center };
+  const start = { phi: from.phi, theta: from.theta, radius: from.radius, target: controls.target.clone() };
+  if (!keepName) $('#viewName').textContent = (state.person.on && view.pname) || view.name || '';
+  if (!animate || reduceMotion.matches) {
+    tween = null;
+    controls.target.copy(center);
+    camera.position.copy(center).add(new THREE.Vector3().setFromSphericalCoords(radius, phi, to.theta));
+    controls.update();
+    return;
+  }
+  tween = { t0: performance.now(), dur: 750, start, to };
+}
+function stepTween(now) {
+  if (!tween) return;
+  let k = Math.min(1, (now - tween.t0) / tween.dur);
+  const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+  const { start, to } = tween;
+  const phi = start.phi + (to.phi - start.phi) * e;
+  const theta = start.theta + (to.theta - start.theta) * e;
+  const radius = start.radius + (to.radius - start.radius) * e;
+  controls.target.lerpVectors(start.target, to.target, e);
+  camera.position.copy(controls.target).add(new THREE.Vector3().setFromSphericalCoords(radius, phi, theta));
+  if (k >= 1) tween = null;
+}
+controls.addEventListener('start', () => { tween = null; $('#viewName').textContent = ''; setViewPressed(null); });
+
+function setView(name, animate = true) {
+  state.view = name;
+  setViewPressed(name);
+  goTo(VIEWS[name], animate);
+}
+function setViewPressed(name) {
+  document.querySelectorAll('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === name)));
+}
+
+/* ---------- UI ---------- */
+function renderChrome() {
+  const A = slots.a.bag, B = slots.b.bag;
+  if (!A || !B) return;
+  $('#selAWrap').style.setProperty('--c', slotColor('a'));
+  $('#selBWrap').style.setProperty('--c', slotColor('b'));
+  for (const [k, bag] of [['A', A], ['B', B]]) {
+    const vol = bag.specs && typeof bag.specs.volume_internal_l === 'number' ? `${+fmt(bag.specs.volume_internal_l, 1)} L listed` : 'Volume not listed';
+    $('#meta' + k).textContent = [bag.brand, vol].filter(Boolean).join(' · ');
+  }
+  const legend = $('#legend');
+  legend.replaceChildren();
+  for (const s of [slots.a, slots.b]) {
+    const ghost = state.mode === 'overlay' && state.ghost === s.key;
+    const c = el('span', 'chip' + (ghost ? ' ghost' : ''));
+    c.style.setProperty('--c', slotColor(s.key));
+    c.append(el('i'), el('span', null, s.bag.short));
+    if (ghost) c.append(el('small', null, 'ghost'));
+    legend.appendChild(c);
+  }
+  const gb = $('#ghostBtn');
+  const g = slots[state.ghost].bag;
+  gb.style.setProperty('--c', slotColor(state.ghost));
+  gb.querySelector('span').textContent = `Ghost ${state.ghost.toUpperCase()}`;
+  gb.disabled = state.mode !== 'overlay';
+  gb.style.opacity = state.mode === 'overlay' ? '' : '0.45';
+  gb.title = `See-through bag in overlay: ${g.short}. Tap to swap.`;
+  document.querySelectorAll('[data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === state.mode)));
+  $('#boxBtn').setAttribute('aria-pressed', String(state.boxes));
+}
+
+function renderStatus() {
+  const st = $('#status');
+  st.replaceChildren();
+  for (const s of [slots.a, slots.b]) {
+    if (!s.status || !s.bag) continue;
+    if (s.status.kind === 'loading') {
+      const m = el('div', 'msg');
+      m.style.setProperty('--c', slotColor(s.key));
+      m.append(document.createTextNode(`Loading ${s.bag.short}…`));
+      const bar = el('span', 'bar'); const fill = el('span');
+      fill.style.setProperty('--p', Math.round((s.status.p || 0) * 100) + '%');
+      bar.appendChild(fill); m.appendChild(bar);
+      st.appendChild(m);
+    } else if (s.status.kind === 'failed') {
+      st.appendChild(el('div', 'msg warn', `${s.bag.short}: 3D model didn't load. Showing a plain box at the listed size.`));
+    }
+  }
+}
+
+function boxInfo(slot) {
+  if (!slot.box) return null;
+  const s = slot.box.getSize(new THREE.Vector3());
+  return { w: s.x, h: s.y, d: s.z, l: s.x * s.y * s.z * 1000 };
+}
+
+/* "What's different": five tiles, each with the two values, bars for numeric rows, one short line */
+const num = (v) => (typeof v === 'number' && isFinite(v) ? v : null);
+const trim0 = (n, d) => String(+fmt(n, d));
+function parseDims(s) {
+  const n = String(s || '').match(/[\d.]+/g);
+  return n && n.length >= 3 ? n.slice(0, 3).map(Number) : null;
+}
+function parseInches(s) {
+  const m = String(s || '').match(/([\d.]+)\s*(?:"|″|in\b|inch)/i);
+  return m ? parseFloat(m[1]) : null;
+}
+function sentence(parts) {
+  const p = el('p', 'line');
+  for (const x of parts) p.append(typeof x === 'string' ? document.createTextNode(x) : x);
+  return p;
+}
+function makeTile(label, vals, opts = {}) {
+  const t = el('div', 'tile' + (opts.wide ? ' wide' : ''));
+  t.appendChild(el('div', 'lab', label));
+  const box = el('div', 'vals');
+  const nums = vals.map((v) => v.n).filter((n) => n != null && n > 0);
+  const max = nums.length === 2 ? Math.max(...nums) : 0;
+  for (const v of vals) {
+    const row = el('div', 'val'); row.style.setProperty('--c', slotColor(v.slot.key));
+    const r1 = el('div', 'row1');
+    r1.appendChild(el('span', 'dot'));
+    const big = el('span', 'big num' + (v.text == null ? ' na' : '') + (v.small ? ' txt' : ''));
+    if (v.text == null) big.textContent = 'Not listed';
+    else { big.textContent = v.text; if (v.unit) big.appendChild(el('small', null, v.unit)); }
+    big.title = v.slot.bag.short;
+    r1.appendChild(big);
+    row.appendChild(r1);
+    if (opts.bars && max) {
+      const tr = el('div', 'track'); const f = el('span');
+      f.style.setProperty('--w', v.n != null ? `${Math.max(2, (v.n / max) * 100).toFixed(1)}%` : '0%');
+      tr.appendChild(f); row.appendChild(tr);
+    }
+    row.appendChild(el('div', 'who', v.sub ? `${v.slot.bag.short} · ${v.sub}` : v.slot.bag.short));
+    box.appendChild(row);
+  }
+  t.appendChild(box);
+  if (opts.extra) t.appendChild(opts.extra);
+  if (opts.line) t.appendChild(opts.line);
+  return t;
+}
+function compareLine(A, B, va, vb, { tol = 0, more, less, fmtDiff, same = 'About the same' }) {
+  if (va == null || vb == null) return sentence(['Not listed for both bags.']);
+  if (Math.abs(va - vb) <= tol) { const p = sentence([same]); p.classList.add('same'); return p; }
+  return more(va > vb ? A : B, va > vb ? B : A, Math.max(va, vb), Math.min(va, vb));
+}
+function renderReadout() {
+  const A = slots.a, B = slots.b;
+  const wrap = $('#tiles');
+  if (!A.bag || !B.bag) return;
+  wrap.replaceChildren();
+  const sp = (s) => s.bag.specs || {};
+  const strong = (t) => el('strong', null, t);
+
+  // Volume (listed) + outer box volume from the models
+  const vA = num(sp(A).volume_internal_l), vB = num(sp(B).volume_internal_l);
+  const vol = (s, v) => ({ slot: s, n: v, text: v == null ? null : trim0(v, 1), unit: 'L' });
+  const outer = el('div', 'outer');
+  for (const s of [A, B]) {
+    const i = boxInfo(s); const o = el('span', 'o num'); o.style.setProperty('--c', slotColor(s.key));
+    o.append(el('i'), document.createTextNode(i ? `${fmt(i.l, 1)} L outer box${s.fallback ? ' (listed size)' : ''}` : 'Measuring…'));
+    outer.appendChild(o);
+  }
+  outer.appendChild(el('span', 'note', 'Outer box is height × width × depth of each 3D model, straps included: the space the bag takes up, not what it holds.'));
+  wrap.appendChild(makeTile('Volume', [vol(A, vA), vol(B, vB)], {
+    wide: true, bars: true, extra: outer,
+    line: compareLine(A, B, vA, vB, { tol: 0.05, same: 'Both hold the same',
+      more: (w, l, hi, lo) => sentence([`${w.bag.short} holds `, strong(`${fmt((hi / lo - 1) * 100, 0)}% more`), ` (+${trim0(hi - lo, 1)} L)`]) }),
+  }));
+
+  // Weight
+  const wA = num(sp(A).weight_kg), wB = num(sp(B).weight_kg);
+  const wt = (s, v) => ({ slot: s, n: v, text: v == null ? null : fmt(v, 2), unit: 'kg' });
+  wrap.appendChild(makeTile('Weight', [wt(A, wA), wt(B, wB)], {
+    bars: true,
+    line: compareLine(A, B, wA, wB, { tol: 0.005, same: 'Same weight',
+      more: (w, l, hi, lo) => sentence([`${l.bag.short} is `, strong(`${fmt(hi - lo, 2)} kg lighter`)]) }),
+  }));
+
+  // Listed size
+  const dA = parseDims(sp(A).dimensions_cm), dB = parseDims(sp(B).dimensions_cm);
+  const sz = (s, d) => ({ slot: s, small: true, text: d ? d.map((x) => trim0(x, 1)).join(' × ') : null, unit: d ? 'cm' : '' });
+  wrap.appendChild(makeTile('Size · H × W × D', [sz(A, dA), sz(B, dB)], {
+    line: compareLine(A, B, dA && dA[0], dB && dB[0], { tol: 0.05, same: 'Same height',
+      more: (w, l, hi, lo) => sentence([`${w.bag.short} is `, strong(`${trim0(hi - lo, 1)} cm taller`)]) }),
+  }));
+
+  // Laptop
+  const lap = (s) => { const v = sp(s).laptop; if (!v) return { slot: s, text: null }; const m = String(v).match(/^([^(]*?)\s*\((.*)\)\s*(.*)$/); return { slot: s, small: true, text: (m ? m[1] : String(v)).trim(), sub: m ? (m[2] + (m[3] ? ' ' + m[3] : '')).trim() : '' }; };
+  const iA = parseInches(sp(A).laptop), iB = parseInches(sp(B).laptop);
+  wrap.appendChild(makeTile('Laptop', [lap(A), lap(B)], {
+    line: compareLine(A, B, iA, iB, { tol: 0.05, same: 'Same laptop size',
+      more: (w, l, hi, lo) => sentence([`${w.bag.short} fits a `, strong(`${trim0(hi - lo, 1)}″ larger`), ' laptop']) }),
+  }));
+
+  // Price
+  const mA = parseMoney(sp(A).price), mB = parseMoney(sp(B).price);
+  const pr = (s, m) => ({ slot: s, n: m ? m.v : null, text: sp(s).price ? String(sp(s).price) : null });
+  const sameCur = mA && mB && mA.cur === mB.cur;
+  let pline;
+  if (mA && mB && !sameCur) { pline = sentence(['Different currencies, not compared']); pline.classList.add('same'); }
+  else pline = compareLine(A, B, mA && mA.v, mB && mB.v, { tol: 0.5, same: 'About the same price',
+    more: (w, l, hi, lo) => sentence([`${l.bag.short} costs `, strong(`${mA.approx || mB.approx ? '≈ ' : ''}${mA.cur}${fmt(hi - lo, 0)} less`)]) });
+  wrap.appendChild(makeTile('Price', [pr(A, mA), pr(B, mB)], { bars: !!sameCur, line: pline }));
+}
+
+/* specs rows: known keys first, then any extra keys present in the data */
+const ROWS = [
+  { key: 'volume_internal_l', label: 'Internal volume', unit: 'L', dec: 1 },
+  { key: 'volume_external_l', label: 'External volume', unit: 'L', dec: 1 },
+  { key: '_boxvol', label: 'Outer box volume', unit: 'L', dec: 1, computed: true },
+  { key: 'dimensions_cm', label: 'Listed size · H × W × D', suffix: ' cm' },
+  { key: '_boxdims', label: 'Outer size · H × W × D', computed: true },
+  { key: 'weight_kg', label: 'Weight', unit: 'kg', dec: 2, word: ['heavier', 'lighter'] },
+  { key: 'laptop', label: 'Laptop' },
+  { key: 'storage_compartment_cm', label: 'Main compartment', suffix: ' cm' },
+  { key: 'tech_compartment_cm', label: 'Tech compartment', suffix: ' cm' },
+  { key: 'pockets', label: 'Pockets' },
+  { key: 'material', label: 'Material' },
+  { key: 'opening', label: 'Opening' },
+  { key: 'price', label: 'Price', money: true },
+  { key: 'warranty', label: 'Warranty' },
+];
+const SKIP = new Set(['sources']);
+const human = (k) => k.replace(/_(cm|kg|l)$/i, (m, u) => ` (${u === 'l' ? 'L' : u})`).replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
+function parseMoney(s) {
+  const m = String(s || '').match(/([$€£¥])\s?([\d.,]+)/);
+  return m ? { cur: m[1], v: parseFloat(m[2].replace(/,/g, '')), approx: /≈|~|approx/i.test(s) } : null;
+}
+function specVal(slot, row) {
+  const sp = slot.bag.specs || {};
+  if (row.key === '_boxvol') { const i = boxInfo(slot); return i ? i.l : null; }
+  if (row.key === '_boxdims') { const i = boxInfo(slot); return i ? `${cm(i.h)} × ${cm(i.w)} × ${cm(i.d)} cm` : null; }
+  const v = sp[row.key];
+  return v === undefined ? null : v;
+}
+function renderSpecs() {
+  const A = slots.a, B = slots.b;
+  if (!A.bag || !B.bag) return;
+  const head = $('#specHead'); head.replaceChildren(el('div'));
+  for (const s of [A, B]) {
+    const d = el('div'); d.style.setProperty('--c', slotColor(s.key));
+    d.append(el('i'), el('span', null, s.bag.name));
+    head.appendChild(d);
+  }
+  const rows = ROWS.slice();
+  const known = new Set(rows.map((r) => r.key));
+  for (const s of [A, B]) for (const k of Object.keys(s.bag.specs || {})) {
+    if (!known.has(k) && !SKIP.has(k)) { known.add(k); rows.push({ key: k, label: human(k), unit: /_l$/.test(k) ? 'L' : /_kg$/.test(k) ? 'kg' : undefined, dec: 1 }); }
+  }
+  const wrap = $('#specRows'); wrap.replaceChildren();
+  for (const row of rows) {
+    const va = specVal(A, row), vb = specVal(B, row);
+    if (va == null && vb == null) continue;
+    const r = el('div', 'srow' + (row.computed ? ' computed' : ''));
+    r.appendChild(el('div', 'lab', row.label));
+    const numeric = typeof va === 'number' || typeof vb === 'number';
+    for (const v of [va, vb]) {
+      let text;
+      if (v == null) text = 'Not listed';
+      else if (typeof v === 'number') text = `${row.dec != null ? fmt(v, row.dec) : v} ${row.unit || ''}`.trim();
+      else text = String(v) + (row.suffix && !String(v).endsWith(row.suffix.trim()) ? row.suffix : '');
+      r.appendChild(el('div', 'v' + (numeric && v != null ? ' numv' : '') + (v == null ? ' na' : ''), text));
+    }
+    // difference line
+    let d = null;
+    if (typeof va === 'number' && typeof vb === 'number') {
+      const diff = va - vb;
+      const tol = row.dec != null ? 0.5 * 10 ** -row.dec : 0;
+      if (Math.abs(diff) <= tol) d = el('div', 'd same', 'Same');
+      else {
+        const win = diff > 0 ? A : B, lose = win === A ? B : A;
+        const hi = Math.max(va, vb), lo = Math.min(va, vb);
+        d = el('div', 'd'); d.style.setProperty('--c', slotColor(win.key));
+        const word = row.word ? ` ${row.word[0]}` : row.unit === 'L' ? ' more' : '';
+        d.append(el('i'), document.createTextNode(`${win.bag.short} `), el('span', 'num', `+${fmt(hi - lo, row.dec ?? 1)} ${row.unit || ''}`.trim()));
+        const tail = (lo > 0 ? ` · ${fmt((hi / lo - 1) * 100, 0)}%` : '') + word;
+        d.append(el('span', 'num', tail));
+      }
+    } else if (row.money && va && vb) {
+      const ma = parseMoney(va), mb = parseMoney(vb);
+      if (ma && mb && ma.cur === mb.cur) {
+        const diff = ma.v - mb.v;
+        if (Math.abs(diff) < 0.5) d = el('div', 'd same', 'About the same');
+        else {
+          const win = diff > 0 ? A : B;
+          d = el('div', 'd'); d.style.setProperty('--c', slotColor(win.key));
+          d.append(el('i'), document.createTextNode(`${win.bag.short} costs `), el('span', 'num', `${ma.approx || mb.approx ? '≈ ' : ''}${ma.cur}${fmt(Math.abs(diff), 0)}`), document.createTextNode(' more'));
+        }
+      } else if (ma && mb) d = el('div', 'd same', 'Different currencies, not compared');
+    } else if (typeof va === 'string' && typeof vb === 'string' && va.trim().toLowerCase() === vb.trim().toLowerCase()) {
+      d = el('div', 'd same', 'Same');
+    }
+    if (d) r.appendChild(d);
+    wrap.appendChild(r);
+  }
+  // sources
+  const r = el('div', 'srow');
+  r.appendChild(el('div', 'lab', 'Sources'));
+  for (const s of [A, B]) {
+    const ul = el('ul', 'src');
+    for (const src of (s.bag.specs && s.bag.specs.sources) || []) {
+      const li = el('li'); const a = el('a', null, src.title);
+      a.href = src.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      li.appendChild(a); ul.appendChild(li);
+    }
+    if (!ul.children.length) ul.appendChild(el('li', 'na', 'None listed'));
+    r.appendChild(ul);
+  }
+  wrap.appendChild(r);
+}
+
+function onThemeChange() {
+  drawGrid();
+  diffMat.color.set(css('--measure'));
+  backMat.color.set(css('--accent'));
+  hipMat.color.set(css('--ink-2'));
+  personMat.color.set(css('--mannequin') || '#cdc8be');
+  for (const s of Object.values(slots)) {
+    const col = slotColor(s.key);
+    if (s.lines) s.lines.material.color.set(col);
+    if (s.dims) s.dims.h.material.color.set(col);
+    if (s.ghostMat) s.ghostMat.color.set(col);
+    if (s.labels) for (const l of Object.values(s.labels)) l.el.style.setProperty('--c', col);
+  }
+  if (slots.a.bag && slots.b.bag) { renderChrome(); renderReadout(); renderSpecs(); renderFit(); }
+}
+
+function fillSelects() {
+  for (const [id, slotKey] of [['#selA', 'a'], ['#selB', 'b']]) {
+    const sel = $(id); sel.replaceChildren();
+    for (const b of state.bags) { const o = el('option', null, b.short || b.name); o.value = b.id; sel.appendChild(o); }
+    sel.value = slots[slotKey].bag.id;
+  }
+}
+function choose(slotKey, id) {
+  const other = slotKey === 'a' ? 'b' : 'a';
+  const bag = state.byId[id];
+  if (!bag || slots[slotKey].bag === bag) return;
+  if (slots[other].bag === bag) { swapBags(); return; }
+  setSlotBag(slots[slotKey], bag);
+  fillSelects();
+}
+function swapBags() {
+  const a = slots.a.bag, b = slots.b.bag;
+  setSlotBag(slots.a, b); setSlotBag(slots.b, a);
+  fillSelects();
+}
+
+$('#selA').addEventListener('change', (e) => choose('a', e.target.value));
+$('#selB').addEventListener('change', (e) => choose('b', e.target.value));
+$('#swapBtn').addEventListener('click', swapBags);
+document.querySelectorAll('[data-mode]').forEach((b) => b.addEventListener('click', () => {
+  if (state.mode === b.dataset.mode) return;
+  state.mode = b.dataset.mode; renderChrome(); relayout(false); goTo(currentDir(), true, true);
+}));
+$('#ghostBtn').addEventListener('click', () => { state.ghost = state.ghost === 'a' ? 'b' : 'a'; renderChrome(); applyMaterials(); });
+$('#boxBtn').addEventListener('click', () => { state.boxes = !state.boxes; renderChrome(); relayout(false); });
+document.querySelectorAll('[data-view]').forEach((b) => b.addEventListener('click', () => setView(b.dataset.view)));
+function personChanged(refit) {
+  syncPersonUI();
+  savePerson();
+  relayout(false);
+  if (refit) goTo(currentDir(), true, true);
+}
+$('#personBtn').addEventListener('click', () => {
+  state.person.on = !state.person.on;
+  personChanged(true);
+  const v = VIEWS[state.view];
+  if (v && document.querySelector(`[data-view="${state.view}"][aria-pressed="true"]`)) $('#viewName').textContent = (state.person.on && v.pname) || v.name;
+});
+for (const [id, k] of [['#hIn', 'h'], ['#wIn', 'w']]) {
+  const inp = $(id);
+  inp.addEventListener('input', () => { state.person[k] = +inp.value; rebuildPerson(); personChanged(false); });
+  inp.addEventListener('change', () => goTo(currentDir(), true, true));
+}
+$('#personReset').addEventListener('click', () => {
+  state.person.h = PERSON_DEF.h; state.person.w = PERSON_DEF.w;
+  rebuildPerson(); personChanged(true);
+});
+const KEYS = ['front', 'back', 'left', 'right', 'top', 'iso'];
+addEventListener('keydown', (e) => {
+  if (e.altKey || e.ctrlKey || e.metaKey) return;
+  const t = e.target; if (t && (t.tagName === 'SELECT' || t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+  const i = '123456'.indexOf(e.key);
+  if (i >= 0) { setView(KEYS[i]); e.preventDefault(); }
+});
+
+/* ---------- resize + loop ---------- */
+function resize() {
+  const w = viewer.clientWidth, h = viewer.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / Math.max(1, h);
+  camera.updateProjectionMatrix();
+  for (const m of lineMats) sizeLineMat(m);
+}
+new ResizeObserver(() => { resize(); }).observe(viewer);
+resize();
+onThemeChange();
+
+function frame(now) {
+  stepTween(now);
+  controls.update();
+  viewDir.copy(camera.position).sub(controls.target).normalize();
+  for (const s of Object.values(slots)) {
+    if (!s.dims) continue;
+    for (const o of Object.values(s.dims)) o.visible = state.boxes && Math.abs(viewDir.dot(AXES[o.userData.axis])) <= 0.92;
+  }
+  renderer.render(scene, camera);
+  updateLabels();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---------- boot ---------- */
+(async function boot() {
+  let data;
+  try {
+    const res = await fetch('bags.json');
+    if (!res.ok) throw new Error(res.status);
+    data = await res.json();
+  } catch (e) {
+    viewer.appendChild(el('div', 'fatal', "Couldn't load the bag list (bags.json). Reload to try again."));
+    console.error(e);
+    return;
+  }
+  state.bags = (data.bags || []).filter((b) => b && b.id);
+  for (const b of state.bags) state.byId[b.id] = b;
+  if (state.bags.length < 2) { viewer.appendChild(el('div', 'fatal', 'Need at least two bags in bags.json.')); return; }
+  const a = state.byId['ltt-original'] || state.bags[0];
+  const b = state.byId['sympl-commuter-20'] && a.id !== 'sympl-commuter-20' ? state.byId['sympl-commuter-20'] : state.bags.find((x) => x !== a);
+  slots.a.bag = a; slots.b.bag = b;
+  fillSelects();
+  syncPersonUI();
+  setView('iso', false);
+  setSlotBag(slots.a, a);
+  setSlotBag(slots.b, b);
+})();
+</script>
+
+</body>
+</html>

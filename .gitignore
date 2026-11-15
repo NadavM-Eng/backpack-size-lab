@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+previews/
+docs/models/*.glb.txt
+references/**/*.jpg
+references/**/*.png
+.DS_Store

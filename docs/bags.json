@@ -1,0 +1,582 @@
+{
+  "_contract": {
+    "units": "All geometry dimensions in centimetres. GLB exported in metres (1 unit = 1 m).",
+    "axes_glb": "glTF Y-up. Origin at bottom-centre of the bag body footprint. Bag FRONT faces +Z, BACK (shoulder straps) faces -Z, width along X, height along +Y.",
+    "files": "models/<id>.glb, one per bag. Mesh/material names prefixed with the bag id.",
+    "add_a_bag": "Add an object to bags[] with the same fields, run `python3 build_models.py`, the site picks it up from bags.json automatically.",
+    "builder": "Optional bag.builder names builders/<builder>.py, whose `class Builder(Bag)` overrides parts of the generic build (one file per brand)."
+  },
+  "bags": [
+    {
+      "id": "ltt-original",
+      "name": "The Original LTT Backpack",
+      "short": "LTT Original",
+      "brand": "LTTStore",
+      "accent": "#e8792e",
+      "shape": {
+        "height": 47.6,
+        "width": 33.0,
+        "depth_external": 29.2,
+        "body_depth": 21.0,
+        "corner_radius": 6.0,
+        "top_round": 0.35,
+        "front_bulge": 1.6,
+        "taper_top": 0.94,
+        "fabric": {
+          "color": "#1c1d1f",
+          "roughness": 0.82,
+          "weave": "nylon"
+        },
+        "trim_color": "#2a2b2e",
+        "zip_color": "#121212",
+        "pull_style": "carabiner",
+        "pull_color": "#a7a9ac",
+        "front_pocket": {
+          "type": "panel",
+          "top": 0.86,
+          "bottom": 0.42,
+          "inset": 2.2,
+          "zip": "top-arc"
+        },
+        "lower_pocket": {
+          "top": 0.38,
+          "bottom": 0.08,
+          "inset": 2.6
+        },
+        "clamshell_zip": true,
+        "side_bottle_pocket": "none",
+        "side_zip_pocket": true,
+        "top_handle": {
+          "type": "riveted",
+          "width": 13.0
+        },
+        "straps": {
+          "width": 7.5,
+          "thickness": 2.4,
+          "length": 60,
+          "sternum": true,
+          "load_lifters": true
+        },
+        "back_panel": {
+          "pads": 3,
+          "thickness": 2.2
+        },
+        "luggage_strap": true,
+        "logo": "small-rect"
+      },
+      "specs": {
+        "volume_internal_l": 25.5,
+        "volume_external_l": 35,
+        "dimensions_cm": "47.6 × 33.0 × 29.2",
+        "weight_kg": 1.7,
+        "laptop": "Up to 17\" (3 device sleeves)",
+        "storage_compartment_cm": "45.7 × 32.4 × 12.7",
+        "tech_compartment_cm": "45.7 × 31.1 × 5.7",
+        "pockets": "22 pockets & sleeves",
+        "material": "Water-resistant nylon, YKK zippers",
+        "price": "$249.99",
+        "warranty": "Limited lifetime (TMB Guarantee)",
+        "opening": "Clamshell main + separate tech compartment",
+        "sources": [
+          {
+            "title": "LTTStore – The Original LTT Backpack",
+            "url": "https://global.lttstore.com/products/backpack"
+          },
+          {
+            "title": "LTTStore – Backpack (size comparison)",
+            "url": "https://www.lttstore.com/collections/accessories/products/backpack"
+          }
+        ]
+      },
+      "builder": "ltt"
+    },
+    {
+      "id": "sympl-commuter-20",
+      "name": "Sympl Commuter Pack 20L (V2.2)",
+      "short": "Sympl Commuter 20L",
+      "brand": "Sympl",
+      "accent": "#4f8fc9",
+      "shape": {
+        "height": 42.8,
+        "width": 30.0,
+        "depth_external": 26.0,
+        "body_depth": 16.4,
+        "corner_radius": 4.0,
+        "top_round": 0.55,
+        "front_bulge": 1.0,
+        "taper_top": 1.0,
+        "fabric": {
+          "color": "#1c1d1f",
+          "roughness": 0.5,
+          "weave": "ballistic"
+        },
+        "trim_color": "#1f2022",
+        "zip_color": "#141517",
+        "pull_style": "tab",
+        "pull_color": "#1d1e20",
+        "front_pocket": null,
+        "lower_pocket": null,
+        "clamshell_zip": true,
+        "side_bottle_pocket": "right",
+        "side_zip_pocket": true,
+        "top_handle": {
+          "type": "padded-tube",
+          "width": 12.8,
+          "rise": 2.6,
+          "diameter": 2.2
+        },
+        "straps": {
+          "width": 7.8,
+          "thickness": 2.6,
+          "length": 56,
+          "sternum": true,
+          "load_lifters": false
+        },
+        "back_panel": {
+          "pads": 4,
+          "thickness": 1.4,
+          "top_laptop_zip": true
+        },
+        "luggage_strap": true,
+        "logo": "text",
+        "overall_height_with_handle": 45.4
+      },
+      "specs": {
+        "volume_internal_l": 20,
+        "volume_external_l": null,
+        "dimensions_cm": "46 × 30 × 17",
+        "weight_kg": 1.4,
+        "laptop": "Up to 16\" (top-access, suspended)",
+        "storage_compartment_cm": null,
+        "tech_compartment_cm": null,
+        "pockets": "Tech caddy, quick-access, AirTag, 2 bottle pockets",
+        "material": "Cordura 840D ballistic nylon, YKK AquaGuard zippers",
+        "price": "≈ $239",
+        "warranty": "Limited lifetime",
+        "opening": "Clamshell main + top-access laptop",
+        "sources": [
+          {
+            "title": "Rushfaster – Sympl Commuter Pack 20L Ballistic",
+            "url": "https://rushfaster.com.au/products/sympl-commuter-pack-20l-ballistic"
+          },
+          {
+            "title": "FWRD – Sympl Commuter Pack 20L",
+            "url": "https://www.fwrd.com/product-sympl-commuter-pack-20l-in-black/SYMF-MY15/"
+          }
+        ]
+      },
+      "builder": "sympl"
+    },
+    {
+      "id": "sympl-commuter-24",
+      "name": "Sympl Commuter Pack 24L (V2.2)",
+      "short": "Sympl Commuter 24L",
+      "brand": "Sympl",
+      "accent": "#7fb069",
+      "shape": {
+        "height": 42.8,
+        "width": 30.0,
+        "depth_external": 28.0,
+        "body_depth": 18.4,
+        "corner_radius": 4.0,
+        "top_round": 0.55,
+        "front_bulge": 1.0,
+        "taper_top": 1.0,
+        "fabric": {
+          "color": "#1c1d1f",
+          "roughness": 0.5,
+          "weave": "ballistic"
+        },
+        "trim_color": "#1f2022",
+        "zip_color": "#141517",
+        "pull_style": "tab",
+        "pull_color": "#1d1e20",
+        "front_pocket": null,
+        "lower_pocket": null,
+        "clamshell_zip": true,
+        "side_bottle_pocket": "right",
+        "side_zip_pocket": true,
+        "top_handle": {
+          "type": "padded-tube",
+          "width": 12.8,
+          "rise": 2.6,
+          "diameter": 2.2
+        },
+        "straps": {
+          "width": 7.8,
+          "thickness": 2.6,
+          "length": 56,
+          "sternum": true,
+          "load_lifters": false
+        },
+        "back_panel": {
+          "pads": 4,
+          "thickness": 1.4,
+          "top_laptop_zip": true
+        },
+        "luggage_strap": true,
+        "logo": "text",
+        "overall_height_with_handle": 45.4
+      },
+      "specs": {
+        "volume_internal_l": 24,
+        "volume_external_l": null,
+        "dimensions_cm": "46 × 30 × 19",
+        "weight_kg": 1.45,
+        "laptop": "Up to 16\" (top-access, suspended)",
+        "storage_compartment_cm": null,
+        "tech_compartment_cm": null,
+        "pockets": "Tech caddy, quick-access, passport, AirTag, 2 bottle pockets",
+        "material": "Cordura 840D ballistic nylon",
+        "price": "≈ €259",
+        "warranty": "Limited lifetime",
+        "opening": "Clamshell main + top-access laptop",
+        "sources": [
+          {
+            "title": "Rushfaster – Sympl Commuter Pack 24L Ballistic",
+            "url": "https://rushfaster.com.au/products/sympl-commuter-pack-24l-ballistic"
+          },
+          {
+            "title": "Mukama – Sympl Commuter Pack 24 L",
+            "url": "https://www.mukama.com/products/sympl-commuter-pack-24-l"
+          }
+        ]
+      },
+      "builder": "sympl"
+    },
+    {
+      "id": "aer-cpp2-20",
+      "name": "Aer City Pack Pro 2 20L",
+      "short": "Aer CPP2 20L",
+      "brand": "Aer",
+      "accent": "#d4a72c",
+      "shape": {
+        "height": 44.5,
+        "width": 30.5,
+        "depth_external": 18.0,
+        "body_depth": 14.0,
+        "corner_radius": 4.0,
+        "top_round": 0.3,
+        "front_bulge": 0.8,
+        "taper_top": 0.96,
+        "fabric": {
+          "color": "#161718",
+          "roughness": 0.66,
+          "weave": "ballistic"
+        },
+        "trim_color": "#202123",
+        "zip_color": "#0d0d0e",
+        "pull_style": "cord",
+        "pull_color": "#1e1e20",
+        "front_pocket": {
+          "type": "panel",
+          "top": 0.62,
+          "bottom": 0.12,
+          "inset": 2.2,
+          "zip": "top-straight"
+        },
+        "lower_pocket": null,
+        "top_pocket": true,
+        "clamshell_zip": true,
+        "side_bottle_pocket": "right",
+        "side_zip_pocket": true,
+        "side_handle": true,
+        "d_rings": true,
+        "top_handle": {
+          "type": "webbing",
+          "width": 11.0
+        },
+        "straps": {
+          "width": 6.8,
+          "thickness": 2.0,
+          "length": 56,
+          "sternum": true,
+          "load_lifters": false
+        },
+        "back_panel": {
+          "pads": 2,
+          "thickness": 1.8
+        },
+        "luggage_strap": true,
+        "logo": "small-rect"
+      },
+      "specs": {
+        "volume_internal_l": 20,
+        "volume_external_l": null,
+        "dimensions_cm": "44.5 × 30.5 × 18",
+        "weight_kg": 1.27,
+        "laptop": "Up to 16\" (padded, suspended) + tablet sleeve",
+        "storage_compartment_cm": null,
+        "tech_compartment_cm": null,
+        "pockets": "5 exterior pockets: front, top quick-access, side quick-access, bottle, hidden tracker",
+        "material": "1680D Cordura ballistic nylon, YKK zippers, Duraflex hardware",
+        "price": "$199",
+        "warranty": "Limited lifetime",
+        "opening": "Lay-flat main compartment + laptop compartment",
+        "sources": [
+          {
+            "title": "REI – Aer City Pack Pro 2 20L",
+            "url": "https://www.rei.com/product/C07945/aer-city-pack-pro-2-20-l"
+          },
+          {
+            "title": "Rushfaster – Aer City Pack Pro 2 20L",
+            "url": "https://rushfaster.com.au/products/aer-city-pack-pro-2-20l"
+          }
+        ]
+      },
+      "builder": "aer"
+    },
+    {
+      "id": "aer-cpp2-24",
+      "name": "Aer City Pack Pro 2 24L",
+      "short": "Aer CPP2 24L",
+      "brand": "Aer",
+      "accent": "#c76b98",
+      "shape": {
+        "height": 46.0,
+        "width": 30.5,
+        "depth_external": 18.0,
+        "body_depth": 14.0,
+        "corner_radius": 4.0,
+        "top_round": 0.3,
+        "front_bulge": 0.9,
+        "taper_top": 0.96,
+        "fabric": {
+          "color": "#161718",
+          "roughness": 0.66,
+          "weave": "ballistic"
+        },
+        "trim_color": "#202123",
+        "zip_color": "#0d0d0e",
+        "pull_style": "cord",
+        "pull_color": "#1e1e20",
+        "front_pocket": {
+          "type": "panel",
+          "top": 0.62,
+          "bottom": 0.12,
+          "inset": 2.2,
+          "zip": "top-straight"
+        },
+        "lower_pocket": null,
+        "top_pocket": true,
+        "clamshell_zip": true,
+        "side_bottle_pocket": "both",
+        "side_zip_pocket": true,
+        "side_handle": true,
+        "d_rings": true,
+        "top_handle": {
+          "type": "webbing",
+          "width": 11.0
+        },
+        "straps": {
+          "width": 6.8,
+          "thickness": 2.0,
+          "length": 56,
+          "sternum": true,
+          "load_lifters": false
+        },
+        "back_panel": {
+          "pads": 2,
+          "thickness": 1.8
+        },
+        "luggage_strap": true,
+        "logo": "small-rect"
+      },
+      "specs": {
+        "volume_internal_l": 24,
+        "volume_external_l": null,
+        "dimensions_cm": "46 × 30.5 × 18",
+        "weight_kg": 1.3,
+        "laptop": "Up to 16\" (padded, suspended) + tablet sleeve",
+        "storage_compartment_cm": null,
+        "tech_compartment_cm": null,
+        "pockets": "5 exterior pockets: front, top quick-access, pen, bottle pockets, hidden tracker",
+        "material": "1680D Cordura ballistic nylon, YKK zippers, Duraflex hardware",
+        "price": "$219",
+        "warranty": "Limited lifetime",
+        "opening": "Lay-flat main compartment + laptop compartment",
+        "sources": [
+          {
+            "title": "REI – Aer City Pack Pro 2 24L",
+            "url": "https://www.rei.com/product/C07946/aer-city-pack-pro-2-24-l"
+          },
+          {
+            "title": "Rushfaster – Aer City Pack Pro 2 24L",
+            "url": "https://rushfaster.com.au/products/aer-city-pack-pro-2-24l"
+          }
+        ]
+      },
+      "builder": "aer"
+    },
+    {
+      "id": "aer-tp4-28",
+      "name": "Aer Travel Pack 4 28L",
+      "short": "Aer TP4 28L",
+      "brand": "Aer",
+      "accent": "#8a6fb0",
+      "builder": "aer_tp4",
+      "shape": {
+        "height": 48.9,
+        "width": 32.4,
+        "depth_external": 28.0,
+        "body_depth": 20.3,
+        "corner_radius": 4.5,
+        "top_round": 0.35,
+        "front_bulge": 1.0,
+        "taper_top": 0.95,
+        "fabric": {
+          "color": "#18191b",
+          "roughness": 0.68,
+          "weave": "ballistic"
+        },
+        "trim_color": "#202123",
+        "zip_color": "#0d0d0e",
+        "pull_style": "cord",
+        "pull_color": "#1e1e20",
+        "front_pocket": {
+          "type": "panel",
+          "top": 0.6,
+          "bottom": 0.12,
+          "inset": 2.2,
+          "zip": "top-straight"
+        },
+        "lower_pocket": null,
+        "clamshell_zip": true,
+        "side_bottle_pocket": "both",
+        "side_zip_pocket": true,
+        "side_handle": true,
+        "d_rings": true,
+        "top_handle": {
+          "type": "webbing",
+          "width": 11.0
+        },
+        "straps": {
+          "width": 7.0,
+          "thickness": 2.2,
+          "length": 60,
+          "sternum": true,
+          "load_lifters": true
+        },
+        "back_panel": {
+          "pads": 2,
+          "thickness": 2.0
+        },
+        "luggage_strap": true,
+        "logo": "small-rect"
+      },
+      "specs": {
+        "volume_internal_l": 28,
+        "volume_external_l": null,
+        "dimensions_cm": "48.9 × 32.4 × 20.3",
+        "weight_kg": 1.6,
+        "laptop": "Up to 16\"",
+        "storage_compartment_cm": null,
+        "tech_compartment_cm": null,
+        "pockets": "Front pocket, stretchy top pocket, side/bottle pockets, hidden tracker pocket",
+        "material": "1680D CORDURA ballistic nylon (also X-Pac / Ultra versions), YKK zippers, Duraflex hardware",
+        "price": "$239",
+        "warranty": "Limited lifetime",
+        "opening": "Clamshell main + laptop compartment, lockable zips",
+        "load_lifters": "Yes",
+        "sources": [
+          {
+            "title": "Pack Hacker – Aer Travel Pack 4 28L",
+            "url": "https://www.packhacker.com/travel-gear/aer/travel-pack-4-28l/"
+          },
+          {
+            "title": "Aer – Travel Pack 4 28L",
+            "url": "https://aersf.com/products/travel-pack-4-28l"
+          },
+          {
+            "title": "Nomads Nation – Travel Pack 4 28L vs 35L",
+            "url": "https://nomadsnation.com/aer-travel-pack-4-28l-vs-35l-review/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "jansport-superbreak",
+      "name": "JanSport SuperBreak",
+      "short": "JanSport SuperBreak",
+      "brand": "JanSport",
+      "accent": "#b8423a",
+      "builder": "jansport",
+      "shape": {
+        "height": 42.5,
+        "width": 33.0,
+        "depth_external": 24.0,
+        "body_depth": 19.0,
+        "corner_radius": 8.0,
+        "top_round": 0.7,
+        "front_bulge": 2.0,
+        "taper_top": 0.92,
+        "fabric": {
+          "color": "#1b1b1d",
+          "roughness": 0.85,
+          "weave": "polyester"
+        },
+        "trim_color": "#1f1f21",
+        "zip_color": "#111112",
+        "pull_style": "cord",
+        "pull_color": "#1a1a1a",
+        "front_pocket": {
+          "type": "panel",
+          "top": 0.55,
+          "bottom": 0.06,
+          "inset": 3.0,
+          "zip": "u-shape"
+        },
+        "lower_pocket": null,
+        "clamshell_zip": false,
+        "side_bottle_pocket": "left",
+        "side_zip_pocket": false,
+        "top_handle": {
+          "type": "webbing",
+          "width": 9.0
+        },
+        "straps": {
+          "width": 6.0,
+          "thickness": 1.6,
+          "length": 55,
+          "sternum": false,
+          "load_lifters": false
+        },
+        "back_panel": {
+          "pads": 0,
+          "thickness": 0.8
+        },
+        "luggage_strap": false,
+        "logo": "patch"
+      },
+      "specs": {
+        "volume_internal_l": 26,
+        "volume_external_l": null,
+        "dimensions_cm": "≈ 42.5 × 33 × 21.5 (filled)",
+        "weight_kg": 0.34,
+        "laptop": "No dedicated sleeve",
+        "storage_compartment_cm": null,
+        "tech_compartment_cm": null,
+        "pockets": "Main compartment, front utility pocket, side bottle pocket (current version)",
+        "material": "600D polyester",
+        "price": "≈ $40–50",
+        "warranty": "Lifetime (JanSport)",
+        "opening": "Top-loading U-zip",
+        "load_lifters": "No",
+        "sources": [
+          {
+            "title": "Nomads Nation – JanSport SuperBreak review",
+            "url": "https://nomadsnation.com/jansport-superbreak-review/"
+          },
+          {
+            "title": "Walmart – JanSport SuperBreak 25L",
+            "url": "https://www.walmart.com/ip/144447200"
+          },
+          {
+            "title": "Simons – JanSport SuperBreak",
+            "url": "https://www.simons.ca/en/women-accessories/bags/brand-name-bags/superbreak-backpack--7243-4244004"
+          }
+        ]
+      }
+    }
+  ]
+}
