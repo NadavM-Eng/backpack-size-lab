@@ -311,6 +311,7 @@ details.all[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 .src a{font-size:14px;overflow-wrap:anywhere}
 .foot{margin:16px 0 0;font-size:13px;color:var(--muted)}
 
+.site-foot{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .fatal{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;font-size:15px;color:var(--ink-2);background:var(--viewer);border-radius:14px}
 
 @media (max-width:900px){
@@ -357,6 +358,67 @@ details.all[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   .spec-head > :first-child{display:none}
   .srow .d{grid-column:1/-1;margin-top:0}
 }
+/* ---------- your bags: the add button, the panel, the drop highlight, the red × in the pickers ---------- */
+.add-btn{background:var(--accent-fill);border-color:var(--accent-fill);color:var(--on-accent)}
+.add-btn:hover:not(:disabled){border-color:var(--accent-fill);filter:brightness(1.07)}
+.add-btn svg{width:16px;height:16px;flex:none}
+.bag-opt .pdel{flex:none;width:30px;height:30px;margin:-4px -6px -4px 0;display:grid;place-items:center;padding:0;border:0;border-radius:8px;background:transparent;color:#e0352b;cursor:pointer}
+.bag-opt .pdel svg{width:16px;height:16px}
+.bag-opt .pdel:hover{background:rgba(224,53,43,.14)}
+.bag-opt .pdel:focus-visible{outline:none;background:rgba(224,53,43,.14);box-shadow:inset 0 0 0 2px #e0352b}
+.msg.undo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;pointer-events:auto}
+.msg.undo button{border:0;background:none;padding:2px 4px;margin:-2px 0;font:inherit;font-weight:600;color:var(--ink);text-decoration:underline;cursor:pointer;border-radius:6px}
+.msg.undo button:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+.drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(460px,100%);max-width:100%;height:100%;max-height:100%;padding:0;border:0;border-left:1px solid var(--line);background:var(--surface);color:var(--ink);box-shadow:-18px 0 44px -22px rgba(0,0,0,.4);overflow:auto;overscroll-behavior:contain}
+.drawer::backdrop{background:rgba(20,20,18,.34)}
+.dr-in{padding:20px 24px calc(32px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:20px}
+.dr-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dr-head h2{margin:0;font:500 20px/1.2 var(--font);letter-spacing:-.01em}
+.dr-lead{margin:0;font-size:14px;color:var(--ink-2)}
+.dr-lead strong{font-weight:500;color:var(--ink)}
+.step{display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid var(--line);min-width:0}
+.step h3{margin:0;display:flex;align-items:center;gap:10px;font:500 16px/1.3 var(--font)}
+.step .num{width:24px;height:24px;border-radius:999px;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font:700 12px/1 var(--font);flex:none}
+.step p{margin:0;font-size:14px;color:var(--ink-2)}
+.drawer code{font:12.5px ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--well);padding:1px 5px;border-radius:5px;overflow-wrap:anywhere}
+.btn-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pill.pri{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+a.pill{text-decoration:none}
+.copied{font-size:13px;color:var(--accent)}
+.peek{margin:0;padding:12px 14px;max-height:9.5em;overflow:hidden;background:var(--well);border-radius:10px;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.drop{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 16px;border:1.5px dashed var(--line-strong);border-radius:14px;text-align:center;font-size:14px;color:var(--ink-2);transition:border-color .15s,background .15s}
+.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+details.paste > summary{cursor:pointer;font-size:13px;color:var(--muted);width:max-content;max-width:100%}
+details.paste > summary:hover{color:var(--ink)}
+details.paste textarea{display:block;width:100%;min-height:120px;margin:8px 0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--page);color:var(--ink);font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical}
+.add-msgs{display:flex;flex-direction:column;gap:8px}
+.add-msgs:empty{display:none}
+.amsg{padding:10px 12px;border-radius:10px;font-size:13.5px;background:var(--well);overflow-wrap:anywhere}
+.amsg.err{box-shadow:inset 0 0 0 1.5px var(--sig-a)}
+.amsg.ok{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.amsg b{font-weight:500}
+.amsg ul{margin:6px 0 8px;padding-left:18px}
+.amsg .pill{height:34px;font-size:13px;margin-top:4px}
+.add-msgs .msg.undo{box-shadow:inset 0 0 0 1px var(--line);background:var(--well)}
+.mine-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mine-list li{display:flex;align-items:center;gap:8px;padding:10px 10px 10px 14px;border:1px solid var(--line);border-radius:12px;min-width:0}
+.mine-list .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.mine-list .nm{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mine-list .sub{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.mine-list .sub.bad{color:var(--sig-a)}
+.mine-list .pill{height:34px;padding:0 12px;font-size:13px;flex:none}
+.mine-empty{font-size:14px;color:var(--muted)}
+.small{font-size:12.5px}
+.drop-veil{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:16px;background:color-mix(in srgb,var(--page) 72%,transparent);pointer-events:none}
+.drop-veil div{padding:28px 36px;border:2px dashed var(--accent);border-radius:18px;background:var(--surface);font:500 18px/1.3 var(--font);text-align:center}
+.srow .v .more{display:block;margin-top:4px;font-size:13px;color:var(--muted)}
+@media (max-width:640px){
+  .top .right{gap:10px}
+  .add-btn{width:40px;padding:0;justify-content:center}
+  .add-btn span{display:none}
+  .dr-in{padding:16px 16px calc(28px + env(safe-area-inset-bottom,0px))}
+}
+
 @media (prefers-reduced-motion: reduce){
   *{transition:none!important;animation:none!important}
 }
@@ -369,6 +431,9 @@ details.all[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     <h1>Backpack Size Lab</h1>
     <div class="right">
       <span class="units">cm · litres</span>
+      <button class="pill add-btn" id="addBtn" type="button" aria-label="Add your bag" aria-haspopup="dialog" aria-controls="addDlg" title="Add any backpack: your AI writes one file, you drop it here">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg><span>Add your bag</span>
+      </button>
       <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch colour theme" title="Light / dark">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg>
       </button>
@@ -449,7 +514,56 @@ details.all[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       <p class="foot">Listed specs come from the linked retailer pages. Outer sizes are measured from the 3D models on this page.</p>
     </details>
   </section>
+
+  <footer class="site-foot">
+    <a href="https://github.com/NadavM-Eng/backpack-size-lab" target="_blank" rel="noopener">Source on GitHub</a>
+    <span aria-hidden="true">·</span>
+    <a href="https://github.com/NadavM-Eng/backpack-size-lab/blob/main/LICENSE" target="_blank" rel="noopener">MIT licence</a>
+  </footer>
 </div>
+
+<!-- your bags: the "Add your bag" panel (see the YOUR BAGS section of the script) -->
+<dialog class="drawer" id="addDlg" aria-labelledby="addTitle">
+  <div class="dr-in">
+    <div class="dr-head">
+      <h2 id="addTitle">Add your bag</h2>
+      <button type="button" class="icon-btn" id="addClose" aria-label="Close">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+      </button>
+    </div>
+    <p class="dr-lead">Compare any backpack with these. Your AI assistant does the research and writes one file; you drop that file here. <strong>Nothing is uploaded:</strong> the bag is kept only in this browser, and other visitors don't see it.</p>
+    <section class="step" aria-labelledby="stepAi">
+      <h3 id="stepAi"><span class="num">1</span>Instructions for your AI</h3>
+      <p>Paste these instructions into ChatGPT, Gemini, Claude or another assistant that can search the web, then tell it the exact bag and your country. It answers with one file, <code>&lt;bag&gt;.bag.json</code>. The more it can do (look at photos, run code, use Blender), the closer the model gets to the real bag.</p>
+      <div class="btn-row">
+        <button type="button" class="pill pri" id="aiCopy">Copy instructions</button>
+        <a class="pill" id="aiDl" href="ai-instructions.md" download="backpack-size-lab-ai-instructions.md">Download</a>
+        <span class="copied" id="aiCopied" role="status"></span>
+      </div>
+      <pre class="peek" id="aiPeek" aria-label="The first lines of the instructions"></pre>
+    </section>
+    <section class="step" aria-labelledby="stepDrop">
+      <h3 id="stepDrop"><span class="num">2</span>Drop the file your AI made</h3>
+      <div class="drop" id="dropZone">
+        <span>Drop the <code>.bag.json</code> file here, or anywhere on the page</span>
+        <button type="button" class="pill" id="pickFile">Choose file</button>
+        <input type="file" id="fileIn" accept=".json,application/json" multiple hidden>
+      </div>
+      <details class="paste">
+        <summary>Or paste the text your AI wrote</summary>
+        <textarea id="pasteBox" spellcheck="false" aria-label="Bag file text"></textarea>
+        <button type="button" class="pill" id="pasteAdd">Add it</button>
+      </details>
+      <div class="add-msgs" id="addMsgs" aria-live="polite"></div>
+    </section>
+    <section class="step" aria-labelledby="stepMine">
+      <h3 id="stepMine"><span class="num">3</span>Your bags</h3>
+      <ul class="mine-list" id="mineList"></ul>
+      <p class="small muted" id="mineKeep">Saved in this browser only. Clearing the site's data removes them; keep the files to add them again.</p>
+    </section>
+  </div>
+</dialog>
+<div class="drop-veil" id="dropVeil" hidden><div>Drop the bag file to add it</div></div>
 
 <script>
   // Shown if the ES module (three.js from CDN) never starts.
@@ -732,7 +846,8 @@ function alignBack(model, bag) {
     if (!o.isMesh) return;
     const raw = (o.name.startsWith(prefix) ? o.name : (o.parent && o.parent.name) || '').replace(/[^\w-]/g, '_');
     const part = raw.startsWith(prefix) ? raw.slice(prefix.length) : raw;
-    if (BACK_PARTS.test(part)) box.union(tmp.setFromObject(o, true));
+    // (an added bag marks its back-panel meshes itself, see YOUR BAGS: userData.back)
+    if (BACK_PARTS.test(part) || isBackMesh(o)) box.union(tmp.setFromObject(o, true));
   });
   // fallback models (or unnamed parts): use the whole model's back face
   if (box.isEmpty()) box.setFromObject(model, true);
@@ -742,11 +857,45 @@ function alignBack(model, bag) {
 }
 
 function prepModel(obj) {
+  steadyDepth(obj);
   obj.traverse((o) => {
     if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; o.userData.origMat = o.material; }
   });
   obj.updateMatrixWorld(true);
   return obj;
+}
+/* Two surfaces of different materials lying in the same plane (a zip tape flush on a coated panel, a
+   patch drawn on the body) flicker as the camera turns, because neither is in front of the other. Give
+   every material its own small, fixed depth nudge, smaller surfaces further forward, so the same one
+   always wins. The nudge is far below a tenth of a millimetre at viewing distance; it changes no
+   measurement. (Ported from Printers Size Lab.) */
+function steadyDepth(model) {
+  const area = new Map();
+  const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3(), ab = new THREE.Vector3(), ac = new THREE.Vector3();
+  model.traverse((o) => {
+    if (!o.isMesh || !o.geometry) return;
+    const pos = o.geometry.attributes.position, idx = o.geometry.index;
+    const m = Array.isArray(o.material) ? o.material[0] : o.material;
+    if (!pos || !m || (m.polygonOffset && !m.userData.steady)) return;   // already placed on purpose
+    if (m.userData.steady) { area.set(m, Math.max(area.get(m) || 0, m.userData.steadyArea || 0)); return; }   // shared with an earlier copy
+    let s = 0;
+    const n = idx ? idx.count : pos.count;
+    for (let i = 0; i + 2 < n; i += 3) {
+      a.fromBufferAttribute(pos, idx ? idx.getX(i) : i);
+      b.fromBufferAttribute(pos, idx ? idx.getX(i + 1) : i + 1);
+      c.fromBufferAttribute(pos, idx ? idx.getX(i + 2) : i + 2);
+      s += ab.subVectors(b, a).cross(ac.subVectors(c, a)).length() / 2;
+    }
+    area.set(m, (area.get(m) || 0) + s);
+  });
+  [...area.entries()].sort((x, y) => y[1] - x[1]).forEach(([m, s], k) => {
+    m.userData.steady = true;
+    m.userData.steadyArea = s;
+    m.polygonOffset = k > 0;
+    m.polygonOffsetFactor = -Math.min(4, 0.35 * k);
+    m.polygonOffsetUnits = -1.5 * k;
+    m.needsUpdate = true;
+  });
 }
 
 async function setSlotBag(slot, bag) {
@@ -762,7 +911,8 @@ async function setSlotBag(slot, bag) {
   progressListeners.set(bag.id, (p) => { if (slot.seq === seq && slot.status && slot.status.kind === 'loading') { slot.status.p = p; renderStatus(); } });
   let model, failed = false;
   try {
-    const src = await loadGLB(bag.id);
+    // a visitor's bag is built from their file (see YOUR BAGS); built-in bags load their GLB
+    const src = bag.user ? mineModel(bag) : await loadGLB(bag.id);
     model = src.clone(true);
   } catch (e) {
     console.warn(`Model for ${bag.id} failed to load`, e);
@@ -1331,7 +1481,7 @@ function renderChrome() {
   $('#selBWrap').style.setProperty('--c', slotColor('b'));
   for (const [k, bag] of [['A', A], ['B', B]]) {
     const vol = bag.specs && typeof bag.specs.volume_internal_l === 'number' ? `${+fmt(bag.specs.volume_internal_l, 1)} L listed` : 'Volume not listed';
-    $('#meta' + k).textContent = [bag.brand, vol].filter(Boolean).join(' · ');
+    $('#meta' + k).textContent = [bag.user ? 'Added by you' : null, bag.brand, vol].filter(Boolean).join(' · ');
   }
   const legend = $('#legend');
   legend.replaceChildren();
@@ -1357,6 +1507,7 @@ function renderChrome() {
 function renderStatus() {
   const st = $('#status');
   st.replaceChildren();
+  mineStatus(st);   // added bags: the Undo message and size warnings (YOUR BAGS)
   for (const s of [slots.a, slots.b]) {
     if (!s.status || !s.bag) continue;
     if (s.status.kind === 'loading') {
@@ -1505,17 +1656,20 @@ const ROWS = [
   { key: 'opening', label: 'Opening' },
   { key: 'price', label: 'Price', money: true },
   { key: 'warranty', label: 'Warranty' },
+  { key: '_made', label: 'How this model was made' },
 ];
 const SKIP = new Set(['sources']);
 const human = (k) => k.replace(/_(cm|kg|l)$/i, (m, u) => ` (${u === 'l' ? 'L' : u})`).replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
 function parseMoney(s) {
-  const m = String(s || '').match(/([$€£¥])\s?([\d.,]+)/);
+  // "$249", "≈ €259", and (added bags, written with Intl) "₪1,099", "CA$120", "CHF 99"
+  const m = String(s || '').match(/([A-Z]{1,3}\$|[A-Z]{3}(?=\s?\d)|[$€£¥₪₹₩])\s?([\d.,]+)/);
   return m ? { cur: m[1], v: parseFloat(m[2].replace(/,/g, '')), approx: /≈|~|approx/i.test(s) } : null;
 }
 function specVal(slot, row) {
   const sp = slot.bag.specs || {};
   if (row.key === '_boxvol') { const i = boxInfo(slot); return i ? i.l : null; }
   if (row.key === '_boxdims') { const i = boxInfo(slot); return i ? `${cm(i.h)} × ${cm(i.w)} × ${cm(i.d)} cm` : null; }
+  if (row.key === '_made') return madeText(slot.bag);
   const v = sp[row.key];
   return v === undefined ? null : v;
 }
@@ -1531,7 +1685,7 @@ function renderSpecs() {
   const rows = ROWS.slice();
   const known = new Set(rows.map((r) => r.key));
   for (const s of [A, B]) for (const k of Object.keys(s.bag.specs || {})) {
-    if (!known.has(k) && !SKIP.has(k)) { known.add(k); rows.push({ key: k, label: human(k), unit: /_l$/.test(k) ? 'L' : /_kg$/.test(k) ? 'kg' : undefined, dec: 1 }); }
+    if (!known.has(k) && !SKIP.has(k)) { known.add(k); rows.push({ key: k, label: (s.bag.labels && s.bag.labels[k]) || human(k), unit: /_l$/.test(k) ? 'L' : /_kg$/.test(k) ? 'kg' : undefined, dec: 1 }); }
   }
   const wrap = $('#specRows'); wrap.replaceChildren();
   for (const row of rows) {
@@ -1544,8 +1698,11 @@ function renderSpecs() {
       let text;
       if (v == null) text = 'Not listed';
       else if (typeof v === 'number') text = `${row.dec != null ? fmt(v, row.dec) : v} ${row.unit || ''}`.trim();
+      else if (typeof v === 'object') text = null;   // { text, more }: an added bag's row with a second line
       else text = String(v) + (row.suffix && !String(v).endsWith(row.suffix.trim()) ? row.suffix : '');
-      r.appendChild(el('div', 'v' + (numeric && v != null ? ' numv' : '') + (v == null ? ' na' : ''), text));
+      const cell = el('div', 'v' + (numeric && v != null ? ' numv' : '') + (v == null ? ' na' : ''), text);
+      if (v && typeof v === 'object') { cell.textContent = v.text; if (v.more) cell.appendChild(el('span', 'more', v.more)); }
+      r.appendChild(cell);
     }
     // difference line
     let d = null;
@@ -1621,6 +1778,7 @@ function bagSub(b) {
   const s = b.specs || {}, parts = [b.brand];
   if (s.volume_internal_l) parts.push(`${s.volume_internal_l} L`);
   if (s.weight_kg) parts.push(`${s.weight_kg.toFixed(2)} kg`);
+  if (b.user) parts.push(b.boxOnly ? 'plain box' : b.mesh ? 'real 3D model' : 'simple-shape model');
   return parts.filter(Boolean).join(' · ');
 }
 function fillSelects() {
@@ -1632,7 +1790,8 @@ function fillSelects() {
     p.list.replaceChildren();
     let lastBrand = null;
     state.bags.forEach((b) => {
-      if (b.brand !== lastBrand) { lastBrand = b.brand; const g = el('li', 'grp', b.brand); g.setAttribute('role', 'presentation'); p.list.appendChild(g); }
+      const grp = b.user ? MINE.GROUP : b.brand;   // added bags come last, in their own group
+      if (grp !== lastBrand) { lastBrand = grp; const g = el('li', 'grp', grp); g.setAttribute('role', 'presentation'); p.list.appendChild(g); }
       const li = el('li', 'bag-opt');
       li.id = `opt-${k}-${b.id}`; li.dataset.id = b.id;
       li.setAttribute('role', 'option');
@@ -1645,6 +1804,14 @@ function fillSelects() {
         li.append(el('span', 'swapnote', 'swaps'));
         const tag = el('span', `slot ${other}`, other.toUpperCase()); tag.title = `Currently bag ${other.toUpperCase()}`;
         li.append(tag);
+      }
+      if (b.user) {   // a bag the visitor added: a red × removes it (Undo for a few seconds)
+        const del = el('button', 'pdel'); del.type = 'button'; del.tabIndex = -1;
+        del.setAttribute('aria-label', `Remove ${b.name}`); del.title = 'Remove from this browser (Delete key)';
+        del.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
+        del.addEventListener('click', (ev) => { ev.stopPropagation(); ev.preventDefault(); removeFromPicker(k, b.id); });
+        li.setAttribute('aria-keyshortcuts', 'Delete');
+        li.appendChild(del);
       }
       li.addEventListener('click', (e) => { e.stopPropagation(); pickAndClose(k, b.id); });
       li.addEventListener('pointermove', () => setActive(k, optionsOf(k).indexOf(li)));
@@ -1687,7 +1854,15 @@ for (const k of ['a', 'b']) {
   });
   p.list.addEventListener('keydown', (e) => {
     const n = optionsOf(k).length;
-    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(k, p.active + 1); }
+    if (e.target.closest && e.target.closest('.pdel')) {   // on an added bag's ×: Enter/Space press it; arrows go back to the list
+      if (e.key === 'ArrowLeft' || e.key === 'Escape' || e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); p.list.focus({ preventScroll: true }); if (e.key === 'ArrowDown') setActive(k, p.active + 1); else if (e.key === 'ArrowUp') setActive(k, p.active - 1); }
+      else if (e.key === 'Tab') closePicker(k);
+      e.stopPropagation();
+      return;
+    }
+    if (e.key === 'ArrowRight') { const d = optionsOf(k)[p.active] && optionsOf(k)[p.active].querySelector('.pdel'); if (d) { e.preventDefault(); d.focus(); } }
+    else if (e.key === 'Delete' || e.key === 'Backspace') { const x = optionsOf(k)[p.active]; if (x && x.querySelector('.pdel')) { e.preventDefault(); removeFromPicker(k, x.dataset.id); } }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); setActive(k, p.active + 1); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(k, p.active - 1); }
     else if (e.key === 'Home') { e.preventDefault(); setActive(k, 0); }
     else if (e.key === 'End') { e.preventDefault(); setActive(k, n - 1); }
@@ -1751,6 +1926,1414 @@ addEventListener('keydown', (e) => {
   if (i >= 0) { setView(KEYS[i]); e.preventDefault(); }
 });
 
+/* ==========================================================================================
+   YOUR BAGS
+   A visitor's AI assistant writes one file, <id>.bag.json (format in ai-instructions.md): the specs this
+   page shows, each fact with its source, and the 3D shape as either
+     - a real mesh: model.glb_base64 (a self-contained GLB in the built-in bags' frame: metres, Y up,
+       front +Z, back -Z, origin at the bottom centre) plus model.geom (which nodes are the back panel), or
+     - a shape recipe in centimetres: body cross-sections lofted into a soft body, plus pockets, patches,
+       zips, straps, a handle, a lid and simple boxes and tubes, built here with three.js, or
+     - nothing: a rounded box at the listed size.
+   The page marks the back-panel meshes (userData.back), so alignBack(), the measuring boxes, person mode
+   and every tile and spec row treat an added bag exactly like a built-in one. Sizes are measured here,
+   never taken from the file; a model that differs from the listed size by more than 1 cm gets a warning.
+   The file is untrusted: it is parsed defensively, every string goes into textContent (or onto a canvas),
+   links must be http(s), a GLB may not name any outside file or URI, and nothing the file names is ever
+   fetched. Added bags live only in this browser (IndexedDB).
+   ========================================================================================== */
+const MINE = {
+  FORMAT: 'backpack-size-lab/bag@1', FORMATS: ['backpack-size-lab/bag@1'],
+  GROUP: 'Your bags (this browser only)',
+  MAX_RECIPE: 512 * 1024, MAX_FILE: 17 * 1024 * 1024, MAX_GLB: 12 * 1024 * 1024, MAX_TRIS: 400000, MAX_TEX_PX: 4096,
+  MAX_NODES: 3000, MAX_IMAGES: 32, MAX_PARTS: 80, MAX_SECTIONS: 40, MAX_POINTS: 64, MAX_BANDS: 12, MAX_SPECS: 30,
+  MAX_SAVED: 20, LIM_CM: 120, TOL_CM: 1.0,
+  list: [],   // [{ id, text, added, n, bag, errors }] in the order they were added
+  noStore: false, undo: null, undoTimer: 0,
+};
+const MB = (n) => fmtN(n / 1048576, 1);
+const fmtN = (v, d = 1) => { const s = (Math.round(v * 10 ** d) / 10 ** d).toFixed(d); return d ? s.replace(/\.?0+$/, '') : s; };
+function isBackMesh(o) { for (let x = o; x; x = x.parent) if (x.userData && x.userData.back) return true; return false; }
+
+/* --- small, strict readers for untrusted values --- */
+const isObj = (v) => v != null && typeof v === 'object' && !Array.isArray(v);
+function txt(v, max = 300) {
+  if (typeof v === 'number' && Number.isFinite(v)) v = String(v);
+  if (typeof v !== 'string') return null;
+  const s = v.replace(/[\u0000-\u001f\u007f-\u009f‪-‮⁦-⁩]+/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!s) return null;
+  return s.length > max ? s.slice(0, max - 1).trimEnd() + '…' : s;
+}
+function numOf(v) {
+  if (typeof v === 'string' && /^\s*-?\d+(\.\d+)?\s*$/.test(v)) v = Number(v);
+  return typeof v === 'number' && Number.isFinite(v) ? v : null;
+}
+function safeUrl(v) {
+  if (typeof v !== 'string' || v.length > 800) return null;
+  try {
+    const u = new URL(v.trim());
+    return (u.protocol === 'https:' || u.protocol === 'http:') && !u.username && !u.password ? u.href : null;
+  } catch (e) { return null; }
+}
+const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return u; } };
+const jshow = (v) => { try { const s = JSON.stringify(v); return s == null ? String(v) : s.length > 60 ? s.slice(0, 57) + '…' : s; } catch (e) { return '?'; } };
+function validCurrency(c) {
+  if (typeof c !== 'string' || !/^[A-Za-z]{3}$/.test(c.trim())) return null;
+  const code = c.trim().toUpperCase();
+  try { new Intl.NumberFormat('en', { style: 'currency', currency: code }); return code; } catch (e) { return null; }
+}
+function money(v, cur) {
+  try { return new Intl.NumberFormat('en', { style: 'currency', currency: cur, maximumFractionDigits: Number.isInteger(v) ? 0 : 2 }).format(v); }
+  catch (e) { return `${cur} ${v}`; }
+}
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+
+/* --- reading a file: returns { bag, errors, warnings }; bag has the same shape as an entry of bags.json --- */
+async function readBagFile(text, opts = {}) {
+  const errors = [], warnings = [];
+  const err = (m) => { if (errors.length < 40) errors.push(m); return null; };
+  const warn = (m) => { if (warnings.length < 30 && !warnings.includes(m)) warnings.push(m); };
+  const out = { bag: null, errors, warnings };
+  if (typeof text !== 'string' || !text.trim()) { err('The file is empty.'); return out; }
+  if (text.length > MINE.MAX_FILE) { err(`The file is ${MB(text.length)} MB; the limit is 17 MB (a mesh of at most 12 MB, base64-encoded). Simplify the mesh.`); return out; }
+  let f, raw = text.replace(/^﻿/, '').trim();
+  try { f = JSON.parse(raw); } catch (e1) {
+    // an AI's whole reply pasted in: keep what lies between the first { and the last }
+    const i = raw.indexOf('{'), j = raw.lastIndexOf('}');
+    try { if (i < 0 || j <= i) throw e1; f = JSON.parse(raw.slice(i, j + 1)); warn('Text around the JSON was ignored.'); }
+    catch (e2) { err(`This is not valid JSON (${txt(e2.message, 160) || 'parse error'}). Ask your AI for the whole file again as plain JSON: double quotes, no comments, no trailing commas.`); return out; }
+  }
+  if (!isObj(f)) { err(`The file must be one JSON object: { "format": "${MINE.FORMAT}", ... }.`); return out; }
+  if (!MINE.FORMATS.includes(f.format)) { err(`"format" must be "${MINE.FORMAT}" (found ${jshow(f.format)}).${typeof f.format === 'string' && /printer/.test(f.format) ? ' That is a printer file, for Printers Size Lab.' : ''}`); return out; }
+  const hasMesh = isObj(f.model) && f.model.glb_base64 != null;
+  if (!hasMesh && text.length > MINE.MAX_RECIPE) { err(`The file is ${Math.round(text.length / 1024)} KB; the limit for a shape recipe is 500 KB. Use fewer parts or points.`); return out; }
+
+  // identity
+  const name = txt(f.name, 90);
+  if (!name) err('"name" is missing (the full bag name with its brand and size, e.g. "Osprey Daylite Plus 20").');
+  const fileId = String(typeof f.id === 'string' ? f.id : name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  let id = fileId;
+  if (!id) err('"id" is missing (lowercase letters, digits and dashes, e.g. "osprey-daylite-plus").');
+  let short = txt(f.short, 28) || (name && name.length <= 28 ? name : name ? name.slice(0, 27).trimEnd() + '…' : null);
+  if (id && opts.reserved && opts.reserved.has(id)) {
+    id = (id + '-mine').slice(0, 64);
+    if (short) short = (short.length > 21 ? short.slice(0, 20).trimEnd() + '…' : short) + ' (yours)';
+    warn('This bag is already on the page, so yours is added as a separate copy.');
+  }
+
+  // listed size (cm), required: the page checks the model against it
+  const ls = isObj(f.dims_cm) ? f.dims_cm : null;
+  if (!ls) err('"dims_cm" is missing: the listed size in cm, e.g. {"h": 48, "w": 30, "d": 20, "includes": "...", "source": "https://..."}.');
+  const dims = {};
+  if (ls) for (const [k, word] of [['h', 'height'], ['w', 'width'], ['d', 'depth']]) {
+    const v = numOf(ls[k]);
+    if (v == null) err(`dims_cm.${k} is missing (the listed ${word} in cm).`);
+    else if (v > 150) err(`dims_cm.${k} = ${v} is more than 150 cm; sizes are in centimetres, not millimetres.`);
+    else if (v < 4) err(`dims_cm.${k} = ${v} is less than 4 cm${v < 2 ? '; sizes are in centimetres, not metres' : ''}.`);
+    else dims[k] = v;
+  }
+  // with the basics wrong, still check the 3D shape, so one round of messages covers everything
+  if (errors.length) {
+    if (hasMesh) readMesh(f.model, err, warn);
+    else if (f.model != null) readRecipe(f.model, err, warn);
+    return out;
+  }
+
+  const bag = { id, fileId, name, short, brand: txt(f.brand, 60), user: true, specs: {}, labels: {}, statusNotes: [], warnings };
+  const sp = bag.specs;
+  const fileSources = [];
+  for (const s of Array.isArray(f.sources) ? f.sources.slice(0, 40) : []) {
+    const url = safeUrl(isObj(s) ? s.url : s);
+    if (url) fileSources.push({ url, title: txt(isObj(s) ? s.title : null, 90) || hostOf(url) });
+  }
+  const bySrc = new Map();   // url -> what it is the source of
+  const src = (v, what) => { const u = safeUrl(v); if (u) { if (!bySrc.has(u)) bySrc.set(u, []); if (what && !bySrc.get(u).includes(what)) bySrc.get(u).push(what); } return u; };
+  const noSource = [];
+  const fact = (v, what, needSource = true) => {   // a value or {value, source, note}
+    const o = isObj(v) ? v : { value: v };
+    const u = src(o.source || o.url, what);
+    if (needSource && !u && o.value != null) noSource.push(what);
+    return { value: o.value, note: txt(o.note, 300), what: txt(o.what, 160), includes: txt(o.includes, 200) };
+  };
+
+  // size
+  sp.dimensions_cm = `${fmtN(dims.h)} × ${fmtN(dims.w)} × ${fmtN(dims.d)}`;
+  src(ls.source || ls.url, 'size');
+  if (!safeUrl(ls.source || ls.url)) noSource.push('size');
+  const lsIncl = txt(ls.includes, 200);
+  // volume
+  for (const [key, out2, word] of [['volume_l', 'volume_internal_l', 'volume'], ['volume_external_l', 'volume_external_l', 'outer volume']]) {
+    if (f[key] == null) continue;
+    const x = fact(f[key], word), v = numOf(x.value);
+    if (v == null || v < 1 || v > 150) warn(`${key} ${jshow(x.value)} was left out: it must be a number of litres (1 to 150).`);
+    else sp[out2] = v;
+  }
+  if (sp.volume_internal_l == null) warn('No volume ("volume_l"), so the Volume tile shows "Not listed".');
+  // weight
+  if (f.weight_kg != null) {
+    const x = fact(f.weight_kg, 'weight'), v = numOf(x.value);
+    if (v == null || v <= 0.03 || v > 15) warn(`weight_kg ${jshow(x.value)} was left out: it must be a number of kg${v > 15 ? ' (is it in grams?)' : ''}.`);
+    else { sp.weight_kg = v; if (x.what) { sp.weight_note = x.what; bag.labels.weight_note = 'Weight covers'; } }
+  }
+  // laptop: text, plus the largest size in inches if the text doesn't say it
+  if (f.laptop != null) {
+    const x = fact(f.laptop, 'laptop', false), t = txt(x.value, 120), inch = numOf(isObj(f.laptop) ? f.laptop.max_inches : null);
+    if (t) sp.laptop = inch && !parseInches(t) ? `Up to ${fmtN(inch)}" (${t})` : t;
+    else if (inch) sp.laptop = `Up to ${fmtN(inch)}"`;
+  }
+  // compartments
+  for (const [key, out2, word] of [['main_compartment_cm', 'storage_compartment_cm', 'main compartment'], ['laptop_compartment_cm', 'tech_compartment_cm', 'laptop compartment']]) {
+    const c = f[key]; if (!isObj(c)) continue;
+    const v = ['h', 'w', 'd'].map((k) => numOf(c[k]));
+    if (v.every((x) => x > 0 && x <= 150)) { sp[out2] = v.map((x) => fmtN(x)).join(' × '); src(c.source || c.url, word); }
+    else warn(`${key} was left out: it needs "h", "w" and "d" in cm.`);
+  }
+  // text facts
+  for (const key of ['pockets', 'material', 'opening', 'warranty']) {
+    if (f[key] == null) continue;
+    const x = fact(f[key], key, false), t = txt(Array.isArray(x.value) ? x.value.join(', ') : x.value, 300);
+    if (t) sp[key] = t;
+  }
+  // price: one price in the buyer's country, in its own currency
+  const country = txt(f.buyer_country, 60);
+  if (isObj(f.price)) {
+    const pr = f.price, v = numOf(pr.value), cur = validCurrency(pr.currency);
+    if (v == null || v <= 0) warn('The price was left out: "price.value" must be a number.');
+    else if (!cur) warn(`The price was left out: "price.currency" ${jshow(pr.currency)} is not a 3-letter currency code like "EUR".`);
+    else {
+      sp.price = money(v, cur);
+      if (!src(pr.url || pr.source, 'price')) noSource.push('price');
+      const where = [txt(pr.where, 80), country, txt(pr.date, 20), txt(pr.note, 200)].filter(Boolean).join(' · ');
+      if (where) { sp.price_where = where; bag.labels.price_where = 'Price from'; }
+    }
+  } else if (f.price != null) warn('"price" must look like {"value": 449, "currency": "ILS", "where": "...", "url": "https://...", "date": "YYYY-MM-DD"}; it was left out.');
+  // other facts, as extra rows
+  if (Array.isArray(f.more_specs)) {
+    let n = 0;
+    for (const s of f.more_specs.slice(0, MINE.MAX_SPECS)) {
+      if (!isObj(s)) continue;
+      const label = txt(s.label, 40), value = txt(Array.isArray(s.value) ? s.value.join(', ') : s.value, 300);
+      if (!label || !value) continue;
+      const key = `more_${++n}`;
+      sp[key] = value; bag.labels[key] = label;
+      src(s.source || s.url, label.toLowerCase());
+    }
+  } else if (f.more_specs != null) warn('"more_specs" must be a list of {"label", "value", "source"}; it was left out.');
+  const notes = txt(f.notes, 1200);
+  if (notes) sp.notes = notes;
+  if (noSource.length && !fileSources.length) warn(`No source link for: ${noSource.join(', ')}. The page shows them, but each fact should have a "source".`);
+  // sources: the file's own list, then every per-fact source with what it supports
+  const seen = new Set();
+  sp.sources = [];
+  for (const [u, what] of bySrc) { seen.add(u); sp.sources.push({ url: u, title: `${hostOf(u)}${what.length ? ' · ' + what.slice(0, 5).join(', ') : ''}` }); }
+  for (const s of fileSources) if (!seen.has(s.url)) { seen.add(s.url); sp.sources.push(s); }
+  sp.sources = sp.sources.slice(0, 30);
+
+  // the 3D shape: a mesh, a recipe, or nothing (a rounded box)
+  let rec = null, mesh = null;
+  if (hasMesh) mesh = readMesh(f.model, err, warn);
+  else if (f.model == null) { bag.boxOnly = true; warn('The file has no 3D shape ("model"), so the bag is shown as a rounded box at its listed size.'); }
+  else rec = readRecipe(f.model, err, warn);
+  if (errors.length) return out;
+  let built;
+  try {
+    built = mesh ? await buildMeshMine(fileId, mesh, warn) : rec ? buildRecipe(id, rec, warn) : buildBoxMine(id, dims);
+    built.measure = measureMine(built.root, built.inner, dims, warn, bag.statusNotes);
+  } catch (e) {
+    console.warn(e);
+    err(e && e.userMsg ? e.userMsg : `The 3D shape could not be built (${txt(e && e.message, 160) || 'unknown error'}).${mesh ? ' Export the GLB again from Blender (glTF Binary, no compression).' : ''}`);
+    return out;
+  }
+  bag._tpl = built.root;
+  bag.mesh = !!mesh;
+  bag.tris = built.tris || null;
+  // what the listed size covers, and how the model compares with it
+  const m = built.measure;
+  const fit = m.offAxes.length ? `The 3D model differs from it by more than ${fmtN(MINE.TOL_CM)} cm (${m.offAxes.join(', ')}).` : `The 3D model matches it within ${fmtN(MINE.TOL_CM)} cm (${m.matched.join(', ')}).`;
+  sp.size_covers = { text: lsIncl || 'Not stated', more: fit };
+  bag.labels.size_covers = 'Listed size covers';
+  bag.made = madeWithRow(f.made_with, mesh ? 'mesh' : bag.boxOnly ? 'none' : 'recipe', bag);
+  out.bag = bag;
+  return out;
+}
+
+/* --- "How this model was made": the file's own account (made_with), and what the file really holds --- */
+const ROUTE_WORDS = { A: 'real 3D mesh (Blender or similar)', B: 'shape recipe generated by code', C: 'shape recipe written by hand' };
+function madeWithRow(mw, holds, bag) {
+  const holdsWord = { mesh: 'a real 3D mesh', recipe: 'a shape recipe (built here from simple shapes)', none: 'no 3D shape (shown as a rounded box)' }[holds];
+  if (!isObj(mw)) return { text: 'Not stated', more: `The file doesn't say. It holds ${holdsWord}.` };
+  const route = (txt(mw.route, 20) || '').toUpperCase().replace(/^ROUTE\s*/, '')[0];
+  const list = (v, n = 12, max = 80) => (Array.isArray(v) ? v.map((x) => txt(x, max)).filter(Boolean).slice(0, n) : []);
+  const count = (v, max) => { const n = numOf(v); return n != null && n >= 0 && n <= max ? Math.round(n) : null; };
+  const rounds = count(mw.comparison_rounds, 100), photos = count(mw.photos_used, 1000);
+  bag.route = ROUTE_WORDS[route] ? route : null;
+  let text = ROUTE_WORDS[route] ? `Route ${route}: ${ROUTE_WORDS[route]}` : 'Route not stated';
+  text += rounds ? ` · ${plural(rounds, 'comparison round')} with photos` : rounds === 0 ? ' · not compared with photos' : '';
+  const more = [];
+  const mismatch = (route === 'A' && holds !== 'mesh') || ((route === 'B' || route === 'C') && holds !== 'recipe');
+  if (mismatch || !ROUTE_WORDS[route]) more.push(`The file holds ${holdsWord}.`);
+  else if (holds === 'recipe') more.push('Built here from simple shapes: the size and layout, not the detail of a model made from photos in Blender.');
+  const tools = list(mw.tools, 10, 50);
+  if (tools.length) more.push(`Tools: ${tools.join(', ')}.`);
+  if (photos != null) more.push(`${plural(photos, 'photo')} used.`);
+  const ok = list(mw.verified_from_photos), est = list(mw.estimated);
+  if (ok.length) more.push(`Checked against photos: ${ok.join(', ')}.`);
+  if (est.length) more.push(`Estimated: ${est.join(', ')}.`);
+  const notes = txt(mw.notes, 600);
+  if (notes) more.push(notes);
+  return { text, more: more.join(' ') };
+}
+function madeText(bag) {
+  if (bag.user) return bag.made || null;
+  return { text: 'Built for this site in Blender from real photos', more: 'Measured from 12 to 33 photos of this exact bag and compared with them side by side over several rounds.' };
+}
+
+/* --- a real mesh: checked here before three.js ever sees it --- */
+const MESH_EXT_OK = /^(KHR_materials_\w+|KHR_texture_transform|KHR_mesh_quantization)$/;
+function meshErr(m) { const e = new Error(m); e.userMsg = m; return e; }
+function glbChunks(bytes) {
+  // a GLB: 12-byte header ("glTF", version 2, total length), then a JSON chunk and an optional BIN chunk
+  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  if (bytes.length < 20 || dv.getUint32(0, true) !== 0x46546C67) throw meshErr('model.glb_base64 is not a binary glTF (GLB): it must start with "glTF". Export "glTF Binary (.glb)", then base64-encode the whole file.');
+  if (dv.getUint32(4, true) !== 2) throw meshErr('The GLB is not glTF version 2.');
+  if (dv.getUint32(8, true) > bytes.length) throw meshErr('The GLB is cut short: its header says it is longer than the decoded data. Encode the whole file.');
+  const jlen = dv.getUint32(12, true);
+  if (dv.getUint32(16, true) !== 0x4E4F534A || 20 + jlen > bytes.length) throw meshErr('The GLB has no JSON chunk.');
+  let json;
+  try { json = JSON.parse(new TextDecoder().decode(bytes.subarray(20, 20 + jlen))); } catch (e) { throw meshErr('The GLB\'s JSON chunk is not valid JSON.'); }
+  let bin = null;
+  const o = 20 + jlen + ((4 - (jlen % 4)) % 4);
+  if (o + 8 <= bytes.length && dv.getUint32(o + 4, true) === 0x004E4942) bin = bytes.subarray(o + 8, Math.min(bytes.length, o + 8 + dv.getUint32(o, true)));
+  return { json, bin };
+}
+function imageSize(b) {
+  // width and height from a PNG or JPEG header, without decoding it
+  if (b.length > 24 && b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4E && b[3] === 0x47) {
+    const dv = new DataView(b.buffer, b.byteOffset, b.byteLength); return [dv.getUint32(16), dv.getUint32(20)];
+  }
+  if (b.length > 4 && b[0] === 0xFF && b[1] === 0xD8) {
+    for (let i = 2; i + 9 < b.length;) {
+      if (b[i] !== 0xFF) { i++; continue; }
+      const mk = b[i + 1], len = (b[i + 2] << 8) | b[i + 3];
+      if (mk >= 0xC0 && mk <= 0xCF && mk !== 0xC4 && mk !== 0xC8 && mk !== 0xCC) return [(b[i + 7] << 8) | b[i + 8], (b[i + 5] << 8) | b[i + 6]];
+      i += 2 + len;
+    }
+  }
+  return null;
+}
+function readMesh(m, err, warn) {
+  let s = m.glb_base64;
+  if (typeof s !== 'string' || !s.trim()) return err('model.glb_base64 must be the GLB file as one base64 string.');
+  s = s.replace(/^data:[^,]{0,100},/, '').replace(/\s+/g, '');
+  if (s.length * 0.75 > MINE.MAX_GLB + 3) return err(`The mesh is ${MB(s.length * 0.75)} MB; the limit is 12 MB. Use smaller textures (1024 px is plenty), fewer bevel segments, or a Decimate modifier.`);
+  if (!/^[A-Za-z0-9+/]*={0,2}$/.test(s)) return err('model.glb_base64 is not valid base64 (only A–Z, a–z, 0–9, +, / and = padding).');
+  let bytes;
+  try { const bin = atob(s); bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); }
+  catch (e) { return err('model.glb_base64 could not be decoded as base64.'); }
+  let gl;
+  try { gl = glbChunks(bytes); } catch (e) { return err(e.userMsg || 'The GLB could not be read.'); }
+  const j = gl.json;
+  // self-contained: no "uri" anywhere (outside files, web addresses, even data: URIs); everything lives in the GLB
+  let uri = null;
+  const walk = (v, path, depth) => {
+    if (uri || depth > 40 || v == null || typeof v !== 'object') return;
+    if (Array.isArray(v)) { v.forEach((x, i) => walk(x, `${path}[${i}]`, depth + 1)); return; }
+    for (const [k, x] of Object.entries(v)) { if (k === 'uri') { uri = { path, value: x }; return; } walk(x, path ? `${path}.${k}` : k, depth + 1); }
+  };
+  walk(j, '', 0);
+  if (uri) return err(`The GLB refers to an outside file or address (${txt(uri.path, 40)}: ${jshow(uri.value)}). It must be self-contained: in Blender export "glTF Binary (.glb)", which packs the mesh and its images into the one file.`);
+  const req = (Array.isArray(j.extensionsRequired) ? j.extensionsRequired : []).filter((x) => !MESH_EXT_OK.test(String(x)));
+  if (req.length) return err(`The GLB needs ${req.map((x) => txt(x, 40)).join(', ')}, which the page doesn't load. Export it without compression (no Draco, no meshopt, no KTX2 textures).`);
+  const nodes = Array.isArray(j.nodes) ? j.nodes : [], meshes = Array.isArray(j.meshes) ? j.meshes : [], acc = Array.isArray(j.accessors) ? j.accessors : [];
+  if (!meshes.length) return err('The GLB has no meshes.');
+  if (nodes.length > MINE.MAX_NODES) return err(`The GLB has ${nodes.length} nodes; join the objects of each part (at most ${MINE.MAX_NODES} nodes).`);
+  let tris = 0;
+  for (const n of nodes) {
+    if (!isObj(n) || !Number.isInteger(n.mesh) || !isObj(meshes[n.mesh])) continue;
+    for (const pr of Array.isArray(meshes[n.mesh].primitives) ? meshes[n.mesh].primitives : []) {
+      if (!isObj(pr) || (pr.mode ?? 4) !== 4) continue;
+      const a = Number.isInteger(pr.indices) ? acc[pr.indices] : isObj(pr.attributes) ? acc[pr.attributes.POSITION] : null;
+      tris += isObj(a) && Number.isFinite(a.count) ? Math.floor(a.count / 3) : 0;
+    }
+  }
+  if (tris > MINE.MAX_TRIS) return err(`The mesh has ${tris.toLocaleString('en')} triangles; the limit is ${MINE.MAX_TRIS.toLocaleString('en')}. Use fewer bevel and sweep segments, or a Decimate modifier on large rounded parts.`);
+  // embedded images: PNG or JPEG, at most 4096 px a side (checked from their headers before they are decoded)
+  const imgs = Array.isArray(j.images) ? j.images : [], views = Array.isArray(j.bufferViews) ? j.bufferViews : [];
+  if (imgs.length > MINE.MAX_IMAGES) return err(`The GLB has ${imgs.length} images; at most ${MINE.MAX_IMAGES}.`);
+  for (const [i, im] of imgs.entries()) {
+    const bv = isObj(im) && Number.isInteger(im.bufferView) ? views[im.bufferView] : null;
+    if (!isObj(bv) || !gl.bin) return err(`Image ${i + 1} in the GLB is not stored inside it.`);
+    if (!/^image\/(png|jpeg)$/.test(im.mimeType)) return err(`Image ${i + 1} in the GLB is ${jshow(im.mimeType)}; use PNG or JPEG.`);
+    const off = bv.byteOffset || 0, sz = imageSize(gl.bin.subarray(off, off + Math.min(bv.byteLength || 0, 65536)));
+    if (!sz) return err(`Image ${i + 1} in the GLB could not be read.`);
+    if (sz[0] > MINE.MAX_TEX_PX || sz[1] > MINE.MAX_TEX_PX) return err(`Image ${i + 1} in the GLB is ${sz[0]} × ${sz[1]} px; at most ${MINE.MAX_TEX_PX} px a side.`);
+  }
+  // model.geom: which nodes are the back panel (the body and the padding that touches the wearer)
+  const g = m.geom, back = [];
+  if (g != null && !isObj(g)) err('model.geom must look like {"back": ["<id>_body", "<id>_back_pad"]}.');
+  else if (isObj(g)) {
+    const list = g.back ?? g.back_nodes;
+    if (list != null && !Array.isArray(list)) err('model.geom.back must be a list of node names, e.g. ["<id>_body", "<id>_back_pad"].');
+    else for (const n of (list || []).slice(0, 40)) { const s2 = txt(n, 120); if (s2) back.push(s2); }
+  }
+  return { bytes, tris, back };
+}
+
+/* a mesh from the file: parsed by the same GLTFLoader as the built-in bags, from the decoded bytes only */
+async function buildMeshMine(fileId, mesh, warn) {
+  let gltf;
+  try { gltf = await loader.parseAsync(mesh.bytes.slice().buffer, ''); }
+  catch (e) { throw meshErr(`The GLB could not be loaded (${txt(e && e.message, 140) || 'unknown error'}). Export it again as "glTF Binary (.glb)" without compression.`); }
+  const scene = gltf.scene;
+  // nothing but meshes and groups: drop lights and cameras the file may carry; check decoded textures once more
+  const drop = [];
+  let tris = 0, big = null;
+  scene.traverse((o) => {
+    if (o.isLight || o.isCamera) drop.push(o);
+    if (o.isMesh && o.geometry) {
+      const g = o.geometry; tris += g.index ? g.index.count / 3 : (g.attributes.position ? g.attributes.position.count / 3 : 0);
+      for (const mt of [].concat(o.material || [])) for (const k of Object.keys(mt)) {
+        const im = mt[k] && mt[k].isTexture && mt[k].image;
+        if (im && (im.width > MINE.MAX_TEX_PX || im.height > MINE.MAX_TEX_PX)) big = im;
+      }
+    }
+  });
+  if (big) throw meshErr(`A texture in the GLB is ${big.width} × ${big.height} px; at most ${MINE.MAX_TEX_PX} px a side.`);
+  for (const o of drop) o.removeFromParent();
+  if (tris > MINE.MAX_TRIS) throw meshErr(`The mesh has ${Math.round(tris).toLocaleString('en')} triangles; the limit is ${MINE.MAX_TRIS.toLocaleString('en')}.`);
+  const root = new THREE.Group(); root.name = fileId + '_model';
+  const inner = new THREE.Group(); root.add(inner); inner.add(scene);
+  // the back panel: the nodes model.geom.back names, else the built-in naming (<id>_body, <id>_back_pad, ...)
+  const byName = new Map();
+  scene.traverse((o) => { if (o.name && !byName.has(o.name)) byName.set(o.name, o); });
+  const find = (n) => {   // GLTFLoader drops "." and some other characters from names: "x_body.001" becomes "x_body001"
+    if (byName.has(n)) return byName.get(n);
+    const s = THREE.PropertyBinding.sanitizeNodeName(n);
+    if (byName.has(s)) return byName.get(s);
+    for (const [k, o] of byName) if (k.startsWith(s) && /^\d{3}$/.test(k.slice(s.length))) return o;
+    return null;
+  };
+  let found = 0;
+  if (mesh.back.length) {
+    for (const n of mesh.back) {
+      const o = find(n);
+      if (!o || o === scene) { warn(`model.geom.back names node ${jshow(n)}, which is not in the GLB.`); continue; }
+      o.userData.back = true; found++;
+    }
+  }
+  if (!found) {
+    const prefix = fileId + '_';
+    scene.traverse((o) => {
+      if (!o.isMesh) return;
+      const raw = (o.name.startsWith(prefix) ? o.name : (o.parent && o.parent.name) || '').replace(/[^\w-]/g, '_');
+      const part = raw.startsWith(prefix) ? raw.slice(prefix.length) : null;
+      if (part && BACK_PARTS.test(part.replace(/\d{3}$/, ''))) { o.userData.back = true; found++; }
+    });
+  }
+  if (!found) throw meshErr(`The page can't find the back panel in the mesh. Name the body's node "${fileId}_body" (and the back padding "${fileId}_back_pad"), or list the back-panel nodes in model.geom.back.`);
+  return { root, inner, tris: Math.round(tris) };
+}
+
+/* a file with specs only: a rounded box at the listed size, its back on z = 0 */
+function buildBoxMine(id, dims) {
+  const h = dims.h / 100, w = dims.w / 100, d = dims.d / 100;
+  const mesh = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 4, Math.min(0.04, Math.min(w, d) * 0.2)), new THREE.MeshStandardMaterial({ color: '#3a3d42', roughness: 0.8 }));
+  mesh.position.set(0, h / 2, d / 2); mesh.name = id + '_body'; mesh.userData.back = true;
+  const root = new THREE.Group(), inner = new THREE.Group(); root.add(inner); inner.add(mesh);
+  return { root, inner };
+}
+
+/* the checks every added bag gets, mesh or recipe: stand it on the floor, compare it with the listed size */
+function measureMine(root, inner, dims, warn, statusNotes) {
+  const boxOf = (keep) => {
+    root.updateMatrixWorld(true);
+    const box = new THREE.Box3(), b = new THREE.Box3();
+    root.traverse((o) => {
+      if (!o.isMesh || !keep(o)) return;
+      for (let x = o; x && x !== root; x = x.parent) if (!x.visible) return;
+      b.setFromObject(o, true); box.union(b);
+    });
+    return box;
+  };
+  let all = boxOf(() => true);
+  if (all.isEmpty()) throw meshErr('The 3D shape has nothing visible to show.');
+  if (Math.abs(all.min.y) > 0.01) {
+    warn(`The bag's bottom is at y = ${fmtN(all.min.y * 100)} cm; it was moved to stand on y = 0 (the floor).`);
+    inner.position.y -= all.min.y;
+    all = boxOf(() => true);
+  }
+  const core = boxOf((o) => isBackMesh(o));
+  const sz = (b) => b.getSize(new THREE.Vector3()).multiplyScalar(100);
+  const A = sz(all), C = core.isEmpty() ? A : sz(core);
+  if (A.x / dims.w > 5 || A.x / dims.w < 0.2) throw meshErr(`The 3D shape is ${fmtN(A.x)} cm wide against a listed ${fmtN(dims.w)} cm: its units look wrong. A GLB is in metres (a 30 cm bag is 0.30 wide); a recipe is in centimetres.`);
+  const near = (a, b) => Math.abs(a - b) <= Math.max(1.5, b * 0.06);
+  if (near(C.x, dims.d) && near(C.z, dims.w) && Math.abs(dims.w - dims.d) > 3) {
+    const m = 'The 3D shape looks turned 90°: its width matches the listed depth. Width runs along x, depth along z (front = +z, back and straps = −z).';
+    warn(m); statusNotes.push(m);
+  } else if (near(A.y, dims.d) && near(A.z, dims.h) && Math.abs(dims.h - dims.d) > 3) {
+    const m = 'The 3D shape looks tipped over: its height matches the listed depth. In a GLB +Y is up and the front faces +Z (Blender\'s glTF export does this with "+Y Up" ticked).';
+    warn(m); statusNotes.push(m);
+  }
+  // what sticks out behind the back panel (straps) and in front of it
+  if (!core.isEmpty()) {
+    const behind = (core.min.z - all.min.z) * 100, ahead = (all.max.z - core.max.z) * 100;
+    if (behind < 0.5 && ahead > 3) { const m = `Nothing sticks out behind the back panel, but ${fmtN(ahead)} cm sticks out in front of the body: the shoulder straps may be on the front. The back and straps face −z, the front +z.`; warn(m); statusNotes.push(m); }
+  }
+  // the listed size may or may not include the handle, the straps or side pockets: accept either measure
+  const cand = {
+    h: [[C.y, 'height of the body'], [A.y, 'height with the handle']],
+    w: [[C.x, 'width of the body'], [A.x, 'width with pockets and straps']],
+    d: [[C.z, 'depth of the body and back panel'], [A.z, 'depth with the straps']],
+  };
+  const word = { h: ['tall', 'height', 'taller', 'lower'], w: ['wide', 'width', 'wider', 'narrower'], d: ['deep', 'depth', 'deeper', 'shallower'] };
+  const matched = [], offAxes = [];
+  for (const k of ['h', 'w', 'd']) {
+    const best = cand[k].reduce((b, c) => (Math.abs(c[0] - dims[k]) < Math.abs(b[0] - dims[k]) ? c : b));
+    const dl = best[0] - dims[k];
+    if (Math.abs(dl) <= MINE.TOL_CM) matched.push(best[1]);
+    else {
+      offAxes.push(`${word[k][1]} ${fmtN(best[0])} cm against ${fmtN(dims[k])} cm`);
+      const m = `the 3D model is ${fmtN(best[0])} cm ${word[k][0]} (${best[1]}), but the listed ${word[k][1]} is ${fmtN(dims[k])} cm (${fmtN(Math.abs(dl))} cm ${dl > 0 ? word[k][2] : word[k][3]}).`;
+      warn(m[0].toUpperCase() + m.slice(1)); statusNotes.push(m);
+    }
+  }
+  const cx = (core.isEmpty() ? (all.min.x + all.max.x) : (core.min.x + core.max.x)) / 2 * 100;
+  if (Math.abs(cx) > 1) warn(`The bag is not centred: the middle of its body is at x = ${fmtN(cx)} cm; it should be at 0 (it still works).`);
+  return { matched, offAxes, size: A, core: C };
+}
+
+/* --- the shape recipe: reading it --- */
+const FACES = { front: ['x', 'y'], back: ['x', 'y'], left: ['z', 'y'], right: ['z', 'y'], top: ['x', 'z'] };
+const FINISH = {
+  fabric: { rough: 0.82, weave: 1 }, nylon: { rough: 0.78, weave: 1 }, polyester: { rough: 0.84, weave: 1 }, canvas: { rough: 0.9, weave: 1.4 },
+  ripstop: { rough: 0.76, weave: 1.1, grid: 1 }, ballistic: { rough: 0.72, weave: 1.7 }, cordura: { rough: 0.74, weave: 1.5 },
+  coated: { rough: 0.42 }, tpu: { rough: 0.38 }, leather: { rough: 0.55, weave: 0.35 }, suede: { rough: 0.95, weave: 0.5 },
+  mesh: { rough: 0.9, mesh: 1 }, spacer: { rough: 0.95, weave: 2.2 }, webbing: { rough: 0.78, weave: 1.2 },
+  plastic: { rough: 0.42 }, rubber: { rough: 0.7 }, metal: { rough: 0.3, metal: 1 }, reflective: { rough: 0.25, metal: 0.4 },
+};
+const PART_TYPES = ['pocket', 'patch', 'cover', 'zip', 'strap', 'straps', 'handle', 'box', 'tube'];
+function readRecipe(m, err, warn) {
+  if (!isObj(m)) return err('"model" must be an object with "units", "body" and "parts" (a shape recipe), or "glb_base64" and "geom" (a mesh).');
+  if (m.units != null && String(m.units).toLowerCase() !== 'cm') return err(`model.units must be "cm" (found ${jshow(m.units)}); write every recipe number in centimetres.`);
+  const L = MINE.LIM_CM;
+  const cmNum = (v, lo = -L, hi = L) => { const n = numOf(v); return n != null && n >= lo && n <= hi ? n : null; };
+  const color = (v, where, def) => {
+    if (v == null) return def;
+    if (typeof v === 'string' && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v.trim())) return v.trim();
+    warn(`${where}: color ${jshow(v)} is not "#rrggbb"; ${def ? 'the body colour' : 'grey'} was used.`); return def || '#55585d';
+  };
+  const look = (o, where, defColor) => {
+    let finish = o.finish == null ? null : String(o.finish).toLowerCase();
+    if (finish && !FINISH[finish]) { warn(`${where}: finish ${jshow(o.finish)} is not one of ${Object.keys(FINISH).join(', ')}; "fabric" was used.`); finish = 'fabric'; }
+    const r = numOf(o.roughness);
+    return { color: color(o.color, where, defColor), finish, rough: r != null ? clamp(r, 0, 1) : null };
+  };
+  // body
+  const b = m.body;
+  if (!isObj(b)) return err('model.body is missing: {"sections": [{"y": 0, "w": 28, "d": 14, "r": 4}, ...], "color": "#2b2d31"}.');
+  // (problems are collected, not returned at once, so one round of messages covers the whole recipe)
+  let secList = Array.isArray(b.sections) ? b.sections : [];
+  if (secList.length < 2) { err('model.body.sections needs at least 2 cross-sections from the bottom (y = 0) to the top, e.g. {"y": 0, "w": 28, "d": 14, "r": 4}.'); secList = []; }
+  else if (secList.length > MINE.MAX_SECTIONS) { err(`model.body.sections has ${secList.length} sections; at most ${MINE.MAX_SECTIONS}.`); secList = []; }
+  const secs = [];
+  for (const [i, s] of secList.entries()) {
+    const where = `model.body.sections[${i}]`;
+    if (!isObj(s)) { err(`${where} is not an object.`); continue; }
+    const y = cmNum(s.y, 0, 150), w = cmNum(s.w, 0.5, 150), d = cmNum(s.d, 0.5, 150);
+    if (y == null || w == null || d == null) { err(`${where} needs "y" (height above the floor), "w" (width) and "d" (depth), all in cm (found ${jshow(s)}).`); continue; }
+    let r = cmNum(s.r ?? s.radius, 0, 75); if (r == null) r = Math.min(w, d) * 0.3;
+    if (r > Math.min(w, d) / 2) r = Math.min(w, d) / 2;
+    secs.push({ y, w, d, r, z: cmNum(s.z) ?? 0, x: cmNum(s.x) ?? 0, bulge: clamp(cmNum(s.bulge) ?? 0, 0, 15) });
+  }
+  secs.sort((p, q) => p.y - q.y);
+  for (let i = 1; i < secs.length; i++) if (secs[i].y - secs[i - 1].y < 0.05) { err(`Two body sections are both at y = ${fmtN(secs[i].y)} cm; every section needs its own height.`); break; }
+  if (secs.length && secs[0].y > 0.5) warn(`The lowest body section is at y = ${fmtN(secs[0].y)} cm; the bottom of the bag should be at y = 0.`);
+  const body = { secs, ...look(b, 'model.body', '#2b2d31'), bands: [] };
+  if (!body.finish) body.finish = 'fabric';
+  if (Array.isArray(b.bands)) for (const [i, bd] of b.bands.slice(0, MINE.MAX_BANDS).entries()) {
+    const yr = isObj(bd) && Array.isArray(bd.y) && bd.y.length === 2 ? bd.y.map((v) => cmNum(v, 0, 150)) : null;
+    if (!yr || yr.some((v) => v == null) || yr[1] - yr[0] < 0.1) { err(`model.body.bands[${i}] needs "y": [from, to] in cm, e.g. {"y": [0, 7], "color": "#151515"}.`); continue; }
+    body.bands.push({ y: [Math.min(...yr), Math.max(...yr)], ...look(bd, `model.body.bands[${i}]`, body.color) });
+  }
+  // parts
+  const parts = [];
+  const list = m.parts == null ? [] : m.parts;
+  if (!Array.isArray(list)) return err('model.parts must be a list of parts like {"type": "pocket", "face": "front", ...}.');
+  if (list.length > MINE.MAX_PARTS) return err(`model.parts has ${list.length} parts; at most ${MINE.MAX_PARTS}.`);
+  for (const [i, p] of list.entries()) {
+    const where = `model.parts[${i}]${isObj(p) && p.type ? ` (${txt(p.type, 20)})` : ''}`;
+    if (!isObj(p)) { err(`${where} is not an object.`); continue; }
+    const type = String(p.type || '').toLowerCase();
+    if (!PART_TYPES.includes(type)) { err(`${where}: unknown "type" ${jshow(p.type)}; use ${PART_TYPES.join(', ')}.`); continue; }
+    const q = { type, ...look(p, where, null) };
+    const range = (k, lo = -L, hi = L) => {
+      const r = p[k];
+      if (!Array.isArray(r) || r.length !== 2) return err(`${where}: "${k}" must be a from–to range in cm, like "${k}": [-10, 10].`);
+      const a = cmNum(r[0], lo, hi), c = cmNum(r[1], lo, hi);
+      if (a == null || c == null) return err(`${where}: "${k}" ${jshow(r)} needs two numbers between ${lo} and ${hi} cm.`);
+      if (Math.abs(c - a) < 0.2) return err(`${where}: "${k}" ${jshow(r)} has no size; the two numbers must differ.`);
+      return [Math.min(a, c), Math.max(a, c)];
+    };
+    const pts = (k, dim) => {
+      const v = p[k];
+      if (!Array.isArray(v) || v.length < 2 || v.length > MINE.MAX_POINTS) return err(`${where}: "${k}" must list 2 to ${MINE.MAX_POINTS} points${dim === 3 ? ' [x, y, z]' : ''} in cm.`);
+      const o = [];
+      for (const pt of v) {
+        const a = Array.isArray(pt) && pt.length === dim ? pt.map((x) => cmNum(x)) : null;
+        if (!a || a.some((x) => x == null)) return err(`${where}: point ${jshow(pt)} must be ${dim} numbers in cm.`);
+        o.push(a);
+      }
+      return o;
+    };
+    const face = () => {
+      const f = String(p.face || '').toLowerCase();
+      if (!FACES[f]) return err(`${where}: "face" must be "front", "back", "left", "right" or "top".`);
+      return f;
+    };
+    if (type === 'pocket' || type === 'patch') {
+      const f = face(); if (!f) continue;
+      const [ku, kv] = FACES[f], u = range(ku), v = range(kv);
+      if (!u || !v) continue;
+      Object.assign(q, { face: f, u, v, depth: clamp(cmNum(p.depth, 0, 20) ?? (type === 'pocket' ? 2 : 0.25), 0.08, 20),
+        r: clamp(cmNum(p.r ?? p.radius, 0, 40) ?? (type === 'pocket' ? 3 : 1), 0, 40),
+        zip: type === 'pocket' ? String(p.zip ?? 'top').toLowerCase() : 'none', zipColor: color(p.zip_color, where, null),
+        text: txt(p.text, 30), textColor: color(p.text_color, where, null) });
+      if (!['top', 'bottom', 'left', 'right', 'around', 'none'].includes(q.zip)) { warn(`${where}: zip ${jshow(p.zip)} is not top, bottom, left, right, around or none; "top" was used.`); q.zip = 'top'; }
+    } else if (type === 'cover') {
+      const yf = cmNum(p.y_front, 0, 150), yb = cmNum(p.y_back, 0, 150);
+      if (yf == null || yb == null) { err(`${where}: a cover (lid or flap over the top) needs "y_front" and "y_back": how far down the front and the back it reaches (cm above the floor).`); continue; }
+      Object.assign(q, { yf, yb, x: p.x != null ? range('x') : null, depth: clamp(cmNum(p.depth, 0, 20) ?? 2, 0.1, 20), r: clamp(cmNum(p.r, 0, 40) ?? 3, 0, 40) });
+      if (p.x != null && !q.x) continue;
+    } else if (type === 'zip' || type === 'strap') {
+      const ar = p.around;
+      if (type === 'zip' && isObj(ar)) {
+        const z = cmNum(ar.z), y0 = cmNum(ar.from_y, 0, 150);
+        if (z == null || y0 == null) { err(`${where}: "around" needs "z" (how far from the back, cm) and "from_y" (the height where the zip starts and ends on the two sides).`); continue; }
+        q.around = { z, y0 };
+      } else {
+        const f = face(); if (!f) continue;
+        const pp = pts('points', 2); if (!pp) continue;
+        q.face = f; q.points = pp;
+      }
+      q.width = clamp(cmNum(p.width, 0.2, 15) ?? (type === 'zip' ? 1.1 : 2.5), 0.2, 15);
+      q.thickness = clamp(cmNum(p.thickness, 0.05, 5) ?? (type === 'zip' ? 0.15 : 0.3), 0.05, 5);
+      if (type === 'zip') { q.pull = ['start', 'end', 'both', 'none'].includes(String(p.pull)) ? String(p.pull) : 'end'; q.pullColor = color(p.pull_color, where, null); q.teethColor = color(p.teeth_color, where, null); }
+    } else if (type === 'straps') {
+      const o = {};
+      for (const [k, lo, hi] of [['width', 1, 15], ['thickness', 0.1, 6], ['top_y', 1, 150], ['bottom_y', 0, 150], ['top_gap', 0, 40], ['bottom_x', 0, 60], ['standoff', 0, 25], ['padded', 0.2, 1]]) {
+        if (p[k] == null) continue;
+        const v = cmNum(p[k], lo, hi);
+        if (v == null) err(`${where}: "${k}" ${jshow(p[k])} must be a number from ${lo} to ${hi}.`); else o[k] = v;
+      }
+      Object.assign(q, o, { sternum: p.sternum !== false, loadLifters: p.load_lifters === true, hipBelt: p.hip_belt === true, webColor: color(p.webbing_color, where, null), buckleColor: color(p.buckle_color, where, null) });
+    } else if (type === 'handle') {
+      const x = range('x'); if (!x) continue;
+      Object.assign(q, { x, z: cmNum(p.z), height: clamp(cmNum(p.height, 0, 30) ?? 3.5, 0.3, 30), width: clamp(cmNum(p.width, 0.3, 10) ?? 2.5, 0.3, 10),
+        thickness: clamp(cmNum(p.thickness, 0.1, 5) ?? 0.4, 0.1, 5), style: p.style === 'tube' ? 'tube' : 'webbing' });
+    } else if (type === 'box') {
+      const x = range('x'), y = range('y'), z = range('z'); if (!x || !y || !z) continue;
+      Object.assign(q, { x, y, z, r: clamp(cmNum(p.r ?? p.radius, 0, 20) ?? 0.2, 0, Math.min(x[1] - x[0], y[1] - y[0], z[1] - z[0]) / 2) });
+    } else if (type === 'tube') {
+      const pp = pts('points', 3); if (!pp) continue;
+      Object.assign(q, { points: pp, radius: clamp(cmNum(p.radius, 0.05, 10) ?? 0.4, 0.05, 10) });
+    }
+    parts.push(q);
+  }
+  if (!parts.some((p) => p.type === 'straps')) warn('The recipe has no shoulder straps ({"type": "straps"}); every backpack has them.');
+  return { body, parts };
+}
+
+/* --- the shape recipe: building it (cm in, metres out). Frame: x across (+x right seen from the front),
+   y up from the floor, z = 0 at the back panel, +z toward the front --- */
+const RING = { nf: 6, nc: 8, ns: 8, nb: 12 };   // points per ring: half front, each corner, each side, back
+function ringPts(p) {
+  // a rounded rectangle seen from above: x = p.x ± w/2, z = p.z … p.z + d, corner radius r; starts at the back
+  // centre and runs back-right → right side → front → left side → back-left; the front is bowed out by "bulge"
+  const a = p.w / 2, r = clamp(p.r, 0.01, Math.min(a, p.d / 2) - 0.005), x0 = p.x, z0 = p.z, z1 = p.z + p.d;
+  const P = [];
+  const add = (x, z, nx, nz) => { const f = Math.max(0, nz) ** 2 * Math.cos(Math.PI / 2 * clamp((x - x0) / a, -1, 1)) ** 0.8; P.push([x, z + p.bulge * f]); };
+  const corner = (cx, cz, t0) => { for (let i = 0; i < RING.nc; i++) { const t = t0 + (Math.PI / 2) * (i / RING.nc); add(cx + r * Math.cos(t), cz + r * Math.sin(t), Math.cos(t), Math.sin(t)); } };
+  for (let i = 0; i < RING.nb / 2; i++) add(x0 + (a - r) * (i / (RING.nb / 2)), z0, 0, -1);
+  corner(x0 + a - r, z0 + r, -Math.PI / 2);
+  for (let i = 0; i < RING.ns; i++) add(x0 + a, z0 + r + (p.d - 2 * r) * (i / RING.ns), 1, 0);
+  corner(x0 + a - r, z1 - r, 0);
+  for (let i = 0; i < 2 * RING.nf; i++) add(x0 + (a - r) - 2 * (a - r) * (i / (2 * RING.nf)), z1, 0, 1);
+  corner(x0 - a + r, z1 - r, Math.PI / 2);
+  for (let i = 0; i < RING.ns; i++) add(x0 - a, z1 - r - (p.d - 2 * r) * (i / RING.ns), -1, 0);
+  corner(x0 - a + r, z0 + r, Math.PI);
+  for (let i = 0; i < RING.nb / 2; i++) add(x0 - a + r + (a - r) * (i / (RING.nb / 2)), z0, 0, -1);
+  return P;
+}
+function pip(P, x, z) {
+  let c = false;
+  for (let i = 0, j = P.length - 1; i < P.length; j = i++) {
+    const [xi, zi] = P[i], [xj, zj] = P[j];
+    if ((zi > z) !== (zj > z) && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) c = !c;
+  }
+  return c;
+}
+function makeBodyShape(secs) {
+  const ys = secs.map((s) => s.y), y0 = ys[0], y1 = ys[ys.length - 1];
+  const keys = ['w', 'd', 'r', 'z', 'x', 'bulge'];
+  const cache = new Map();
+  const paramsAt = (y) => {
+    y = clamp(y, y0, y1);
+    let i = 0; while (i < secs.length - 2 && secs[i + 1].y < y) i++;
+    const s1 = secs[i], s2 = secs[i + 1], s0 = secs[Math.max(0, i - 1)], s3 = secs[Math.min(secs.length - 1, i + 2)];
+    const t = (y - s1.y) / (s2.y - s1.y);
+    const o = { y };
+    for (const k of keys) {
+      // Catmull-Rom between sections, kept between its two neighbours so it never overshoots
+      const v = crom(s0[k], s1[k], s2[k], s3[k], t);
+      o[k] = clamp(v, Math.min(s1[k], s2[k]) - 0.25 * Math.abs(s2[k] - s1[k]), Math.max(s1[k], s2[k]) + 0.25 * Math.abs(s2[k] - s1[k]));
+    }
+    o.w = Math.max(o.w, 0.1); o.d = Math.max(o.d, 0.1); o.r = Math.max(o.r, 0.02);
+    return o;
+  };
+  const ringAt = (y) => {
+    const key = Math.round(clamp(y, y0, y1) * 50);
+    let r = cache.get(key);
+    if (!r) { r = ringPts(paramsAt(key / 50)); if (cache.size > 4000) cache.clear(); cache.set(key, r); }
+    return r;
+  };
+  const inside = (x, y, z) => y >= y0 && y <= y1 && pip(ringAt(y), x, z);
+  // the point where a ray from inside the body leaves it
+  const exit = (o, d) => {
+    let t0 = 0, t1 = 0, step = 0.5;
+    for (let k = 0; k < 400; k++) { t1 = t0 + step; if (!inside(o[0] + d[0] * t1, o[1] + d[1] * t1, o[2] + d[2] * t1)) break; t0 = t1; }
+    for (let k = 0; k < 14; k++) { const tm = (t0 + t1) / 2; if (inside(o[0] + d[0] * tm, o[1] + d[1] * tm, o[2] + d[2] * tm)) t0 = tm; else t1 = tm; }
+    const t = (t0 + t1) / 2;
+    return [o[0] + d[0] * t, o[1] + d[1] * t, o[2] + d[2] * t];
+  };
+  const mid = (y) => { const p = paramsAt(y); return [p.x, p.z + p.d / 2]; };
+  // a point on a face: front/back (u = x, v = y), left/right (u = z, v = y), top (u = x, v = z)
+  const onFace = (face, u, v) => {
+    if (face === 'top') {
+      for (const yy of [y1 - 0.4, (y0 + y1) * 0.75, (y0 + y1) / 2]) if (inside(u, yy, v)) return exit([u, yy, v], [0, 1, 0]);
+      return null;
+    }
+    const y = clamp(v, y0 + 0.02, y1 - 0.02), [cx, cz] = mid(y);
+    if (face === 'front' || face === 'back') { if (!inside(u, y, cz)) return null; return exit([u, y, cz], [0, 0, face === 'front' ? 1 : -1]); }
+    if (!inside(cx, y, u)) return null;
+    return exit([cx, y, u], [face === 'right' ? 1 : -1, 0, 0]);
+  };
+  return { y0, y1, paramsAt, ringAt, inside, exit, onFace, mid };
+}
+// normal of a face mapping by finite differences, turned to point out along `out`
+function faceFrame(F, u, v, out, e = 0.15) {
+  const p = F(u, v); if (!p) return null;
+  const pu1 = F(u + e, v) || p, pu0 = F(u - e, v) || p, pv1 = F(u, v + e) || p, pv0 = F(u, v - e) || p;
+  const du = V3(pu1[0] - pu0[0], pu1[1] - pu0[1], pu1[2] - pu0[2]), dv = V3(pv1[0] - pv0[0], pv1[1] - pv0[1], pv1[2] - pv0[2]);
+  const o = typeof out === 'function' ? out(u, v) : out;
+  let n = du.clone().cross(dv);
+  if (n.lengthSq() < 1e-10) n = o.clone(); else n.normalize();
+  if (n.dot(o) < 0) n.negate();
+  return { p: V3(...p), n };
+}
+const FACE_OUT = { front: V3(0, 0, 1), back: V3(0, 0, -1), left: V3(-1, 0, 0), right: V3(1, 0, 0), top: V3(0, 1, 0) };
+
+/* procedural textures: a woven-fabric normal map, an open-mesh alpha map, and text on a patch */
+const TEX = {};
+function weaveTex(kind) {
+  if (TEX[kind]) return TEX[kind];
+  const N = 128, cv = document.createElement('canvas'); cv.width = cv.height = N;
+  const g = cv.getContext('2d'), im = g.createImageData(N, N);
+  const h = (x, y) => {
+    const f = kind === 'grid' ? 8 : 16, u = (x / N) * f * Math.PI * 2, v = (y / N) * f * Math.PI * 2;
+    let s = Math.sin(u) * 0.5 + Math.sin(v) * 0.5 + 0.35 * Math.sin(u + v) * Math.cos(u - v);
+    if (kind === 'grid') s += 1.2 * (Math.abs(Math.sin(u / 4)) < 0.08 || Math.abs(Math.sin(v / 4)) < 0.08 ? 1 : 0);
+    return s;
+  };
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const dx = h((x + 1) % N, y) - h((x + N - 1) % N, y), dy = h(x, (y + 1) % N) - h(x, (y + N - 1) % N);
+    const n = V3(-dx, -dy, 2.2).normalize(), k = (y * N + x) * 4;
+    im.data[k] = (n.x * 0.5 + 0.5) * 255; im.data[k + 1] = (n.y * 0.5 + 0.5) * 255; im.data[k + 2] = (n.z * 0.5 + 0.5) * 255; im.data[k + 3] = 255;
+  }
+  g.putImageData(im, 0, 0);
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.NoColorSpace; t.anisotropy = 4;
+  return (TEX[kind] = t);
+}
+function meshTex() {
+  if (TEX.mesh) return TEX.mesh;
+  const N = 64, cv = document.createElement('canvas'); cv.width = cv.height = N;
+  const g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, N, N); g.fillStyle = '#000';
+  for (let j = 0; j < 4; j++) for (let i = 0; i < 4; i++) { g.beginPath(); g.ellipse((i + 0.5 + (j % 2) * 0.5) * N / 4, (j + 0.5) * N / 4, N / 11, N / 12, 0, 0, Math.PI * 2); g.fill(); }
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.NoColorSpace;
+  return (TEX.mesh = t);
+}
+function textTex(text, bg, fg, aspect) {
+  const H = 128, W = Math.round(clamp(H * aspect, 32, 1024)), cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  g.fillStyle = fg; g.textAlign = 'center'; g.textBaseline = 'middle';
+  let px = H * 0.62; g.font = `700 ${px}px Archivo, system-ui, sans-serif`;
+  const w = g.measureText(text).width; if (w > W * 0.88) { px *= (W * 0.88) / w; g.font = `700 ${px}px Archivo, system-ui, sans-serif`; }
+  g.fillText(text, W / 2, H / 2 + px * 0.04);   // canvas text: drawn as pixels, never parsed as HTML
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+  return t;
+}
+
+/* geometry helpers (cm in, metres out) */
+const CMM = 0.01;
+const darker = (hex, f) => '#' + new THREE.Color(hex).multiplyScalar(f).getHexString();
+function geoFrom(pos, idx, uv) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos.map((v) => v * CMM), 3));
+  if (uv) g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  return g;
+}
+function outwardIdx(pos, idx) {
+  // flip every triangle of a closed mesh when its signed volume is negative (faces pointing in)
+  let vol = 0;
+  for (let i = 0; i < idx.length; i += 3) {
+    const a = idx[i] * 3, b = idx[i + 1] * 3, c = idx[i + 2] * 3;
+    vol += pos[a] * (pos[b + 1] * pos[c + 2] - pos[b + 2] * pos[c + 1]) - pos[a + 1] * (pos[b] * pos[c + 2] - pos[b + 2] * pos[c]) + pos[a + 2] * (pos[b] * pos[c + 1] - pos[b + 1] * pos[c]);
+  }
+  if (vol < 0) for (let i = 0; i < idx.length; i += 3) { const t = idx[i + 1]; idx[i + 1] = idx[i + 2]; idx[i + 2] = t; }
+  return idx;
+}
+// sweep a profile along a path: prof = [[across, thick], ...] (cm, a closed loop), frame from thickDir(i, T)
+function sweep(path, prof, thickDir, caps = true) {
+  const n = path.length, m = prof.length, pos = [], uv = [], idx = [];
+  let len = 0;
+  for (let i = 0; i < n; i++) {
+    const P = path[i], Pn = path[Math.min(n - 1, i + 1)], Pp = path[Math.max(0, i - 1)];
+    const T = Pn.clone().sub(Pp); if (T.lengthSq() < 1e-12) T.set(0, 1, 0); T.normalize();
+    let N = thickDir(i, T).clone(); N.addScaledVector(T, -N.dot(T)); if (N.lengthSq() < 1e-9) N = V3(0, 0, 1).cross(T); N.normalize();
+    const B = T.clone().cross(N);
+    if (i) len += P.distanceTo(path[i - 1]);
+    for (let j = 0; j <= m; j++) {
+      const [a, b] = prof[j % m];
+      pos.push(P.x + B.x * a + N.x * b, P.y + B.y * a + N.y * b, P.z + B.z * a + N.z * b);
+      uv.push(len / 2, j / m * 2);
+    }
+  }
+  const R = m + 1;
+  for (let i = 0; i < n - 1; i++) for (let j = 0; j < m; j++) { const a = i * R + j, b = a + 1, c = a + R, d = c + 1; idx.push(a, c, b, b, c, d); }
+  if (caps) for (const i of [0, n - 1]) {
+    const c = pos.length / 3, P = path[i];
+    pos.push(P.x, P.y, P.z); uv.push(0, 0);
+    for (let j = 0; j < m; j++) idx.push(c, i * R + j, i * R + j + 1);
+  }
+  return geoFrom(pos, outwardIdx(pos, idx), uv);
+}
+const profRect = (w, t, k = 4) => {   // a rounded rectangle, w across and t thick
+  const r = Math.min(t / 2, w / 2) * 0.95, ax = w / 2 - r, ay = t / 2 - r, out = [];
+  for (const [cx, cy, a0] of [[ax, ay, 0], [-ax, ay, Math.PI / 2], [-ax, -ay, Math.PI], [ax, -ay, Math.PI * 1.5]])
+    for (let i = 0; i <= k; i++) { const a = a0 + (Math.PI / 2) * (i / k); out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
+  return out;
+};
+const profCircle = (r, n = 14) => Array.from({ length: n }, (_, i) => [r * Math.cos((i / n) * Math.PI * 2), r * Math.sin((i / n) * Math.PI * 2)]);
+const smoothPath = (pts, per = 6) => {   // Catmull-Rom through cm points (Vector3s)
+  if (pts.length < 3) { const out = []; for (let i = 0; i <= per * 3; i++) out.push(pts[0].clone().lerp(pts[pts.length - 1], i / (per * 3))); return out; }
+  return new THREE.CatmullRomCurve3(pts, false, 'centripetal').getPoints(per * pts.length);
+};
+
+function buildRecipe(id, rec, warn) {
+  const root = new THREE.Group(); root.name = id + '_model';
+  const inner = new THREE.Group(); root.add(inner);
+  const B = rec.body, S = makeBodyShape(B.secs);
+  const mats = new Map();
+  const matOf = (lk, opts = {}) => {
+    const fin = FINISH[lk.finish || opts.finish || 'fabric'] || FINISH.fabric;
+    const color = lk.color || opts.color || B.color, rough = lk.rough ?? fin.rough;
+    const key = [color, rough, lk.finish || opts.finish || '', opts.text || '', opts.textColor || '', opts.aspect ? opts.aspect.toFixed(2) : ''].join('|');
+    if (mats.has(key)) return mats.get(key);
+    const m = new THREE.MeshStandardMaterial({ color, roughness: rough, metalness: fin.metal || 0, side: THREE.DoubleSide });
+    if (fin.weave) { m.normalMap = weaveTex(fin.grid ? 'grid' : 'weave'); m.normalScale.set(0.35 * fin.weave, 0.35 * fin.weave); }
+    if (fin.mesh) { m.alphaMap = meshTex(); m.alphaTest = 0.5; m.color.multiplyScalar(0.85); }
+    if (opts.text) { m.map = textTex(opts.text, color, opts.textColor || '#f2f2f2', opts.aspect || 3); m.normalMap = null; }
+    mats.set(key, m);
+    return m;
+  };
+  const add = (geo, mat, name, back = false) => {
+    const o = new THREE.Mesh(geo, mat); o.name = `${id}_${name}`;
+    if (back) o.userData.back = true;
+    inner.add(o); return o;
+  };
+
+  // the body: rings every ~0.8 cm (closer near the top and bottom), quads between them, flat caps
+  const ys = [];
+  const ySecs = B.secs.map((s) => s.y);
+  for (let i = 0; i < ySecs.length - 1; i++) {
+    const a = ySecs[i], b = ySecs[i + 1], n = Math.max(2, Math.ceil((b - a) / 0.8));
+    for (let k = 0; k < n; k++) ys.push(a + (b - a) * (k / n));
+  }
+  ys.push(S.y1);
+  const rings = ys.map((y) => S.ringAt(y));
+  const M = rings[0].length;
+  const pos = [], uv = [];
+  for (const [i, R] of rings.entries()) {
+    let s = 0;
+    for (let j = 0; j <= M; j++) {
+      const [x, z] = R[j % M];
+      if (j) { const [px, pz] = R[j - 1]; s += Math.hypot(x - px, z - pz); }
+      pos.push(x, ys[i], z); uv.push(s / 2, ys[i] / 2);
+    }
+  }
+  const W = M + 1;
+  const bandOf = (y) => B.bands.findIndex((b) => y >= b.y[0] && y <= b.y[1]);
+  const groups = new Map();   // band index (-1 = body colour) -> triangle indices
+  for (let i = 0; i < rings.length - 1; i++) {
+    const g = bandOf((ys[i] + ys[i + 1]) / 2);
+    if (!groups.has(g)) groups.set(g, []);
+    const L = groups.get(g);
+    for (let j = 0; j < M; j++) { const a = i * W + j, b = a + 1, c = a + W, d = c + 1; L.push(a, b, c, b, d, c); }
+  }
+  // caps (their own vertices, so the bottom and top edges stay crisp)
+  for (const [ri, up] of [[0, false], [rings.length - 1, true]]) {
+    const R = rings[ri], y = ys[ri], c0 = pos.length / 3;
+    let cx = 0, cz = 0; for (const [x, z] of R) { cx += x / M; cz += z / M; }
+    pos.push(cx, y, cz); uv.push(cx / 2, cz / 2);
+    for (const [x, z] of R) { pos.push(x, y, z); uv.push(x / 2, z / 2); }
+    const g = bandOf(up ? y - 0.01 : y + 0.01);
+    if (!groups.has(g)) groups.set(g, []);
+    // wound like the walls: the top cap runs j -> j+1, the bottom cap j+1 -> j
+    for (let j = 0; j < M; j++) groups.get(g).push(...(up ? [c0, c0 + 1 + j, c0 + 1 + ((j + 1) % M)] : [c0, c0 + 1 + ((j + 1) % M), c0 + 1 + j]));
+  }
+  const allIdx = [].concat(...groups.values());
+  const flip = outwardIdx(pos, allIdx.slice()) [1] !== allIdx[1];
+  for (const [g, L] of groups) {
+    if (flip) for (let i = 0; i < L.length; i += 3) { const t = L[i + 1]; L[i + 1] = L[i + 2]; L[i + 2] = t; }
+    const look = g < 0 ? { color: B.color, finish: B.finish, rough: B.rough } : B.bands[g];
+    const mt = matOf(look).clone(); mt.side = THREE.FrontSide;
+    add(geoFrom(pos, L, uv), mt, g < 0 ? 'body' : `body_band_${g + 1}`, true);
+  }
+
+  // a soft panel lying on the body: rounded outline in face coordinates, raised by `depth` toward its middle
+  const pillow = (F, out, u, v, r, depth, look, name, opts = {}) => {
+    const hu = (u[1] - u[0]) / 2, hv = (v[1] - v[0]) / 2, cu = (u[0] + u[1]) / 2, cv = (v[0] + v[1]) / 2;
+    const smax = Math.min(hu, hv), K = 10, edge = Math.min(smax, Math.max(depth * 1.6, 0.5));
+    const NC = 6, NS = 6, pos2 = [], uv2 = [], idx2 = [];
+    let missed = 0, rowLen = 0;
+    for (let k = 0; k <= K; k++) {
+      const s = smax * (k / K) ** 1.35 * 0.999, a = hu - s, b = hv - s, rr = clamp(r - s, 0, Math.min(a, b));
+      const ring = [];
+      const corner = (x, y, t0) => { for (let i = 0; i < NC; i++) { const t = t0 + (Math.PI / 2) * (i / NC); ring.push([x + rr * Math.cos(t), y + rr * Math.sin(t)]); } };
+      const side = (x0, y0, x1, y1) => { for (let i = 0; i < NS; i++) ring.push([x0 + (x1 - x0) * (i / NS), y0 + (y1 - y0) * (i / NS)]); };
+      corner(a - rr, b - rr, 0); side(a - rr, b, -a + rr, b);
+      corner(-a + rr, b - rr, Math.PI / 2); side(-a, b - rr, -a, -b + rr);
+      corner(-a + rr, -b + rr, Math.PI); side(-a + rr, -b, a - rr, -b);
+      corner(a - rr, -b + rr, Math.PI * 1.5); side(a, -b + rr, a, b - rr);
+      rowLen = ring.length;
+      const lift = 0.07 + depth * (1 - (1 - clamp(s / edge, 0, 1)) ** 2);
+      for (const [du, dv] of ring) {
+        const fr = faceFrame(F, cu + du, cv + dv, out);
+        if (!fr) { missed++; pos2.push(NaN, NaN, NaN); uv2.push(0, 0); continue; }
+        const q = fr.p.addScaledVector(fr.n, lift);
+        pos2.push(q.x, q.y, q.z);
+        let tu = (du + hu) / (2 * hu), tv = (dv + hv) / (2 * hv);
+        if (opts.mirrorU) tu = 1 - tu; if (opts.flipV) tv = 1 - tv;
+        uv2.push(opts.text ? tu : (cu + du) / 2, opts.text ? tv : (cv + dv) / 2);
+      }
+    }
+    if (missed > rowLen * (K + 1) * 0.25) { warn(`${name}: much of it lies off the body (check its ${opts.where || 'range'}); it was left out.`); return null; }
+    // centre
+    const fc = faceFrame(F, cu, cv, out);
+    const c0 = pos2.length / 3;
+    if (fc) { const q = fc.p.addScaledVector(fc.n, 0.07 + depth); pos2.push(q.x, q.y, q.z); } else pos2.push(NaN, NaN, NaN);
+    uv2.push(opts.text ? 0.5 : cu / 2, opts.text ? 0.5 : cv / 2);
+    for (let k = 0; k < K; k++) for (let j = 0; j < rowLen; j++) {
+      const a = k * rowLen + j, b = k * rowLen + (j + 1) % rowLen, c = a + rowLen, d = b + rowLen;
+      idx2.push(a, b, c, b, d, c);
+    }
+    for (let j = 0; j < rowLen; j++) idx2.push(K * rowLen + j, K * rowLen + (j + 1) % rowLen, c0);
+    // drop triangles that touch a point off the body
+    const ok = []; for (let i = 0; i < idx2.length; i += 3) if (![idx2[i], idx2[i + 1], idx2[i + 2]].some((q) => Number.isNaN(pos2[q * 3]))) ok.push(idx2[i], idx2[i + 1], idx2[i + 2]);
+    for (let i = 0; i < pos2.length; i++) if (Number.isNaN(pos2[i])) pos2[i] = 0;
+    const aspect = (2 * hu) / (2 * hv);
+    const mat = matOf(look, opts.text ? { text: opts.text, textColor: opts.textColor, aspect: opts.face === 'left' || opts.face === 'right' ? aspect : aspect } : {});
+    const o = add(geoFrom(pos2, ok, uv2), mat, name, opts.back);
+    o.userData.outline = { F, out, u, v, r, lift: 0.07 + depth };
+    return o;
+  };
+  const faceF = (face) => (u, v) => S.onFace(face, u, v);
+
+  // a line on the body (zip, webbing): face points or a path all round, swept as a flat strip
+  const onBodyStrip = (pts3 /* [{p, n}] cm */, width, thick, look, name, lift = 0.1) => {
+    const path = pts3.map((q) => q.p.clone().addScaledVector(q.n, lift + thick / 2));
+    const norms = pts3.map((q) => q.n);
+    return add(sweep(path, profRect(width, thick, 2), (i) => norms[i], true), matOf(look), name);
+  };
+  const facePath = (face, pts) => {
+    const F = faceF(face), out = FACE_OUT[face], res = [];
+    const P = pts.map(([u, v]) => new THREE.Vector2(u, v));
+    for (let i = 0; i < P.length - 1; i++) {
+      const n = Math.max(1, Math.ceil(P[i].distanceTo(P[i + 1]) / 0.5));
+      for (let k = 0; k < n; k++) { const q = P[i].clone().lerp(P[i + 1], k / n), fr = faceFrame(F, q.x, q.y, out); if (fr) res.push(fr); }
+    }
+    const last = P[P.length - 1], fr = faceFrame(F, last.x, last.y, out); if (fr) res.push(fr);
+    return res;
+  };
+  const aroundPath = (z, y0) => {
+    // the outline of the body in the plane at depth z, from the left side at height y0, over the top, down to y0 on the right
+    const p = S.paramsAt(y0), o = [p.x, y0 + 0.01, z], res = [];
+    if (!S.inside(o[0], o[1], o[2])) return res;
+    const n = 90;
+    for (let i = 0; i <= n; i++) {
+      const a = Math.PI - Math.PI * (i / n), d = [Math.cos(a), Math.sin(a), 0];
+      const q = S.exit(o, d);
+      res.push(V3(...q));
+    }
+    // normals: in the plane, away from the centre of curvature (perpendicular to the path, outward)
+    return res.map((q, i) => {
+      const a = res[Math.max(0, i - 1)], b = res[Math.min(res.length - 1, i + 1)];
+      const T = b.clone().sub(a).normalize(), N = T.clone().cross(V3(0, 0, 1)).normalize();
+      if (N.dot(q.clone().sub(V3(o[0], o[1], z))) < 0) N.negate();
+      return { p: q, n: N };
+    });
+  };
+  const zipPull = (q, T, look, name) => {
+    // slider and a short pull tab hanging down the surface
+    const g = new THREE.Group();
+    const sl = new THREE.Mesh(new RoundedBoxGeometry(1.4 * CMM * 1.2, 0.5 * CMM * 1.4, 1.0 * CMM * 1.2, 2, 0.15 * CMM), matOf(look));
+    const tab = new THREE.Mesh(new RoundedBoxGeometry(0.9 * CMM, 3.2 * CMM, 0.3 * CMM, 2, 0.12 * CMM), matOf(look));
+    tab.position.set(0, -1.9 * CMM, 0.25 * CMM);
+    g.add(sl, tab);
+    const N = q.n.clone(), Tt = T.clone().addScaledVector(N, -T.dot(N)).normalize(), Bv = Tt.clone().cross(N);
+    g.matrix.makeBasis(Tt, Bv.clone().negate(), N);
+    g.matrix.setPosition(q.p.clone().addScaledVector(N, 0.45).multiplyScalar(CMM));
+    g.matrixAutoUpdate = false; g.name = `${id}_${name}`;
+    inner.add(g);
+  };
+  const zipAlong = (pts3, part, name) => {
+    if (pts3.length < 2) { warn(`${name}: the zip doesn't lie on the body; it was left out.`); return; }
+    const tape = { color: part.color || '#141414', finish: 'webbing' };
+    onBodyStrip(pts3, part.width, part.thickness, tape, name + '_tape', 0.06);
+    onBodyStrip(pts3, Math.min(0.55, part.width * 0.5), part.thickness * 0.8, { color: part.teethColor || part.color || '#202020', finish: 'plastic' }, name + '_teeth', 0.06 + part.thickness * 0.6);
+    const pc = { color: part.pullColor || '#1c1c1d', finish: 'plastic' };
+    const T = (i, j) => pts3[j].p.clone().sub(pts3[i].p).normalize();
+    if (part.pull === 'start' || part.pull === 'both') zipPull(pts3[Math.min(2, pts3.length - 1)], T(0, Math.min(2, pts3.length - 1)), pc, name + '_pull_1');
+    if (part.pull === 'end' || part.pull === 'both') { const L = pts3.length - 1, i = Math.max(0, L - 2); zipPull(pts3[i], T(i, L), pc, name + '_pull_2'); }
+  };
+
+  let k = 0;
+  for (const p of rec.parts) {
+    k++;
+    const name = `${p.type}_${k}`;
+    if (p.type === 'pocket' || p.type === 'patch') {
+      const opts = { back: p.face === 'back', face: p.face, text: p.type === 'patch' ? p.text : null, textColor: p.textColor,
+        mirrorU: p.face === 'back' || p.face === 'right', flipV: p.face === 'top', where: `${FACES[p.face].join(' and ')} range on the ${p.face}` };
+      const o = pillow(faceF(p.face), FACE_OUT[p.face], p.u, p.v, p.r, p.depth, { color: p.color, finish: p.finish || (p.type === 'patch' ? null : null), rough: p.rough }, name, opts);
+      if (o && p.text && p.type === 'pocket') warn(`model.parts[${k - 1}]: "text" is drawn only on patches.`);
+      if (o && p.type === 'pocket' && p.zip !== 'none') {
+        // the zip runs along the pocket's edge, just inside the outline, on top of the pillow's rim
+        const hu = (p.u[1] - p.u[0]) / 2, hv = (p.v[1] - p.v[0]) / 2, cu = (p.u[0] + p.u[1]) / 2, cv = (p.v[0] + p.v[1]) / 2, ins = Math.min(0.9, Math.min(hu, hv) * 0.2);
+        const top = p.face === 'top' ? -1 : 1, F = faceF(p.face), out = FACE_OUT[p.face];
+        let line;
+        const a = hu - ins, b = hv - ins, rr = clamp(p.r - ins, 0, Math.min(a, b));
+        if (p.zip === 'around') { line = []; for (let i = 0; i <= 48; i++) { const t = Math.PI * 2 * (i / 48); line.push([cu + a * Math.sign(Math.cos(t)) * Math.abs(Math.cos(t)) ** 0.25, cv + b * Math.sign(Math.sin(t)) * Math.abs(Math.sin(t)) ** 0.25]); } }
+        else if (p.zip === 'top' || p.zip === 'bottom') { const yy = cv + top * (p.zip === 'top' ? b : -b); line = [[cu - a + rr * 0.6, yy], [cu + a - rr * 0.6, yy]]; }
+        else { const xx = cu + (p.zip === 'right' ? a : -a); line = [[xx, cv + b - rr * 0.6], [xx, cv - b + rr * 0.6]]; }
+        const pts3 = [];
+        const P = line.map(([u, v]) => new THREE.Vector2(u, v));
+        for (let i = 0; i < P.length - 1; i++) { const n = Math.max(1, Math.ceil(P[i].distanceTo(P[i + 1]) / 0.5)); for (let j = 0; j < n; j++) { const q = P[i].clone().lerp(P[i + 1], j / n), fr = faceFrame(F, q.x, q.y, out); if (fr) pts3.push(fr); } }
+        const end = faceFrame(F, ...line[line.length - 1], out); if (end) pts3.push(end);
+        // raise the zip onto the pillow surface near its rim
+        const s = ins, edge = Math.min(Math.min(hu, hv), Math.max(p.depth * 1.6, 0.5)), lift = 0.07 + p.depth * (1 - (1 - clamp(s / edge, 0, 1)) ** 2);
+        for (const q of pts3) q.p.addScaledVector(q.n, lift);
+        zipAlong(pts3, { width: 0.9, thickness: 0.12, color: p.zipColor || '#151515', pull: 'end', pullColor: p.zipColor }, name + '_zip');
+      }
+    } else if (p.type === 'cover') {
+      // a lid or flap over the top: a soft panel on the "over" face (u = x, v = angle from the back, over the top, to the front)
+      const yc = Math.min(p.yf, p.yb, S.y1 - 2) * 0.5 + S.y1 * 0.5 - 1, zc = S.mid(yc)[1], pw = S.paramsAt(S.y1 - 3);
+      // v = 0 points straight up; positive v turns toward the back (-z), negative toward the front
+      const dirOf = (v) => [0, Math.cos(v), -Math.sin(v)];
+      const F = (u, v) => { const o = [u, yc, zc]; if (!S.inside(...o)) return null; return S.exit(o, dirOf(v)); };
+      const reach = (yTarget, sgn) => { let a = 0; for (let i = 1; i <= 160; i++) { const t = sgn * (i / 160) * Math.PI * 0.95, q = F(pw.x, t); if (!q || q[1] < yTarget) break; a = t; } return a; };
+      const vb = reach(p.yb, 1), vf = reach(p.yf, -1);
+      const x = p.x || [pw.x - pw.w / 2 + 0.3, pw.x + pw.w / 2 - 0.3];
+      const Rm = Math.max(4, (S.y1 - yc));   // v in "cm" along the curve, roughly
+      const Fc = (u, v) => F(clamp(u, x[0] + 0.01, x[1] - 0.01), v / Rm);
+      pillow(Fc, (u, v) => V3(...dirOf(v / Rm)), x, [vf * Rm, vb * Rm], p.r, p.depth, { color: p.color, finish: p.finish, rough: p.rough }, name, { where: 'y_front and y_back' });
+    } else if (p.type === 'zip') {
+      const pts3 = p.around ? aroundPath(p.around.z, p.around.y0) : facePath(p.face, p.points);
+      zipAlong(pts3, p, name);
+    } else if (p.type === 'strap') {
+      const pts3 = facePath(p.face, p.points);
+      if (pts3.length < 2) { warn(`${name}: the strap doesn't lie on the body; it was left out.`); continue; }
+      onBodyStrip(pts3, p.width, p.thickness, { color: p.color || '#1a1a1a', finish: p.finish || 'webbing', rough: p.rough }, name, 0.08);
+    } else if (p.type === 'handle') {
+      const pb = S.paramsAt(S.y1 - 0.5), z = p.z ?? pb.z + pb.d * 0.4;
+      const a = S.onFace('top', p.x[0], z), b = S.onFace('top', p.x[1], z);
+      if (!a || !b) { warn(`${name}: the handle's ends are not on the top of the body; it was left out.`); continue; }
+      const pts = [];
+      for (let i = 0; i <= 24; i++) {
+        const t = i / 24, x = p.x[0] + (p.x[1] - p.x[0]) * t, base = a[1] + (b[1] - a[1]) * t;
+        pts.push(V3(x, base + p.height * Math.sin(Math.PI * t) ** 0.7 - (i === 0 || i === 24 ? 0.3 : 0), z));
+      }
+      const look = { color: p.color || '#1a1a1a', finish: p.finish || (p.style === 'tube' ? 'coated' : 'webbing'), rough: p.rough };
+      if (p.style === 'tube') add(sweep(pts, profCircle(p.width / 2), () => V3(0, 0, 1)), matOf(look), name);
+      else add(sweep(pts, profRect(p.width, p.thickness), (i, T) => T.clone().cross(V3(0, 0, 1))), matOf(look), name);
+      for (const e of [a, b]) add(new RoundedBoxGeometry(3.2 * CMM, 0.35 * CMM, Math.max(p.width + 0.8, 2.5) * CMM, 2, 0.12 * CMM).translate(e[0] * CMM, (e[1] + 0.12) * CMM, z * CMM), matOf(look), name + '_tab');
+    } else if (p.type === 'straps') {
+      const top = S.y1, pT = S.paramsAt(top - 3), pB = S.paramsAt(3);
+      const sw = p.width ?? 7, st = p.thickness ?? 2, topY = p.top_y ?? top - 3.5, botY = p.bottom_y ?? Math.min(6, top * 0.15);
+      const gap = p.top_gap ?? 6, botX = p.bottom_x ?? Math.max(4, pB.w / 2 - 3), stand = p.standoff ?? 6, padded = p.padded ?? 0.72;
+      const look = { color: p.color || darker(B.color, 0.82), finish: p.finish || 'fabric', rough: p.rough };
+      const web = { color: p.webColor || '#151515', finish: 'webbing' }, buck = { color: p.buckleColor || '#161616', finish: 'plastic' };
+      const backAt = (x, y) => { const q = S.onFace('back', x, y); return q ? q[2] : S.paramsAt(y).z; };
+      const L = topY - botY;
+      const sides = [];
+      for (const sgn of [-1, 1]) {
+        const xt = sgn * (gap / 2 + sw / 2), zt = backAt(xt, topY);
+        const ctrl = [
+          V3(xt, topY - 0.5, zt + 0.2),
+          V3(xt * 1.04, topY + 0.4, zt - stand * 0.5),
+          V3(sgn * (Math.abs(xt) + (botX - Math.abs(xt)) * 0.35), topY - L * 0.22, zt - stand * 1.0),
+          V3(sgn * (Math.abs(xt) + (botX - Math.abs(xt)) * 0.75), botY + L * 0.32, backAt(botX * sgn * 0.8, botY + L * 0.32) - stand * 0.75),
+          V3(sgn * botX, botY + 1.0, backAt(sgn * botX, botY + 1) - 0.9),
+        ];
+        const curve = new THREE.CatmullRomCurve3(ctrl, false, 'centripetal'), N = 48, pts = curve.getPoints(N);
+        const cut = Math.round(N * padded);
+        const thickDir = () => V3(0, 0, -1);
+        // padded part, then webbing to the lower corner with a ladder buckle where they meet
+        const pad = pts.slice(0, cut + 1);
+        const prof = profRect(sw, st, 4).map(([a, b2]) => [a * (1 - 0.15 * Math.abs(b2) / (st / 2)), b2]);
+        add(sweep(pad, prof, thickDir), matOf(look), `straps_${sgn < 0 ? 'left' : 'right'}`);
+        const tail = pts.slice(cut);
+        add(sweep(tail, profRect(Math.min(2.5, sw * 0.5), 0.22, 2), thickDir), matOf(web), `straps_web_${sgn < 0 ? 'left' : 'right'}`);
+        const at = pts[cut], T = pts[Math.min(N, cut + 1)].clone().sub(pts[Math.max(0, cut - 1)]).normalize();
+        const bx = new THREE.Mesh(new RoundedBoxGeometry(3.4 * CMM, 1.0 * CMM, 0.5 * CMM, 2, 0.15 * CMM), matOf(buck));
+        const Nn = V3(0, 0, -1).addScaledVector(T, -T.z * -1).normalize(), Bb = T.clone().cross(Nn).normalize();
+        bx.matrix.makeBasis(Bb, T, Bb.clone().cross(T).normalize()); bx.matrix.setPosition(at.clone().multiplyScalar(CMM)); bx.matrixAutoUpdate = false;
+        bx.name = `${id}_straps_buckle`; inner.add(bx);
+        sides.push({ pts, curve });
+      }
+      if (p.sternum) {
+        const t = 0.42, a = sides[0].curve.getPoint(t), b = sides[1].curve.getPoint(t);
+        const mid = a.clone().add(b).multiplyScalar(0.5).add(V3(0, 0, -st / 2 - 0.2));
+        add(sweep([a.clone().add(V3(0, 0, -st / 2 - 0.15)), mid, b.clone().add(V3(0, 0, -st / 2 - 0.15))], profRect(2.0, 0.2, 2), () => V3(0, 0, -1), true), matOf(web), 'straps_sternum');
+        add(new RoundedBoxGeometry(3.0 * CMM, 2.4 * CMM, 0.6 * CMM, 2, 0.2 * CMM).translate(mid.x * CMM, mid.y * CMM, (mid.z - 0.2) * CMM), matOf(buck), 'straps_sternum_buckle');
+      }
+      if (p.loadLifters) for (const sd of sides) {
+        const a = sd.curve.getPoint(0.13), x = Math.sign(a.x) * (pT.w / 2 - 3.5), y = top - 2.5;
+        const q = S.onFace('back', x, y) || [x, y, pT.z];
+        add(sweep(smoothPath([a.clone().add(V3(0, 0, -st / 2)), V3(q[0], q[1], q[2] - 0.15)], 4), profRect(2.0, 0.2, 2), (i, T) => T.clone().cross(V3(1, 0, 0))), matOf(web), 'straps_load_lifter');
+      }
+      if (p.hipBelt) for (const sgn of [-1, 1]) {
+        const y = botY + 2, x0 = sgn * (pB.w / 2 - 1), q = S.onFace(sgn < 0 ? 'left' : 'right', S.paramsAt(y).z + 1.5, y);
+        const pts = [V3(x0, y, (q ? q[2] : 1) - 0.5), V3(sgn * (pB.w / 2 + 2.5), y, -1.5), V3(sgn * (pB.w / 2 + 3), y, -7)];
+        add(sweep(smoothPath(pts, 6), profRect(3.0, 0.25, 2), (i, T) => V3(0, 1, 0).cross(T).multiplyScalar(-sgn)), matOf(web), 'straps_hip_belt');
+      }
+    } else if (p.type === 'box') {
+      const g = new RoundedBoxGeometry((p.x[1] - p.x[0]) * CMM, (p.y[1] - p.y[0]) * CMM, (p.z[1] - p.z[0]) * CMM, 2, Math.max(0.0001, p.r * CMM));
+      g.translate((p.x[0] + p.x[1]) / 2 * CMM, (p.y[0] + p.y[1]) / 2 * CMM, (p.z[0] + p.z[1]) / 2 * CMM);
+      add(g, matOf({ color: p.color || '#18181a', finish: p.finish || 'plastic', rough: p.rough }), name);
+    } else if (p.type === 'tube') {
+      const pts = smoothPath(p.points.map((q) => V3(...q)), 8);
+      add(sweep(pts, profCircle(p.radius, 12), (i, T) => (Math.abs(T.y) < 0.9 ? V3(0, 1, 0) : V3(1, 0, 0))), matOf({ color: p.color || '#18181a', finish: p.finish || 'rubber', rough: p.rough }), name);
+    }
+  }
+  // (pockets and patches sit 0.07 cm off the body; steadyDepth() in prepModel keeps any flush surface steady)
+  let tris = 0;
+  root.traverse((o) => { if (o.isMesh) tris += o.geometry.index ? o.geometry.index.count / 3 : 0; });
+  return { root, inner, tris: Math.round(tris) };
+}
+
+function mineModel(bag) {
+  if (!bag._tpl) throw new Error('no model');
+  return bag._tpl;
+}
+
+/* --- keeping them: this browser only, in IndexedDB (a mesh file is too big for localStorage) --- */
+const IDB = { name: 'bsl', store: 'mine', p: null };
+function idb() {
+  if (!IDB.p) {
+    IDB.p = new Promise((resolve, reject) => {
+      let rq;
+      try { rq = indexedDB.open(IDB.name, 1); } catch (e) { reject(e); return; }
+      rq.onupgradeneeded = () => { if (!rq.result.objectStoreNames.contains(IDB.store)) rq.result.createObjectStore(IDB.store, { keyPath: 'id' }); };
+      rq.onsuccess = () => resolve(rq.result);
+      rq.onerror = () => reject(rq.error || new Error('IndexedDB failed'));
+      rq.onblocked = () => reject(new Error('IndexedDB is blocked'));
+      setTimeout(() => reject(new Error('IndexedDB did not answer')), 3000);
+    });
+    IDB.p.catch(() => {});
+  }
+  return IDB.p;
+}
+async function idbDo(mode, fn) {
+  const db = await idb();
+  return new Promise((resolve, reject) => {
+    let tx, out;
+    try { tx = db.transaction(IDB.store, mode); out = fn(tx.objectStore(IDB.store)); } catch (e) { reject(e); return; }
+    tx.oncomplete = () => resolve(out && 'result' in out ? out.result : undefined);
+    tx.onerror = () => reject(tx.error || new Error('IndexedDB write failed'));
+    tx.onabort = () => reject(tx.error || new Error('IndexedDB write was aborted'));
+  });
+}
+async function storeMine(entry) {
+  try { await idbDo('readwrite', (s) => s.put({ id: entry.id, text: entry.text, added: entry.added, n: entry.n })); return true; }
+  catch (e) { console.warn('could not save your bag', e); return false; }
+}
+async function unstoreMine(id) {
+  try { await idbDo('readwrite', (s) => s.delete(id)); } catch (e) { console.warn('could not remove your bag from storage', e); }
+}
+function builtInIds() { return new Set(state.bags.filter((b) => !b.user).map((b) => b.id)); }
+function registerMine(bag, at = -1) {
+  const i = state.bags.findIndex((x) => x.user && x.id === bag.id);
+  if (i >= 0) state.bags[i] = bag; else if (at >= 0) state.bags.splice(Math.min(at, state.bags.length), 0, bag); else state.bags.push(bag);
+  state.byId[bag.id] = bag;
+}
+async function loadMine() {
+  let saved = [];
+  try { saved = await idbDo('readonly', (s) => s.getAll()); if (!Array.isArray(saved)) saved = []; }
+  catch (e) { console.warn('IndexedDB is not available', e); MINE.noStore = true; }
+  saved.sort((a, b) => (a.n || 0) - (b.n || 0));
+  const reserved = builtInIds();
+  for (const s of saved.slice(0, MINE.MAX_SAVED)) {
+    if (!isObj(s) || typeof s.text !== 'string') continue;
+    let r;
+    try { r = await readBagFile(s.text, { reserved }); } catch (e) { console.warn(e); r = { bag: null, errors: ['This saved bag could not be read again.'] }; }
+    const entry = { id: r.bag ? r.bag.id : String(s.id || 'bag').slice(0, 64), text: s.text, added: s.added, n: s.n, bag: r.bag, errors: r.bag ? [] : r.errors, storeId: s.id };
+    if (MINE.list.some((x) => x.id === entry.id)) continue;
+    MINE.list.push(entry);
+    if (r.bag) registerMine(r.bag);
+  }
+  renderMineList();
+}
+
+/* --- adding one --- */
+async function addBagFromText(text, label = 'The file', { select = true } = {}) {
+  let r;
+  try { r = await readBagFile(text, { reserved: builtInIds() }); }
+  catch (e) { console.error(e); r = { bag: null, errors: ['The file could not be read (unexpected error).'], warnings: [] }; }
+  if (!r.bag) { showAddResult(label, r); return { ok: false, errors: r.errors, warnings: r.warnings }; }
+  const bag = r.bag;
+  const old = MINE.list.findIndex((x) => x.id === bag.id);
+  if (old < 0 && MINE.list.length >= MINE.MAX_SAVED) {
+    const errs = [`You already have ${MINE.MAX_SAVED} added bags; remove one first.`];
+    showAddResult(label, { errors: errs }); return { ok: false, errors: errs, warnings: r.warnings };
+  }
+  if (old >= 0) r.warnings.push('It replaced the earlier copy with the same id.');
+  const entry = { id: bag.id, text, added: new Date().toISOString().slice(0, 10), n: Date.now(), bag, errors: [] };
+  if (old >= 0) MINE.list[old] = entry; else MINE.list.push(entry);
+  const wasShown = ['a', 'b'].filter((k) => slots[k].bag && slots[k].bag.user && slots[k].bag.id === bag.id);
+  registerMine(bag);
+  const saved = !MINE.noStore && await storeMine(entry);
+  if (!saved) r.warnings.push(MINE.noStore
+    ? "This browser doesn't let the page keep anything, so this bag is here for this visit only. Keep the file to add it again."
+    : "It couldn't be saved in this browser (storage is full or blocked), so it is here for this visit only. Keep the file to add it again.");
+  bag.unsaved = !saved;
+  renderMineList();
+  fillSelects();
+  showAddResult(label, r, bag);
+  for (const k of wasShown) await setSlotBag(slots[k], bag);   // a replaced copy that is on show: show the new one
+  if (select) { closeAdd(); showMine(bag.id); }
+  return { ok: true, id: bag.id, warnings: r.warnings, saved };
+}
+function showMine(id) {
+  const bag = state.byId[id]; if (!bag) return;
+  if (slots.a.bag === bag) return;
+  choose('a', id);   // (swaps when it is bag B)
+}
+/* removing one: from the list, the pickers and this browser's storage. For 8 seconds a "Removed … Undo"
+   message (over the viewer, and in the panel when it is open) puts it back where it was. */
+async function removeMine(id, { undo = true } = {}) {
+  const i = MINE.list.findIndex((x) => x.id === id); if (i < 0) return;
+  const [e] = MINE.list.splice(i, 1);
+  const wasA = !!(slots.a.bag && slots.a.bag.user && slots.a.bag.id === id), wasB = !!(slots.b.bag && slots.b.bag.user && slots.b.bag.id === id);
+  const k = state.bags.findIndex((x) => x.user && x.id === id);
+  if (k >= 0) state.bags.splice(k, 1);
+  if (state.byId[id] && state.byId[id].user) delete state.byId[id];
+  clearTimeout(MINE.undoTimer);
+  MINE.undo = undo && e.bag ? { e, i, k, wasA, wasB } : null;
+  if (MINE.undo) MINE.undoTimer = setTimeout(() => { MINE.undo = null; renderStatus(); renderUndoInPanel(); }, 8000);
+  // a bag on show is replaced by a built-in one that the other side doesn't show
+  const builtIn = state.bags.filter((b) => !b.user);
+  const other = (not) => builtIn.find((b) => b !== not) || builtIn[0];
+  if (wasA) setSlotBag(slots.a, other(slots.b.bag));
+  if (wasB) setSlotBag(slots.b, other(slots.a.bag));
+  fillSelects();
+  renderMineList(); renderUndoInPanel(); renderStatus();
+  await unstoreMine(e.storeId || id);
+  if (e.storeId && e.storeId !== id) await unstoreMine(id);
+}
+async function undoRemove() {
+  const u = MINE.undo; if (!u) return;
+  MINE.undo = null; clearTimeout(MINE.undoTimer);
+  if (!MINE.list.some((x) => x.id === u.e.id)) {
+    MINE.list.splice(Math.min(u.i, MINE.list.length), 0, u.e);
+    registerMine(u.e.bag, u.k);
+    u.e.bag.unsaved = MINE.noStore || !(await storeMine(u.e));
+    delete u.e.storeId;
+  }
+  if (u.wasA && slots.b.bag !== u.e.bag) setSlotBag(slots.a, u.e.bag);
+  if (u.wasB && slots.a.bag !== u.e.bag) setSlotBag(slots.b, u.e.bag);
+  fillSelects();
+  renderMineList(); renderUndoInPanel(); renderStatus();
+}
+function undoMsg() {
+  const m = el('div', 'msg undo');
+  m.appendChild(el('span', null, `Removed ${MINE.undo.e.bag.name} from this browser.`));
+  const b = el('button', null, 'Undo'); b.type = 'button';
+  b.setAttribute('aria-label', `Undo: put ${MINE.undo.e.bag.name} back`);
+  b.addEventListener('click', (ev) => { ev.stopPropagation(); undoRemove(); });
+  m.appendChild(b);
+  return m;
+}
+function renderUndoInPanel() {
+  const box = $('#addMsgs'); if (!box) return;
+  const old = box.querySelector('.msg.undo'); if (old) old.remove();
+  if (MINE.undo && addDlg.open) box.prepend(undoMsg());
+}
+// the red × in a picker: remove it, keep the list open where it was
+async function removeFromPicker(k, id) {
+  const P = pickers[k], at = Math.max(0, P.active);
+  const job = removeMine(id);
+  if (!P.list.hidden) { setActive(k, Math.min(at, optionsOf(k).length - 1)); P.list.focus({ preventScroll: true }); }
+  await job;
+}
+async function takeFiles(files) {
+  const list = [...(files || [])].slice(0, 5);
+  if (!list.length) return;
+  if (!addDlg.open) openAdd(true);
+  for (const [i, f] of list.entries()) {
+    const label = `“${txt(f.name, 60) || 'file'}”`;
+    if (/\.(glb|gltf|stl|obj|3mf|fbx|blend|usdz?)$/i.test(f.name)) { showAddResult(label, { errors: ['A 3D model file on its own can’t be added: the page also needs the bag’s size, specs and sources. Ask your AI to pack it into the .bag.json file (model.glb_base64 and model.geom, as the instructions say), then drop that file.'] }); continue; }
+    if (f.size > MINE.MAX_FILE) { showAddResult(label, { errors: [`The file is ${MB(f.size)} MB; the limit is 17 MB (a mesh of at most 12 MB). Simplify the mesh.`] }); continue; }
+    let text;
+    try { text = await f.text(); } catch (e) { showAddResult(label, { errors: ['The file could not be read.'] }); continue; }
+    await addBagFromText(text, label, { select: i === list.length - 1 });
+  }
+}
+
+/* --- the panel --- */
+const addDlg = $('#addDlg'), dropZone = $('#dropZone'), dropVeil = $('#dropVeil');
+let aiText = null;
+function loadAiText() {
+  if (!aiText) aiText = fetch('ai-instructions.md', { cache: 'no-cache' }).then((r) => { if (!r.ok) throw new Error(r.status); return r.text(); });
+  aiText.catch(() => { aiText = null; });
+  return aiText;
+}
+function openAdd(keepMsgs = false) {
+  for (const k of ['a', 'b']) closePicker(k);
+  if (!keepMsgs && !addDlg.open) $('#addMsgs').replaceChildren();
+  renderMineList();
+  if (!addDlg.open) { try { addDlg.showModal(); } catch (e) { addDlg.setAttribute('open', ''); } }
+  renderUndoInPanel();
+  loadAiText().then((t) => { $('#aiPeek').textContent = t.split('\n').slice(0, 9).join('\n'); })
+    .catch(() => { $('#aiPeek').textContent = "The instructions couldn't be loaded. Use Download, or reload the page."; });
+}
+function closeAdd() { if (addDlg.open) addDlg.close(); }
+$('#addBtn').addEventListener('click', () => openAdd());
+$('#addClose').addEventListener('click', closeAdd);
+addDlg.addEventListener('click', (e) => { if (e.target === addDlg) closeAdd(); });   // a click on the dimmed page
+addDlg.addEventListener('keydown', (e) => e.stopPropagation());   // keys 1–6 move the camera only outside the panel
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch (e) {
+    const ta = el('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    addDlg.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch (e2) {}
+    ta.remove(); return ok;
+  }
+}
+function flash(node, t) { node.textContent = t; clearTimeout(node._t); node._t = setTimeout(() => { node.textContent = ''; }, 3500); }
+$('#aiCopy').addEventListener('click', async () => {
+  let t; try { t = await loadAiText(); } catch (e) { flash($('#aiCopied'), "Couldn't load them; use Download."); return; }
+  flash($('#aiCopied'), (await copyText(t)) ? 'Copied. Paste it into your AI.' : "Couldn't copy; use Download.");
+});
+$('#pickFile').addEventListener('click', () => $('#fileIn').click());
+$('#fileIn').addEventListener('change', (e) => { takeFiles(e.target.files); e.target.value = ''; });
+$('#pasteAdd').addEventListener('click', async () => {
+  const box = $('#pasteBox');
+  const res = await addBagFromText(box.value, 'The pasted text');
+  if (res.ok) box.value = '';
+});
+function showAddResult(label, r, bag) {
+  const box = $('#addMsgs'); box.replaceChildren();
+  if (bag) {
+    const m = el('div', 'amsg ok'); m.append(el('b', null, `${bag.name} was added.`));
+    if (r.warnings && r.warnings.length) { const ul = el('ul'); for (const w of r.warnings) ul.appendChild(el('li', null, w)); m.appendChild(ul); }
+    box.appendChild(m);
+    return;
+  }
+  const m = el('div', 'amsg err');
+  m.append(el('b', null, `${label} could not be added:`));
+  const ul = el('ul'); for (const e of r.errors || []) ul.appendChild(el('li', null, e)); m.appendChild(ul);
+  const btn = el('button', 'pill', 'Copy these messages for your AI'); btn.type = 'button';
+  const note = el('span', 'copied');
+  btn.addEventListener('click', async () => {
+    const t = 'Backpack Size Lab could not use the bag file:\n' + (r.errors || []).map((x) => '- ' + x).join('\n') + '\nPlease fix these and send the whole corrected JSON file again.';
+    flash(note, (await copyText(t)) ? ' Copied.' : " Couldn't copy.");
+  });
+  m.append(btn, note);
+  box.appendChild(m);
+}
+function renderMineList() {
+  const ul = $('#mineList'); if (!ul) return;
+  ul.replaceChildren();
+  const keep = $('#mineKeep');
+  if (keep) keep.textContent = MINE.noStore
+    ? "This browser doesn't let the page keep anything, so added bags last for this visit only. Keep the files to add them again."
+    : "Saved in this browser only. Clearing the site's data removes them; keep the files to add them again.";
+  if (!MINE.list.length) { const li = el('li', 'mine-empty', 'None yet.'); li.style.border = '0'; li.style.padding = '0'; ul.appendChild(li); return; }
+  for (const e of MINE.list) {
+    const li = el('li'), t = el('span', 't');
+    if (e.bag) {
+      t.append(el('span', 'nm', e.bag.name), el('span', 'sub', [bagSub(e.bag), e.added ? `added ${e.added}` : '', e.bag.unsaved ? 'this visit only' : ''].filter(Boolean).join(' · ')));
+      const showBtn = el('button', 'pill', 'Show'); showBtn.type = 'button';
+      showBtn.setAttribute('aria-label', `Show ${e.bag.name} as bag A`);
+      showBtn.addEventListener('click', () => { closeAdd(); showMine(e.id); });
+      li.append(t, showBtn);
+    } else {
+      t.append(el('span', 'nm', e.id), el('span', 'sub bad', `Can't be read any more: ${(e.errors || [])[0] || 'unknown problem'}`));
+      li.append(t);
+    }
+    const rm = el('button', 'pill', 'Remove'); rm.type = 'button';
+    rm.setAttribute('aria-label', `Remove ${e.bag ? e.bag.name : e.id}`);
+    rm.addEventListener('click', () => removeMine(e.id));
+    li.appendChild(rm);
+    ul.appendChild(li);
+  }
+}
+/* status lines over the viewer: the Undo message, and an added bag whose shape doesn't match its listed size */
+function mineStatus(st) {
+  if (MINE.undo) st.appendChild(undoMsg());
+  for (const k of ['a', 'b']) {
+    const b = slots[k].bag;
+    if (!b || !b.user || !b.statusNotes || !b.statusNotes.length) continue;
+    const n = b.statusNotes.length;
+    st.appendChild(el('div', 'msg warn', `${b.short || b.name}: ${b.statusNotes[0]}${n > 1 ? ` (${n - 1} more under Add your bag)` : ''}`));
+  }
+}
+
+/* --- dropping a file anywhere on the page --- */
+let dragDepth = 0;
+const dragHasFiles = (e) => !!(e.dataTransfer && [...(e.dataTransfer.types || [])].includes('Files'));
+addEventListener('dragenter', (e) => {
+  if (!dragHasFiles(e)) return;
+  e.preventDefault(); dragDepth++;
+  dropVeil.hidden = addDlg.open;
+  dropZone.classList.toggle('over', addDlg.open);
+});
+addEventListener('dragover', (e) => { if (!dragHasFiles(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
+addEventListener('dragleave', (e) => {
+  if (!dragHasFiles(e)) return;
+  if (--dragDepth <= 0) { dragDepth = 0; dropVeil.hidden = true; dropZone.classList.remove('over'); }
+});
+addEventListener('drop', (e) => {
+  if (!dragHasFiles(e)) return;
+  e.preventDefault(); dragDepth = 0; dropVeil.hidden = true; dropZone.classList.remove('over');
+  takeFiles(e.dataTransfer.files);
+});
+
+/* test hooks for the added bags */
+window.__bsl = {
+  addBagFromText: (text, opts) => addBagFromText(text, 'The text', opts),
+  readBagFile: async (text) => { const r = await readBagFile(text, { reserved: builtInIds() }); return { ok: !!r.bag, errors: r.errors, warnings: r.warnings, mesh: !!(r.bag && r.bag.mesh), tris: r.bag && r.bag.tris, specs: r.bag && r.bag.specs }; },
+  mine: () => MINE.list.map((e) => ({ id: e.id, ok: !!e.bag, errors: e.errors, mesh: !!(e.bag && e.bag.mesh), unsaved: !!(e.bag && e.bag.unsaved) })),
+  stored: async () => { try { return (await idbDo('readonly', (s) => s.getAll())).map((x) => ({ id: x.id, bytes: x.text.length })); } catch (e) { return null; } },
+  slotInfo: () => Object.fromEntries(['a', 'b'].map((k) => { const s = slots[k]; return [k, s.bag && { id: s.bag.id, user: !!s.bag.user, box: s.box && { min: s.box.min.toArray(), max: s.box.max.toArray() }, pos: s.group.position.toArray(), fallback: s.fallback }]; })),
+  choose, setView, removeMine, removeFromPicker, undoRemove, openAdd, closeAdd, takeFiles, state, slots, relayout,
+  setMode: (m) => { state.mode = m; renderChrome(); relayout(false); },
+  setPerson: (on, h, w) => { state.person.on = on; if (h) state.person.h = h; if (w) state.person.w = w; rebuildPerson(); personChanged(true); },
+  setGhost: (g) => { state.ghost = g; renderChrome(); applyMaterials(); },
+};
+
 /* ---------- resize + loop ---------- */
 function resize() {
   const w = viewer.clientWidth, h = viewer.clientHeight;
@@ -1800,6 +3383,7 @@ requestAnimationFrame(frame);
   setView('iso', false);
   setSlotBag(slots.a, a);
   setSlotBag(slots.b, b);
+  loadMine().then(() => fillSelects()).catch((e) => console.warn('added bags could not be loaded', e));   // the visitor's own bags (YOUR BAGS)
 })();
 </script>
 

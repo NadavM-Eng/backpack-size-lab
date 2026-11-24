@@ -5,3 +5,4 @@ docs/models/*.glb.txt
 references/**/*.jpg
 references/**/*.png
 .DS_Store
+work/

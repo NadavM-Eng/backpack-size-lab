@@ -1,0 +1,51 @@
+{
+  "format": "backpack-size-lab/bag@1",
+  "id": "acme-trail-22",
+  "name": "Acme Trail 22",
+  "short": "Acme Trail 22",
+  "brand": "Acme",
+  "buyer_country": "Germany",
+  "dims_cm": {"h": 47, "w": 30, "d": 23, "includes": "height with the handle; depth with the shoulder straps", "source": "https://www.example.com/trail-22/specs"},
+  "volume_l": {"value": 22, "source": "https://www.example.com/trail-22/specs"},
+  "weight_kg": {"value": 0.68, "what": "empty", "source": "https://www.example.com/trail-22/specs"},
+  "laptop": {"value": "Up to 15\" (padded sleeve)", "source": "https://www.example.com/trail-22/specs"},
+  "pockets": {"value": "Front zip pocket, two mesh side pockets, laptop sleeve", "source": "https://www.example.com/trail-22/specs"},
+  "material": {"value": "420D recycled nylon", "source": "https://www.example.com/trail-22/specs"},
+  "opening": {"value": "Zip around the top, two thirds down the sides", "source": "https://www.example.com/trail-22/specs"},
+  "warranty": {"value": "Lifetime", "source": "https://www.example.com/warranty"},
+  "price": {"value": 89.95, "currency": "EUR", "where": "Example Shop", "url": "https://shop.example.de/acme-trail-22", "date": "2026-11-24"},
+  "more_specs": [
+    {"label": "Back system", "value": "Foam back panel with an air channel", "source": "https://www.example.com/trail-22/specs"}
+  ],
+  "notes": "A made-up bag that shows the recipe syntax (Route C). The side pockets stretch out about 3 cm when full.",
+  "made_with": {"route": "C", "tools": ["web search"], "photos_used": 0, "comparison_rounds": 0, "verified_from_photos": [], "estimated": ["whole shape, from the maker's description"]},
+  "model": {
+    "units": "cm",
+    "body": {
+      "color": "#2e3a46", "finish": "nylon",
+      "sections": [
+        {"y": 0,    "w": 24,   "d": 11,   "r": 4},
+        {"y": 1.5,  "w": 28,   "d": 13.5, "r": 5},
+        {"y": 4,    "w": 29.5, "d": 14.5, "r": 5.5, "bulge": 0.6},
+        {"y": 20,   "w": 30,   "d": 15,   "r": 6,   "bulge": 1.4},
+        {"y": 36,   "w": 29,   "d": 14,   "r": 6,   "bulge": 1.1},
+        {"y": 41,   "w": 26,   "d": 12.5, "r": 5.5, "bulge": 0.6},
+        {"y": 44,   "w": 20,   "d": 10,   "r": 4.5},
+        {"y": 45.2, "w": 12,   "d": 7,    "r": 3}
+      ],
+      "bands": [{"y": [0, 5], "color": "#1b1f24", "finish": "coated"}]
+    },
+    "parts": [
+      {"type": "pocket", "face": "front", "x": [-11, 11], "y": [7, 25], "depth": 1.8, "r": 4, "zip": "top", "color": "#33414e"},
+      {"type": "patch", "face": "front", "x": [-4, 4], "y": [27, 29.4], "depth": 0.15, "r": 0.5, "color": "#1b1f24", "text": "ACME", "text_color": "#d9dde2"},
+      {"type": "zip", "around": {"z": 9.5, "from_y": 12}, "color": "#161a1e", "pull": "both"},
+      {"type": "pocket", "face": "left", "z": [3, 13.5], "y": [1.5, 19], "depth": 2.5, "r": 3, "zip": "none", "finish": "mesh", "color": "#20262c"},
+      {"type": "pocket", "face": "right", "z": [3, 13.5], "y": [1.5, 19], "depth": 2.5, "r": 3, "zip": "none", "finish": "mesh", "color": "#20262c"},
+      {"type": "pocket", "face": "back", "x": [-12, 12], "y": [6, 39], "depth": 1.4, "r": 5, "zip": "none", "finish": "spacer", "color": "#242b33"},
+      {"type": "strap", "face": "left", "points": [[2, 24], [13, 26]], "width": 2, "thickness": 0.25, "color": "#15181b"},
+      {"type": "strap", "face": "right", "points": [[2, 24], [13, 26]], "width": 2, "thickness": 0.25, "color": "#15181b"},
+      {"type": "handle", "x": [-5, 5], "z": 4, "height": 1.8, "width": 2.5, "thickness": 0.35, "color": "#15181b"},
+      {"type": "straps", "width": 7, "thickness": 2, "top_y": 41, "bottom_y": 4, "top_gap": 6, "standoff": 4, "sternum": true, "color": "#2b343e", "webbing_color": "#15181b"}
+    ]
+  }
+}

@@ -1313,7 +1313,22 @@ def build_bag(bag):
         "depth_ok": bool(abs(dz) <= 1.5), "depth_delta": round(float(dz), 2),
         "size_ok": bool(size <= 6e6), "tris_ok": bool(tris2 <= 150000),
     }
+    rep["overlaps"] = same_plane_overlaps(out)
     return rep
+
+
+def same_plane_overlaps(path):
+    """Surfaces of different materials lying in the same plane flicker on the site as the camera turns
+    (tools/check_model.py). Returns the list, largest first, or None if the check could not run."""
+    try:
+        sys.path.insert(0, os.path.join(HERE, "tools"))
+        import check_model
+        with open(path, "rb") as f:
+            js, bn = check_model.parse_glb(f.read())
+        return check_model.overlaps(check_model.glb_prims(js, bn))
+    except Exception as e:  # the check is advice; never fail a build over it
+        print("  (same-plane overlap check skipped: %s)" % e)
+        return None
 
 
 # --------------------------------------------------------------------------------------
@@ -1399,7 +1414,8 @@ def main():
         eng = render_previews(a.render_only, a.size, a.engine, a.samples)
         print("RENDERED", a.render_only, eng)
         return
-    data = json.load(open(BAGS_JSON))
+    with open(BAGS_JSON, encoding="utf-8") as f:
+        data = json.load(f)
     bags = data["bags"]
     if a.only:
         bags = [b for b in bags if b["id"] in a.only]
@@ -1409,7 +1425,11 @@ def main():
     for bag in bags:
         rep = build_bag(bag)
         reports.append(rep)
-        print("BUILT", json.dumps(rep))
+        print("BUILT", json.dumps({k: v for k, v in rep.items() if k != "overlaps"}))
+        if rep.get("overlaps") is not None:
+            import check_model
+            print("same-plane overlaps in %s (they flicker on the site; fix the visible ones):" % bag["id"])
+            check_model.print_overlaps(rep["overlaps"], "gltf")
         if not a.no_render:
             for eng in (a.engine, "CYCLES", "BLENDER_WORKBENCH"):
                 res = subprocess.run([sys.executable, os.path.abspath(__file__), "--render-only", bag["id"],
